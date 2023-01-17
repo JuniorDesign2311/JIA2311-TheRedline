@@ -14,7 +14,7 @@ export default function App() {
         <Stack.Screen
           name="Map"
           component={MapScreen}
-          options={{title: "Welcome"}}
+          options={{title: "Map"}}
         />
       </Stack.Navigator>
     </NavigationContainer>

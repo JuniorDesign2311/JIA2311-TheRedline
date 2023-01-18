@@ -23,10 +23,11 @@ const AccountCreationScreen = ({navigation}) => {
             const user = userCredential.user;
             // user.updateFirstName(firstName);
             user.firstName = firstName;
-            console.log(user.email);
-            // console.log(user.password);
-            // userCredential.(phoneNumber);
-            // console.log(user.firstName);
+            user.lastName = lastName;
+            user.password = password;
+            user.state = state;
+            user.phoneNumber = phoneNumber;
+            console.log(user.firstName, user.lastName, user.state, user.phoneNumber, user.password, user.email);
             navigation.navigate("Map");
         })
         .catch(error => alert(error.message))

@@ -18,14 +18,15 @@
       "**/*"
     ],
     "ios": {
-      "bundleIdentifier": "com.test.test",
+      "bundleIdentifier": "com.autoindustryportal.test",
       "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "package": "com.autoindustryportal.test"
     },
     "web": {
       "favicon": "./assets/favicon.png"

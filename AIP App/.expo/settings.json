@@ -5,6 +5,6 @@
   "minify": false,
   "urlRandomness": "eg-cu5",
   "https": false,
-  "scheme": "exp+testing",
+  "scheme": "exp+auto-industry-portal",
   "devClient": false
 }

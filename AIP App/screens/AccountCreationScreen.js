@@ -1,11 +1,9 @@
 import React, {useState} from 'react'
-import { getAuth } from 'firebase/auth';
 import { View, Text, StyleSheet, ScrollView} from 'react-native'
 import CustomInput from '../components/CustomInput';
 import CustomButton from '../components/CustomButton';
 import States from '../components/States';
-// import { auth } from '../firebaseConfig';
-// import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from '../firebaseConfig';
 
 const AccountCreationScreen = ({navigation}) => {
     /* useState returns the original value argument that's passed in and a function that returns the changed value */

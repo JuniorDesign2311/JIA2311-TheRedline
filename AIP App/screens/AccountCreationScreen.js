@@ -15,6 +15,22 @@ const AccountCreationScreen = ({navigation}) => {
     const [lastName, setLastName] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
     const [state, setState] = useState('');
+    
+    const handleSignUp = () => {
+        auth.createUserWithEmailAndPassword(email, password)
+        .then(userCredential => {
+            // Signed in 
+            const user = userCredential.user;
+            // user.updateFirstName(firstName);
+            user.firstName = firstName;
+            console.log(user.email);
+            // console.log(user.password);
+            // userCredential.(phoneNumber);
+            // console.log(user.firstName);
+            navigation.navigate("Map");
+        })
+        .catch(error => alert(error.message))
+    }
 
 /*
     const isValidEmail = (email) =>
@@ -50,7 +66,7 @@ const AccountCreationScreen = ({navigation}) => {
         } else if (phoneNumber === "") {
             alert("Phone number field is required.")
         } else {
-            navigation.navigate("Map");
+            handleSignUp();
         }
     }
 

@@ -1,9 +1,9 @@
 import React, {useState} from 'react'
-import { getAuth } from 'firebase/auth';
 import { View, Text, StyleSheet, ScrollView} from 'react-native'
 import CustomInput from '../components/CustomInput';
 import CustomButton from '../components/CustomButton';
 import States from '../components/States';
+import { auth } from '../firebaseConfig';
 
 const AccountCreationScreen = ({navigation}) => {
     /* useState returns the original value argument that's passed in and a function that returns the changed value */
@@ -15,6 +15,22 @@ const AccountCreationScreen = ({navigation}) => {
     const [lastName, setLastName] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
     const [state, setState] = useState('');
+    
+    const handleSignUp = () => {
+        auth.createUserWithEmailAndPassword(email, password)
+        .then(userCredential => {
+            // Signed in 
+            const user = userCredential.user;
+            // user.updateFirstName(firstName);
+            user.firstName = firstName;
+            console.log(user.email);
+            // console.log(user.password);
+            // userCredential.(phoneNumber);
+            // console.log(user.firstName);
+            navigation.navigate("Map");
+        })
+        .catch(error => alert(error.message))
+    }
 
 /*
     const isValidEmail = (email) =>
@@ -50,7 +66,7 @@ const AccountCreationScreen = ({navigation}) => {
         } else if (phoneNumber === "") {
             alert("Phone number field is required.")
         } else {
-            navigation.navigate("Map");
+            handleSignUp();
         }
     }
 

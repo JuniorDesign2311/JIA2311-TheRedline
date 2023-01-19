@@ -40,7 +40,7 @@ const AccountCreationScreen = ({navigation}) => {
             // console.log(phoneNumber);
             user.number = phoneNumber;
             // user.setPhoneNumber(phoneNumber);
-            console.log(user.firstName, user.lastName, user.state, user.number, user.password, user.email);
+            console.log(user.firstName, user.lastName, user.state, user.number, user.password, user.email, user.uid);
             navigation.navigate("Map");
         })
         .catch(error => alert(error.message))
@@ -57,7 +57,6 @@ const AccountCreationScreen = ({navigation}) => {
     }
 
     const onCreateAccountPressed = () => {
-        console.warn("Account Created");
         if (username === "") {
             alert("Username field is Required.")
         } else if (email === "") {
@@ -76,6 +75,7 @@ const AccountCreationScreen = ({navigation}) => {
             alert("Please only select 1 account type.")
         } else {
             handleSignUp();
+            console.warn("Account Created");
         }
     }
 

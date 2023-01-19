@@ -1,6 +1,6 @@
 import { FontAwesome } from "@expo/vector-icons";
 import React from "react";
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, Text } from "react-native";
 import SelectDropdown from "react-native-select-dropdown";
 
 const States = ({ state, setState }) => {
@@ -62,6 +62,8 @@ const States = ({ state, setState }) => {
     "Wyoming",
   ];
 return (
+    <View style={styles.container}>
+    <Text> State </Text> 
     <View style={{ flexDirection: "row", alignItems: "center", paddingTop: 8 }}>
       <SelectDropdown
         data={states}
@@ -72,7 +74,7 @@ return (
           return (
             <FontAwesome
               name={isOpened ? "chevron-up" : "chevron-down"}
-              color={"#444"}
+              color={"black"}
               size={18}
             />
           );
@@ -84,6 +86,7 @@ return (
         dropdownStyle={styles.dropdown1DropdownStyle}
         rowStyle={styles.dropdown1RowStyle}
         rowTextStyle={styles.dropdown1RowTxtStyle}
+        selectedRowStyle={styles.selectedText}
         buttonTextAfterSelection={(selectedItem) => {
           // text represented after item is selected
           // if data array is an array of objects then return selectedItem.property to render after item is selected
@@ -95,6 +98,7 @@ return (
           return item;
         }}
       />
+    </View>
     </View>
   );
 };
@@ -119,6 +123,7 @@ const styles = StyleSheet.create({
     borderBottomColor: "#C5C5C5",
   },
   dropdown1RowTxtStyle: { color: "black", textAlign: "left", fontSize: 15},
+  selectedText: {color: "black"}
 });
 
 export default States;

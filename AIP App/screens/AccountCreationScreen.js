@@ -2,9 +2,20 @@ import React, {useState} from 'react'
 import { View, Text, StyleSheet, ScrollView} from 'react-native'
 import CustomInput from '../components/CustomInput';
 import CustomButton from '../components/CustomButton';
+import AttendeeHostButtons from '../components/AttendeeHostButtons';
+import {attendeeClicked} from '../components/AttendeeHostButtons';
+import {hostClicked} from '../components/AttendeeHostButtons';
+
 import States from '../components/States';
 import { auth } from '../firebaseConfig';
 
+/*
+const isValidEmail = (email) =>
+/^\w+([.-]?\w+)@\w+([.-]?\w+)(.\w{2,3})+$/.test(email);
+
+const isValidPhoneNumber = (phone) =>
+/^(?(\d{3}))?[- ]?(\d{3})[- ]?(\d{4})$/.test(phone);
+*/
 const AccountCreationScreen = ({navigation}) => {
     /* useState returns the original value argument that's passed in and a function that returns the changed value */
     const [username, setUsername] = useState('');
@@ -35,21 +46,14 @@ const AccountCreationScreen = ({navigation}) => {
         .catch(error => alert(error.message))
     }
 
-/*
-    const isValidEmail = (email) =>
-    /^\w+([.-]?\w+)@\w+([.-]?\w+)(.\w{2,3})+$/.test(email);
-  
-    const isValidPhoneNumber = (phone) =>
-    /^(?(\d{3}))?[- ]?(\d{3})[- ]?(\d{4})$/.test(phone);
-*/
     const onAttendeePressed = () => {
-        console.warn("Attendee Selected");
+        console.warn("Attendee Selected"); 
         
     }
 
     const onHostPressed = () => {
-        console.warn("Host Selected");
-
+       console.warn("Host Selected");
+      
     }
 
     const onCreateAccountPressed = () => {
@@ -68,6 +72,8 @@ const AccountCreationScreen = ({navigation}) => {
             alert("Last name field is required.")
         } else if (phoneNumber === "") {
             alert("Phone number field is required.")
+        } else if (attendeeClicked && hostClicked) {
+            alert("Please only select 1 account type.")
         } else {
             handleSignUp();
         }
@@ -77,7 +83,7 @@ const AccountCreationScreen = ({navigation}) => {
         <ScrollView>
         <View style={styles.root}> 
             <Text style={[styles.setTitleFont]}> Create Account </Text>
-        
+                 
             <CustomInput placeholder="Username" value={username} setValue={setUsername} secureTextEntry={false}/>
             <CustomInput placeholder="Email" value={email} setValue={setEmail} secureTextEntry={false}/>
             <CustomInput placeholder="Password" value={password} setValue={setPassword} secureTextEntry={true}/>
@@ -88,8 +94,9 @@ const AccountCreationScreen = ({navigation}) => {
             <States state={state} setState={setState}/>
 
             <View style={{flexDirection: "row"}}>
-                <CustomButton onPress={onAttendeePressed} buttonName="Attendee" type = "SECONDARY"/>
-                <CustomButton onPress={onHostPressed} buttonName="Host" type = "SECONDARY"/>
+                
+                <AttendeeHostButtons onPress={onAttendeePressed} buttonName="Attendee"/>
+                <AttendeeHostButtons onPress={onHostPressed} buttonName="Host"/>
             </View>
 
             <CustomButton onPress={onCreateAccountPressed} buttonName="Create Account" type="PRIMARY"/>
@@ -106,6 +113,9 @@ const styles = StyleSheet.create({
     },
     setTitleFont: {
         fontSize: 25
+    },
+    text: {
+        textAlign: "left"
     }
 })
 export default AccountCreationScreen

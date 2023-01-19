@@ -4,18 +4,7 @@ import {View, Text, StyleSheet, TouchableOpacity, Pressable} from 'react-native'
 const CustomButton = ({onPress, buttonName, type = "PRIMARY", color= 'white'}) => {
     const [selected, setSelected] = useState(false);
 
-    if (type === "SECONDARY") {
-        return (
-            <TouchableOpacity 
-            style={[styles.container, styles['container_' + type], {backgroundColor: selected ? "black": "white"}]}
-            onPress={() => {
-                setSelected(!selected);
-                {!selected && onPress()};
-            }}>
-                <Text style= {[styles.text, {color: selected ? "white": "black"}]} >{buttonName}</Text>
-            </TouchableOpacity>
-        )
-    } else if (type === "PRIMARY") {
+   if (type === "PRIMARY") {
         return (
         <Pressable 
             style={[styles.container, styles['container_' + type], {backgroundColor: "white"}]}

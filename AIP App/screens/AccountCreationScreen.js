@@ -7,6 +7,7 @@ import {attendeeClicked} from '../components/AttendeeHostButtons';
 import {hostClicked} from '../components/AttendeeHostButtons';
 
 import States from '../components/States';
+import { auth } from '../firebaseConfig';
 
 /*
 const isValidEmail = (email) =>
@@ -25,6 +26,25 @@ const AccountCreationScreen = ({navigation}) => {
     const [lastName, setLastName] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
     const [state, setState] = useState('');
+    
+    const handleSignUp = () => {
+        auth.createUserWithEmailAndPassword(email, password)
+        .then(userCredential => {
+            // Signed in 
+            const user = userCredential.user;
+            // user.updateFirstName(firstName);
+            user.firstName = firstName;
+            user.lastName = lastName;
+            user.password = password;
+            user.state = state;
+            // console.log(phoneNumber);
+            user.number = phoneNumber;
+            // user.setPhoneNumber(phoneNumber);
+            console.log(user.firstName, user.lastName, user.state, user.number, user.password, user.email);
+            navigation.navigate("Map");
+        })
+        .catch(error => alert(error.message))
+    }
 
     const onAttendeePressed = () => {
         console.warn("Attendee Selected"); 
@@ -55,7 +75,7 @@ const AccountCreationScreen = ({navigation}) => {
         } else if (attendeeClicked && hostClicked) {
             alert("Please only select 1 account type.")
         } else {
-            navigation.navigate("Map");
+            handleSignUp();
         }
     }
 

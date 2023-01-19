@@ -1,0 +1,44 @@
+{
+  "expo": {
+    "name": "testing",
+    "slug": "auto-industry-portal",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash1.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#22D66A"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "bundleIdentifier": "com.autoindustryportal.test",
+      "supportsTablet": true,
+      "config": {
+        "googleMapsApiKey": "AIzaSyC8HK1wR2HlPYIKZvzq78fwLx5jPav0BxM"
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#FFFFFF"
+      },
+      "package": "com.autoindustryportal.test"
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "9142222e-9b46-439f-b022-6b8ab8eb7e02"
+      }
+    },
+    "owner": "mjdemars"
+  }
+}

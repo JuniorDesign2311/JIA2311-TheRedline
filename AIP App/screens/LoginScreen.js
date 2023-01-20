@@ -2,14 +2,25 @@ import React, {useState} from 'react'
 import { View, Text } from 'react-native'
 import CustomInput from '../components/CustomInput';
 import CustomButton from '../components/CustomButton';
+import { auth } from '../firebaseConfig';
+import { db } from '../firebaseConfig';
 
 const LoginScreen = ({navigation}) => {
-    const [username, setUsername] = useState('');
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+
+    const handleLogin = () => {
+        auth.signInWithEmailAndPassword(email, password)
+        .then(userCredential => {
+            var user = userCredential.user;
+            navigation.navigate("Map");
+        })
+        .catch(error => alert(error.message))
+    }
 
 
     const onLoginPressed = () => {
-        navigation.navigate("Map");
+        handleLogin();
     }
 
     const onCreateAccountPressed = () => {
@@ -18,7 +29,7 @@ const LoginScreen = ({navigation}) => {
     
     return (
         <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
-            <CustomInput placeholder="Username" value={username} setValue={setUsername} secureTextEntry={false}/>
+            <CustomInput placeholder="Email" value={email} setValue={setEmail} secureTextEntry={false}/>
             <CustomInput placeholder="Password" value={password} setValue={setPassword} secureTextEntry={true}/>
 
             <CustomButton onPress={onLoginPressed} buttonName="Login" type="PRIMARY"/>

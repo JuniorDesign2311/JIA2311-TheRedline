@@ -81,26 +81,27 @@ const AccountCreationScreen = ({navigation}) => {
 
     return (
         <ScrollView>
-        <View style={styles.root}> 
-            <Text style={[styles.setTitleFont]}> Create Account </Text>
+            <View style={styles.root}> 
+                <Text style={[styles.setTitleFont]}> Create Account </Text>
                  
-            <CustomInput placeholder="Username" value={username} setValue={setUsername} secureTextEntry={false}/>
-            <CustomInput placeholder="Email" value={email} setValue={setEmail} secureTextEntry={false}/>
-            <CustomInput placeholder="Password" value={password} setValue={setPassword} secureTextEntry={true}/>
-            <CustomInput placeholder="Confirm Password" value={cpassword} setValue={setcPassword} secureTextEntry={true}/>
-            <CustomInput placeholder="First Name" value={firstName} setValue={setFirstName} secureTextEntry={false}/>
-            <CustomInput placeholder="Last Name" value={lastName} setValue={setLastName} secureTextEntry={false}/>
-            <CustomInput placeholder="Phone Number" value={phoneNumber} setValue={setPhoneNumber} secureTextEntry={false}/>
-            <States state={state} setState={setState}/>
+                <CustomInput placeholder="Username" value={username} setValue={setUsername} secureTextEntry={false}/>
+                <CustomInput placeholder="Email" value={email} setValue={setEmail} secureTextEntry={false}/>
+                <CustomInput placeholder="Password" value={password} setValue={setPassword} secureTextEntry={true}/>
+                <CustomInput placeholder="Confirm Password" value={cpassword} setValue={setcPassword} secureTextEntry={true}/>
+                <CustomInput placeholder="First Name" value={firstName} setValue={setFirstName} secureTextEntry={false}/>
+                <CustomInput placeholder="Last Name" value={lastName} setValue={setLastName} secureTextEntry={false}/>
+                <CustomInput placeholder="Phone Number" value={phoneNumber} setValue={setPhoneNumber} secureTextEntry={false}/>
+                <States state={state} setState={setState}/>
 
-            <View style={{flexDirection: "row"}}>
+                <View style={{flexDirection: "row"}}>
                 
-                <AttendeeHostButtons onPress={onAttendeePressed} buttonName="Attendee"/>
-                <AttendeeHostButtons onPress={onHostPressed} buttonName="Host"/>
-            </View>
+                    <AttendeeHostButtons onPress={onAttendeePressed} buttonName="Attendee"/>
+                    <AttendeeHostButtons onPress={onHostPressed} buttonName="Host"/>
+                </View>
 
-            <CustomButton onPress={onCreateAccountPressed} buttonName="Create Account" type="PRIMARY"/>
-        </View>
+                <View style={{flexDirection:"row", marginBottom:50 }}>
+                    <CustomButton onPress={onCreateAccountPressed} buttonName="Create Account" type="PRIMARY"/></View>
+                </View>
         </ScrollView>
     )
 }

@@ -76,29 +76,30 @@ const AccountCreationScreen = ({navigation}) => {
       
     }
 
-    const onCreateAccountPressed = () => {
-        var errorMessage = "Error:"
+    const onCreateAccountPressed = () => {/*
+        if (username === "" || email === "" || password === "" || cpassword === "" || firstName === "" || lastName === "" || phoneNumber === ""
+            || (!attendeeClicked && !hostClicked) || (attendeeClicked && hostClicked) || password != cpassword) {
 
-        // if (username === "" || email === "" || password === "" || cpassword === "" || firstName === "" || lastName === "" || phoneNumber === ""
-        //     || (!attendeeClicked && !hostClicked) || (attendeeClicked && hostClicked) || password != cpassword) {
+            var errorMessage = "Error:"
 
-        //     if (username === "" || email === "" || password === "" || cpassword === "" || firstName === "" || lastName === "" || phoneNumber === "" || !attendeeClicked || !hostClicked) {
-        //         errorMessage = errorMessage + "\nFill out blank field(s)";
-        //     }
+            if (username === "" || email === "" || password === "" || cpassword === "" || firstName === "" || lastName === "" || phoneNumber === "" || (!attendeeClicked && !hostClicked)) {
+                errorMessage = errorMessage + "\nFill out blank field(s)";
+            }
 
-        //     if (attendeeClicked && hostClicked) {
-        //         errorMessage = errorMessage + ("\nPlease only select 1 account type");
-        //     }
+            if (attendeeClicked && hostClicked) {
+                errorMessage = errorMessage + "\nPlease only select 1 account type";
+            }
 
-        //     if (password != cpassword) {
-        //         errorMessage = errorMessage + ("\nPassword and confirmation do not match");
-        //     }
+            if (!(password === "" && cpassword === "") && password != cpassword) {
+                errorMessage = errorMessage + "\nPassword and confirmation do not match";
+            }
 
-        // //     alert(errorMessage);
-        // } else {
+            alert(errorMessage);
+        } else {
+        **/
             handleSignUp();
             console.warn("Account Created");
-        // }
+        //}
     }
 
     return (
@@ -116,7 +117,6 @@ const AccountCreationScreen = ({navigation}) => {
                 <States state={state} setState={setState}/>
 
                 <View style={{flexDirection: "row"}}>
-                
                     <AttendeeHostButtons onPress={onAttendeePressed} buttonName="Attendee"/>
                     <AttendeeHostButtons onPress={onHostPressed} buttonName="Host"/>
                 </View>

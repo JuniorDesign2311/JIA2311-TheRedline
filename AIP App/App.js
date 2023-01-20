@@ -11,17 +11,24 @@ const Stack = createNativeStackNavigator();
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator>
+      <Stack.Navigator
+        screenOptions={{
+            headerStyle: {
+              backgroundColor: "Yellow",
+            }
+        }}>
       <Stack.Screen
           name="AccountCreation"
           component={AccountCreationScreen}
-          options={{title: "Account Creation"}}
+          options={{title: "Account Creation",
+          headerShown: false}}
         />
         
         <Stack.Screen
           name="Map"
           component={MapScreen}
-          options={{title: "Map"}}
+          options={{title: "Map",
+          headerShown: true}}
         />
         
       </Stack.Navigator>

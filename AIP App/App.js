@@ -12,7 +12,6 @@ const Stack = createNativeStackNavigator();
 export default function App() {
   return (
     <NavigationContainer>
-<<<<<<< HEAD
       <Stack.Navigator
         screenOptions={{
             headerStyle: {
@@ -20,16 +19,12 @@ export default function App() {
             }
         }}>
       <Stack.Screen
-=======
-      <Stack.Navigator>
-        <Stack.Screen
           name="Login"
           component={LoginScreen}
           options={{title: "Login"}}
         />
         
         <Stack.Screen
->>>>>>> josh
           name="AccountCreation"
           component={AccountCreationScreen}
           options={{title: "Account Creation",

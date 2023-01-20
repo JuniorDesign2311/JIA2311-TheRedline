@@ -8,6 +8,7 @@ import {hostClicked} from '../components/AttendeeHostButtons';
 
 import States from '../components/States';
 import { auth } from '../firebaseConfig';
+import * as firebase from "firebase";
 
 /*
 const isValidEmail = (email) =>
@@ -29,22 +30,23 @@ const AccountCreationScreen = ({navigation}) => {
     
     const handleSignUp = () => {
         auth.createUserWithEmailAndPassword(email, password)
-        .then(userCredential => {
-            // Signed in 
-            const user = userCredential.user;
-            // user.updateFirstName(firstName);
-            user.firstName = firstName;
-            user.lastName = lastName;
-            user.password = password;
-            user.state = state;
-            // console.log(phoneNumber);
-            user.number = phoneNumber;
-            // user.setPhoneNumber(phoneNumber);
-            console.log(user.firstName, user.lastName, user.state, user.number, user.password, user.email, user.uid);
-            navigation.navigate("Map");
-        })
-        .catch(error => alert(error.message))
+            .then(userCredential => {
+                // Signed in 
+                const user = userCredential.user;
+                // user.updateFirstName(firstName);
+                user.firstName = firstName;
+                user.lastName = lastName;
+                user.password = password;
+                user.state = state;
+                // console.log(phoneNumber);
+                user.number = phoneNumber;
+                // user.setPhoneNumber(phoneNumber);
+                console.log(user.firstName, user.lastName, user.state, user.number, user.password, user.email, user.uid);
+                navigation.navigate("Map");
+            })
+            .catch(error => alert(error.message))
     }
+
 
     const onAttendeePressed = () => {
         console.warn("Attendee Selected"); 
@@ -57,22 +59,24 @@ const AccountCreationScreen = ({navigation}) => {
     }
 
     const onCreateAccountPressed = () => {
-        if (username === "") {
-            alert("Username field is Required.")
-        } else if (email === "") {
-            alert("Email field is required.")
-        } else if (password === "") {
-            alert("Password field is required.")
-        } else if (cpassword === "") {
-            alert("Please confirm your password.")
-        } else if (firstName === "") {
-            alert("First name field is required.")
-        } else if (lastName === "") {
-            alert("Last name field is required.")
-        } else if (phoneNumber === "") {
-            alert("Phone number field is required.")
-        } else if (attendeeClicked && hostClicked) {
-            alert("Please only select 1 account type.")
+        var errorMessage = "Error:"
+
+        if (username === "" || email === "" || password === "" || cpassword === "" || firstName === "" || lastName === "" || phoneNumber === ""
+            || (!attendeeClicked && !hostClicked) || (attendeeClicked && hostClicked) || password != cpassword) {
+
+            if (username === "" || email === "" || password === "" || cpassword === "" || firstName === "" || lastName === "" || phoneNumber === "" || (!attendeeClicked && !hostClicked)) {
+                errorMessage = errorMessage + "\nFill out blank field(s)";
+            }
+
+            if (attendeeClicked && hostClicked) {
+                errorMessage = errorMessage + ("\nPlease only select 1 account type");
+            }
+
+            if (password != cpassword) {
+                errorMessage = errorMessage + ("\nPassword and confirmation do not match");
+            }
+
+            alert(errorMessage);
         } else {
             handleSignUp();
             console.warn("Account Created");

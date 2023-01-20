@@ -41,6 +41,7 @@ const AccountCreationScreen = ({navigation}) => {
             user.state = state;
             user.number = phoneNumber;
             console.log(user.firstName, user.lastName, user.state, user.number, user.password, user.email, user.uid, user.attendee, user.host);
+            getData();
             navigation.navigate("Login");
         })
         .catch(error => alert(error.message))
@@ -78,26 +79,26 @@ const AccountCreationScreen = ({navigation}) => {
     const onCreateAccountPressed = () => {
         var errorMessage = "Error:"
 
-        if (username === "" || email === "" || password === "" || cpassword === "" || firstName === "" || lastName === "" || phoneNumber === ""
-            || (!attendeeClicked && !hostClicked) || (attendeeClicked && hostClicked) || password != cpassword) {
+        // if (username === "" || email === "" || password === "" || cpassword === "" || firstName === "" || lastName === "" || phoneNumber === ""
+        //     || (!attendeeClicked && !hostClicked) || (attendeeClicked && hostClicked) || password != cpassword) {
 
-            if (username === "" || email === "" || password === "" || cpassword === "" || firstName === "" || lastName === "" || phoneNumber === "" || (!attendeeClicked && !hostClicked)) {
-                errorMessage = errorMessage + "\nFill out blank field(s)";
-            }
+        //     if (username === "" || email === "" || password === "" || cpassword === "" || firstName === "" || lastName === "" || phoneNumber === "" || !attendeeClicked || !hostClicked) {
+        //         errorMessage = errorMessage + "\nFill out blank field(s)";
+        //     }
 
-            if (attendeeClicked && hostClicked) {
-                errorMessage = errorMessage + ("\nPlease only select 1 account type");
-            }
+        //     if (attendeeClicked && hostClicked) {
+        //         errorMessage = errorMessage + ("\nPlease only select 1 account type");
+        //     }
 
-            if (password != cpassword) {
-                errorMessage = errorMessage + ("\nPassword and confirmation do not match");
-            }
+        //     if (password != cpassword) {
+        //         errorMessage = errorMessage + ("\nPassword and confirmation do not match");
+        //     }
 
-            alert(errorMessage);
-        } else {
+        // //     alert(errorMessage);
+        // } else {
             handleSignUp();
             console.warn("Account Created");
-        }
+        // }
     }
 
     return (

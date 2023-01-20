@@ -36,23 +36,25 @@ const AccountCreationScreen = ({navigation}) => {
             user.firstName = firstName;
             user.lastName = lastName;
             user.password = password;
+            user.attendee = attendeeClicked;
+            user.host = hostClicked;
             user.state = state;
             // console.log(phoneNumber);
             user.number = phoneNumber;
             // user.setPhoneNumber(phoneNumber);
-            console.log(user.firstName, user.lastName, user.state, user.number, user.password, user.email, user.uid);
+            console.log(user.firstName, user.lastName, user.state, user.number, user.password, user.email, user.uid, user.attendee, user.host);
             navigation.navigate("Map");
         })
         .catch(error => alert(error.message))
     }
 
     const onAttendeePressed = () => {
-        console.warn("Attendee Selected"); 
+        console.log("Attendee Selected"); 
         
     }
 
     const onHostPressed = () => {
-       console.warn("Host Selected");
+       console.log("Host Selected");
       
     }
 

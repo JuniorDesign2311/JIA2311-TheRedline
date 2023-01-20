@@ -10,7 +10,6 @@ import States from '../components/States';
 import { auth } from '../firebaseConfig';
 import { db } from '../firebaseConfig';
 
-
 /*
 const isValidEmail = (email) =>
 /^\w+([.-]?\w+)@\w+([.-]?\w+)(.\w{2,3})+$/.test(email);
@@ -42,6 +41,7 @@ const AccountCreationScreen = ({navigation}) => {
             user.state = state;
             user.number = phoneNumber;
             console.log(user.firstName, user.lastName, user.state, user.number, user.password, user.email, user.uid, user.attendee, user.host);
+            getData();
             navigation.navigate("Login");
         })
         .catch(error => alert(error.message))
@@ -76,28 +76,30 @@ const AccountCreationScreen = ({navigation}) => {
       
     }
 
-    const onCreateAccountPressed = () => {
-        getData();
-        if (username === "") {
-            alert("Username field is Required.")
-        } else if (email === "") {
-            alert("Email field is required.")
-        } else if (password === "") {
-            alert("Password field is required.")
-        } else if (cpassword === "") {
-            alert("Please confirm your password.")
-        } else if (firstName === "") {
-            alert("First name field is required.")
-        } else if (lastName === "") {
-            alert("Last name field is required.")
-        } else if (phoneNumber === "") {
-            alert("Phone number field is required.")
-        } else if (attendeeClicked && hostClicked) {
-            alert("Please only select 1 account type.")
+    const onCreateAccountPressed = () => {/*
+        if (username === "" || email === "" || password === "" || cpassword === "" || firstName === "" || lastName === "" || phoneNumber === ""
+            || (!attendeeClicked && !hostClicked) || (attendeeClicked && hostClicked) || password != cpassword) {
+
+            var errorMessage = "Error:"
+
+            if (username === "" || email === "" || password === "" || cpassword === "" || firstName === "" || lastName === "" || phoneNumber === "" || (!attendeeClicked && !hostClicked)) {
+                errorMessage = errorMessage + "\nFill out blank field(s)";
+            }
+
+            if (attendeeClicked && hostClicked) {
+                errorMessage = errorMessage + "\nPlease only select 1 account type";
+            }
+
+            if (!(password === "" && cpassword === "") && password != cpassword) {
+                errorMessage = errorMessage + "\nPassword and confirmation do not match";
+            }
+
+            alert(errorMessage);
         } else {
+        **/
             handleSignUp();
             console.warn("Account Created");
-        }
+        //}
     }
 
     return (
@@ -115,7 +117,6 @@ const AccountCreationScreen = ({navigation}) => {
                 <States state={state} setState={setState}/>
 
                 <View style={{flexDirection: "row"}}>
-                
                     <AttendeeHostButtons onPress={onAttendeePressed} buttonName="Attendee"/>
                     <AttendeeHostButtons onPress={onHostPressed} buttonName="Host"/>
                 </View>

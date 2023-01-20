@@ -8,7 +8,7 @@ import {hostClicked} from '../components/AttendeeHostButtons';
 
 import States from '../components/States';
 import { auth } from '../firebaseConfig';
-import * as firebase from "firebase";
+import { db } from '../firebaseConfig';
 
 /*
 const isValidEmail = (email) =>
@@ -30,31 +30,48 @@ const AccountCreationScreen = ({navigation}) => {
     
     const handleSignUp = () => {
         auth.createUserWithEmailAndPassword(email, password)
-            .then(userCredential => {
-                // Signed in 
-                const user = userCredential.user;
-                // user.updateFirstName(firstName);
-                user.firstName = firstName;
-                user.lastName = lastName;
-                user.password = password;
-                user.state = state;
-                // console.log(phoneNumber);
-                user.number = phoneNumber;
-                // user.setPhoneNumber(phoneNumber);
-                console.log(user.firstName, user.lastName, user.state, user.number, user.password, user.email, user.uid);
-                navigation.navigate("Map");
-            })
-            .catch(error => alert(error.message))
+        .then(userCredential => {
+            // Signed in 
+            const user = userCredential.user;
+            user.firstName = firstName;
+            user.lastName = lastName;
+            user.password = password;
+            user.attendee = attendeeClicked;
+            user.host = hostClicked;
+            user.state = state;
+            user.number = phoneNumber;
+            console.log(user.firstName, user.lastName, user.state, user.number, user.password, user.email, user.uid, user.attendee, user.host);
+            navigation.navigate("Login");
+        })
+        .catch(error => alert(error.message))
     }
 
+    const getData = async () => {
+        db.collection("users").add({
+            first: firstName,
+            last: lastName,
+            phoneNumber: phoneNumber,
+            username: username,
+            state: state,
+            email: email,
+            host: hostClicked,
+            attendee: attendeeClicked
+        })
+        .then((docRef) => {
+            console.log("Document written with ID: ", docRef.id);
+        })
+        .catch((error) => {
+            console.error("Error adding document: ", error);
+        });
+    }
 
     const onAttendeePressed = () => {
-        console.warn("Attendee Selected"); 
+        console.log("Attendee Selected"); 
         
     }
 
     const onHostPressed = () => {
-       console.warn("Host Selected");
+       console.log("Host Selected");
       
     }
 

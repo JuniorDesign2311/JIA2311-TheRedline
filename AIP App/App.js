@@ -5,23 +5,37 @@ import { createNativeStackNavigator } from 'react-native-screens/native-stack';
 
 import MapScreen from "./screens/MapScreen";
 import AccountCreationScreen from "./screens/AccountCreationScreen";
+import LoginScreen from './screens/LoginScreen';
 
 const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator>
+      <Stack.Navigator
+        screenOptions={{
+            headerStyle: {
+              backgroundColor: "Yellow",
+            }
+        }}>
       <Stack.Screen
+          name="Login"
+          component={LoginScreen}
+          options={{title: "Login"}}
+        />
+        
+        <Stack.Screen
           name="AccountCreation"
           component={AccountCreationScreen}
-          options={{title: "Account Creation"}}
+          options={{title: "Account Creation",
+          headerShown: false}}
         />
         
         <Stack.Screen
           name="Map"
           component={MapScreen}
-          options={{title: "Map"}}
+          options={{title: "Map",
+          headerShown: true}}
         />
         
       </Stack.Navigator>

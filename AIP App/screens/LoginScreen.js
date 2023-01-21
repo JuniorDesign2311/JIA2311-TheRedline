@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import { View, Text, TouchableOpacity } from 'react-native'
+import { View, Text, TouchableOpacity, Keyboard, ScrollView, StyleSheet, TouchableWithoutFeedback } from 'react-native'
 import CustomInput from '../components/CustomInput';
 import CustomButton from '../components/CustomButton';
 import CustomText from '../components/CustomButton';
@@ -29,6 +29,8 @@ const LoginScreen = ({navigation}) => {
     }
     
     return (
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+
         <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
             <CustomInput placeholder="Email" value={email} setValue={setEmail} secureTextEntry={false}/>
             <CustomInput placeholder="Password" value={password} setValue={setPassword} secureTextEntry={true}/>
@@ -44,7 +46,9 @@ const LoginScreen = ({navigation}) => {
             {/* <Text>Don't have an account?</Text> */}
             <CustomButton onPress={onCreateAccountPressed} buttonName="Create Account" type="PRIMARY"/>
         </View>
-    );
+        </TouchableWithoutFeedback>
+
+    )
 }
 
 export default LoginScreen

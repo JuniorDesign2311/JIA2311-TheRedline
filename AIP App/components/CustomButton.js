@@ -9,7 +9,7 @@ const CustomButton = ({onPress, buttonName, type = "PRIMARY", color= 'white'}) =
         <Pressable 
             style={[styles.container, styles['container_' + type], {backgroundColor: "white"}]}
             onPress={() => {onPress()}}>
-                <Text style= {[styles.text, {color: "black"}]} >{buttonName}</Text>
+                <Text style= {[styles.text, {color: "black"}, {fontSize: 16}]} >{buttonName}</Text>
             </Pressable>
         )
     }

@@ -76,30 +76,30 @@ const AccountCreationScreen = ({navigation}) => {
       
     }
 
-    const onCreateAccountPressed = () => {/*
+    const onCreateAccountPressed = () => {
+        //Error handling
         if (username === "" || email === "" || password === "" || cpassword === "" || firstName === "" || lastName === "" || phoneNumber === ""
             || (!attendeeClicked && !hostClicked) || (attendeeClicked && hostClicked) || password != cpassword) {
 
             var errorMessage = "Error:"
 
-            if (username === "" || email === "" || password === "" || cpassword === "" || firstName === "" || lastName === "" || phoneNumber === "" || (!attendeeClicked && !hostClicked)) {
+            if (username === "" || email === "" || password === "" || cpassword === "" || firstName === "" || lastName === "" || phoneNumber === "" || (attendeeClicked && hostClicked)) {
                 errorMessage = errorMessage + "\nFill out blank field(s)";
             }
 
-            if (attendeeClicked && hostClicked) {
+            if (!attendeeClicked && !hostClicked) {
                 errorMessage = errorMessage + "\nPlease only select 1 account type";
             }
 
-            if (!(password === "" && cpassword === "") && password != cpassword) {
-                errorMessage = errorMessage + "\nPassword and confirmation do not match";
+            if (password != cpassword) {
+                errorMessage = errorMessage + "\nPasswords do not match";
             }
 
             alert(errorMessage);
         } else {
-        **/
             handleSignUp();
             console.warn("Account Created");
-        //}
+        }
     }
 
     return (

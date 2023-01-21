@@ -53,7 +53,7 @@ export default function App() {
           name="AccountCreated"
           component={AccountCreatedScreen}
           options={{title: "AccountCreated",
-          headerShown: true}}
+          headerShown: false}}
         />
         
       </Stack.Navigator>

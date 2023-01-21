@@ -29,7 +29,7 @@ const LoginScreen = ({navigation}) => {
     }
     
     return (
-        <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
+        <ScrollView style={{flex:1,justifyContent:'center',alignItems:'center'}}>
             <CustomInput placeholder="Email" value={email} setValue={setEmail} secureTextEntry={false}/>
             <CustomInput placeholder="Password" value={password} setValue={setPassword} secureTextEntry={true}/>
             <TouchableOpacity
@@ -43,7 +43,7 @@ const LoginScreen = ({navigation}) => {
             <CustomButton onPress={onLoginPressed} buttonName="Login" type="PRIMARY"/>
             {/* <Text>Don't have an account?</Text> */}
             <CustomButton onPress={onCreateAccountPressed} buttonName="Create Account" type="PRIMARY"/>
-        </View>
+        </ScrollView>
     );
 }
 

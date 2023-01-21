@@ -1,8 +1,7 @@
 import React, {useState} from 'react'
 import { View, Text, TouchableOpacity, Button } from 'react-native'
-import CustomInput from '../components/CustomInput';
-import CustomButton from '../components/CustomButton';
-import CustomText from '../components/CustomButton';
+import ResetPasswordInput from '../components/ResetPasswordInput';
+import RequestLinkButton from '../components/RequestLinkButton';
 import { auth } from '../firebaseConfig';
 import { db } from '../firebaseConfig';
 
@@ -42,10 +41,27 @@ const LoginScreen = ({navigation}) => {
     
     return (
         <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
-            <CustomInput placeholder="Email" value={email} setValue={setEmail} secureTextEntry={false}/>
+            <TouchableOpacity
+                onPress={onCancelPressed}
+                style={{marginRight:15, marginLeft:15, marginBottom:20, textAlign: 'center'}}
+            >
+                <Text style = {{fontSize:14}}>
+                    Please enter the email address you'd like your password reset information to be sent to.
+                </Text>
+            </TouchableOpacity>
+            <ResetPasswordInput placeholder="Enter email address" value={email} setValue={setEmail} secureTextEntry={false}/>
             {/* <CustomInput placeholder="Password" value={password} setValue={setPassword} secureTextEntry={true}/> */}
-            <Button onPress={SendLinkPressed} title="Send Reset Link" color='black' borderColor='black' borderRadius/>
-            <Button onPress={onCancelPressed} title="Cancel" color='black' borderColor='black' borderRadius/>
+            <RequestLinkButton onPress={SendLinkPressed} buttonName="Request Reset Link" type="PRIMARY"/>
+            {/* <Button onPress={SendLinkPressed} title="Send Reset Link" color='black' borderColor='black' borderRadius/> */}
+            <TouchableOpacity
+                onPress={onCancelPressed}
+                style={{marginTop:0,}}
+            >
+                <Text style = {{fontSize:16, textDecorationLine: 'underline'}}>
+                    Back To Login
+                </Text>
+            </TouchableOpacity>
+            {/* <Button onPress={onCancelPressed} title="Cancel" color='black' borderColor='black' borderRadius/> */}
             {/* <TouchableOpacity
                 onPress={()=>navigation.navigate("AccountCreation")}
                 style={{marginTop:0,}}
@@ -55,7 +71,6 @@ const LoginScreen = ({navigation}) => {
                 </Text>
             </TouchableOpacity> */}
             {/* <Text>Don't have an account?</Text> */}
-            {/* <CustomButton onPress={onCancelPressed} buttonName="Create Account" type="PRIMARY"/> */}
         </View>
     );
 }

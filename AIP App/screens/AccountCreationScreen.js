@@ -121,7 +121,7 @@ const AccountCreationScreen = ({navigation}) => {
                     <AttendeeHostButtons onPress={onHostPressed} buttonName="Host"/>
                 </View>
 
-                <View style={{flexDirection:"row", marginBottom:50 }}>
+                <View style={{flexDirection:"row", marginBottom: 20, marginTop: 20 }}>
                     <CustomButton onPress={onCreateAccountPressed} buttonName="Create Account" type="PRIMARY"/></View>
                 </View>
         </ScrollView>
@@ -135,7 +135,9 @@ const styles = StyleSheet.create({
         paddingTop: 50,
     },
     setTitleFont: {
-        fontSize: 25
+        fontSize: 20,
+        marginTop: 40,
+        marginBottom: 30,
     },
     text: {
         textAlign: "left"

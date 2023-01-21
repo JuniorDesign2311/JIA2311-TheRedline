@@ -32,23 +32,43 @@ const LoginScreen = ({navigation}) => {
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
 
         <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
+            <Text style={styles.header}>
+            Welcome
+            </Text>
             <CustomInput placeholder="Email" value={email} setValue={setEmail} secureTextEntry={false}/>
             <CustomInput placeholder="Password" value={password} setValue={setPassword} secureTextEntry={true}/>
+            <CustomButton onPress={onLoginPressed} buttonName="Log in" type="PRIMARY"/>
+            {/* <Text>Don't have an account?</Text> */}
+
+            <View style={{flexDirection: 'row', alignItems: 'center', marginLeft: 25, marginRight: 25}}>
+            <View style={{flex: 1, height: 1, backgroundColor: 'lightgrey'}} />
+            <View>
+            <Text style={{width: 50, color:'grey', textAlign: 'center', fontFamily: 'Helvetica Neue'}}>or</Text>
+            </View>
+            <View style={{flex: 1, height: 1, backgroundColor: 'lightgrey'}} />
+            </View>
+
+            <CustomButton onPress={onCreateAccountPressed} buttonName="Create Account" type="PRIMARY"/>
             <TouchableOpacity
                 onPress={()=>navigation.navigate("ResetPassword")}
-                style={{marginBottom:0, marginRight:150,}}
+                style={{alignItems: 'center', marginTop: 20,}}
             >
-                <Text style = {{fontSize:13, textDecorationLine: 'underline'}}>
-                    Forgot your password?
+                <Text style = {{fontSize:13, color: '#039be5'}}>
+                    Forgot password?
                 </Text>
             </TouchableOpacity>
-            <CustomButton onPress={onLoginPressed} buttonName="Login" type="PRIMARY"/>
-            {/* <Text>Don't have an account?</Text> */}
-            <CustomButton onPress={onCreateAccountPressed} buttonName="Create Account" type="PRIMARY"/>
-        </View>
+            </View>
         </TouchableWithoutFeedback>
 
     )
 }
+
+const styles = StyleSheet.create({
+    header: {
+        fontSize: 20,
+        fontFamily: 'Helvetica Neue',
+        marginBottom: 30,
+    },
+  });
 
 export default LoginScreen

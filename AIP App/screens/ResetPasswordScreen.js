@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import { View, Text, TouchableOpacity, Button } from 'react-native'
+import { View, Text, TouchableOpacity, Button, StyleSheet } from 'react-native'
 import ResetPasswordInput from '../components/ResetPasswordInput';
 import RequestLinkButton from '../components/RequestLinkButton';
 import { auth } from '../firebaseConfig';
@@ -41,11 +41,14 @@ const LoginScreen = ({navigation}) => {
     
     return (
         <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
+            <Text style={styles.header}>
+            Reset Password
+            </Text>
             <TouchableOpacity
                 onPress={onCancelPressed}
                 style={{marginRight:15, marginLeft:15, marginBottom:20, textAlign: 'center'}}
             >
-                <Text style = {{fontSize:14}}>
+                <Text style = {{fontSize:14, textAlign: 'center', color: 'grey'}}>
                     Please enter the email address you'd like your password reset information to be sent to.
                 </Text>
             </TouchableOpacity>
@@ -57,7 +60,7 @@ const LoginScreen = ({navigation}) => {
                 onPress={onCancelPressed}
                 style={{marginTop:0,}}
             >
-                <Text style = {{fontSize:16, textDecorationLine: 'underline'}}>
+                <Text style = {{fontSize:13, marginTop: 30,  color: '#039be5'}}>
                     Back To Login
                 </Text>
             </TouchableOpacity>
@@ -74,5 +77,14 @@ const LoginScreen = ({navigation}) => {
         </View>
     );
 }
+
+const styles = StyleSheet.create({
+    header: {
+        fontSize: 20,
+        fontFamily: 'Helvetica Neue',
+        marginBottom: 15,
+    },
+  });
+
 
 export default LoginScreen

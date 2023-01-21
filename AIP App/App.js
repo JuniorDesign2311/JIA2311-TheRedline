@@ -18,6 +18,7 @@ export default function App() {
               backgroundColor: "Yellow",
             }
         }}>
+          
       <Stack.Screen
           name="Login"
           component={LoginScreen}

@@ -1,7 +1,8 @@
 import React, {useState} from 'react'
-import { View, Text } from 'react-native'
+import { View, Text, TouchableOpacity } from 'react-native'
 import CustomInput from '../components/CustomInput';
 import CustomButton from '../components/CustomButton';
+import CustomText from '../components/CustomButton';
 import { auth } from '../firebaseConfig';
 import { db } from '../firebaseConfig';
 
@@ -31,10 +32,16 @@ const LoginScreen = ({navigation}) => {
         <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
             <CustomInput placeholder="Email" value={email} setValue={setEmail} secureTextEntry={false}/>
             <CustomInput placeholder="Password" value={password} setValue={setPassword} secureTextEntry={true}/>
-
             <CustomButton onPress={onLoginPressed} buttonName="Login" type="PRIMARY"/>
-
-            <Text>Don't have an account?</Text>
+            <TouchableOpacity
+                onPress={()=>navigation.navigate("ResetPassword")}
+                style={{marginTop:0,}}
+            >
+                <Text style = {{fontSize:16, textDecorationLine: 'underline'}}>
+                    Reset Password
+                </Text>
+            </TouchableOpacity>
+            {/* <Text>Don't have an account?</Text> */}
             <CustomButton onPress={onCreateAccountPressed} buttonName="Create Account" type="PRIMARY"/>
         </View>
     );

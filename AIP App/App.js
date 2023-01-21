@@ -5,7 +5,8 @@ import { createNativeStackNavigator } from 'react-native-screens/native-stack';
 
 import MapScreen from "./screens/MapScreen";
 import AccountCreationScreen from "./screens/AccountCreationScreen";
-import LoginScreen from './screens/LoginScreen';
+import LoginScreen from './screens/LoginScreen'
+import ResetPasswordScreen from './screens/ResetPasswordScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -29,6 +30,13 @@ export default function App() {
           name="AccountCreation"
           component={AccountCreationScreen}
           options={{title: "Account Creation",
+          headerShown: false}}
+        />
+
+        <Stack.Screen
+          name="ResetPassword"
+          component={ResetPasswordScreen}
+          options={{title: "Reset Password",
           headerShown: false}}
         />
         

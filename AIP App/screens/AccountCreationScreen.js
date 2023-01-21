@@ -42,7 +42,7 @@ const AccountCreationScreen = ({navigation}) => {
             user.number = phoneNumber;
             console.log(user.firstName, user.lastName, user.state, user.number, user.password, user.email, user.uid, user.attendee, user.host);
             getData();
-            navigation.navigate("Login");
+            navigation.navigate("AccountCreated");
         })
         .catch(error => alert(error.message))
     }

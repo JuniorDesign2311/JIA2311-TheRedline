@@ -7,6 +7,7 @@ import MapScreen from "./screens/MapScreen";
 import AccountCreationScreen from "./screens/AccountCreationScreen";
 import LoginScreen from './screens/LoginScreen'
 import ResetPasswordScreen from './screens/ResetPasswordScreen';
+import AccountCreatedScreen from "./screens/AccountCreatedScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -45,6 +46,13 @@ export default function App() {
           name="Map"
           component={MapScreen}
           options={{title: "Map",
+          headerShown: true}}
+        />
+
+        <Stack.Screen
+          name="AccountCreated"
+          component={AccountCreatedScreen}
+          options={{title: "AccountCreated",
           headerShown: true}}
         />
         

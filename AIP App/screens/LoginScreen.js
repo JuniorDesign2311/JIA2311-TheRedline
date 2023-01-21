@@ -32,15 +32,15 @@ const LoginScreen = ({navigation}) => {
         <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
             <CustomInput placeholder="Email" value={email} setValue={setEmail} secureTextEntry={false}/>
             <CustomInput placeholder="Password" value={password} setValue={setPassword} secureTextEntry={true}/>
-            <CustomButton onPress={onLoginPressed} buttonName="Login" type="PRIMARY"/>
             <TouchableOpacity
                 onPress={()=>navigation.navigate("ResetPassword")}
-                style={{marginTop:0,}}
+                style={{marginBottom:0, marginRight:150,}}
             >
-                <Text style = {{fontSize:16, textDecorationLine: 'underline'}}>
-                    Reset Password
+                <Text style = {{fontSize:13, textDecorationLine: 'underline'}}>
+                    Forgot your password?
                 </Text>
             </TouchableOpacity>
+            <CustomButton onPress={onLoginPressed} buttonName="Login" type="PRIMARY"/>
             {/* <Text>Don't have an account?</Text> */}
             <CustomButton onPress={onCreateAccountPressed} buttonName="Create Account" type="PRIMARY"/>
         </View>

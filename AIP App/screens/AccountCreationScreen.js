@@ -32,6 +32,7 @@ const AccountCreationScreen = ({navigation}) => {
     const [state, setState] = useState('');
     
     const handleSignUp = () => {
+<<<<<<< HEAD
         var db = firebase.firestore();
         var usersRef = db.collection("users");
         usersRef.where("username".toLowerCase(), '==', username.toLowerCase()).get()
@@ -65,6 +66,24 @@ const AccountCreationScreen = ({navigation}) => {
             .catch(err => {
                 console.log("Error: ", err);
             });
+=======
+        auth.createUserWithEmailAndPassword(email, password)
+        .then(userCredential => {
+            // Signed in 
+            const user = userCredential.user;
+            user.firstName = firstName;
+            user.lastName = lastName;
+            user.password = password;
+            user.attendee = attendeeClicked;
+            user.host = hostClicked;
+            user.state = state;
+            user.number = phoneNumber;
+            console.log(user.firstName, user.lastName, user.state, user.number, user.password, user.email, user.uid, user.attendee, user.host);
+            getData();
+            navigation.navigate("AccountCreated");
+        })
+        .catch(error => alert(error.message))
+>>>>>>> 5e6525e6fd0a67a85ab3dbae7331da9e57b7b652
     }
 
     const getData = async () => {
@@ -147,7 +166,7 @@ const AccountCreationScreen = ({navigation}) => {
                     <AttendeeHostButtons onPress={onHostPressed} buttonName="Host"/>
                 </View>
 
-                <View style={{flexDirection:"row", marginBottom:50 }}>
+                <View style={{flexDirection:"row", marginBottom: 20, marginTop: 20 }}>
                     <CustomButton onPress={onCreateAccountPressed} buttonName="Create Account" type="PRIMARY"/></View>
                 </View>
         </ScrollView>
@@ -161,7 +180,9 @@ const styles = StyleSheet.create({
         paddingTop: 50,
     },
     setTitleFont: {
-        fontSize: 25
+        fontSize: 20,
+        marginTop: 40,
+        marginBottom: 30,
     },
     text: {
         textAlign: "left"

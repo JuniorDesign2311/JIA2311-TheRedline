@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 import {View, Text, StyleSheet, TouchableOpacity, Pressable} from 'react-native'
 
-const CustomButton = ({onPress, buttonName, type = "PRIMARY", color= 'white'}) => {
+const RequestLinkButton = ({onPress, buttonName, type = "PRIMARY", color= 'gray'}) => {
     const [selected, setSelected] = useState(false);
 
    if (type === "PRIMARY") {
@@ -17,11 +17,11 @@ const CustomButton = ({onPress, buttonName, type = "PRIMARY", color= 'white'}) =
 
 const styles = StyleSheet.create({
     container:{
-        backgroundColor: 'white',
+        backgroundColor: 'gray',
 
         borderColor: '#e8e8e8',
         borderWidth: 1,
-        borderRadius: 15,
+        borderRadius: 25,
 
         paddingHorizontal: 10,
         paddingVertical: 10,
@@ -29,9 +29,12 @@ const styles = StyleSheet.create({
 
     },
 
-    container_PRIMARY: {
-        width: "90%",
 
+    container_PRIMARY: {
+        width: "85%",
+        height: "7%",
+        justifyContent: 'center', //Centered horizontally
+        alignItems: 'center', //Centered vertically
     },
 
     container_SECONDARY: {
@@ -45,4 +48,4 @@ const styles = StyleSheet.create({
 
 });
 
-export default CustomButton
+export default RequestLinkButton

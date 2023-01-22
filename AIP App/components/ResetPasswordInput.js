@@ -2,7 +2,7 @@ import React from 'react'
 import {View, Text, TextInput, StyleSheet } from 'react-native'
 
 /* CustomInput is the stlye of each input field */
-const CustomInput = ({value, setValue, placeholder, secureTextEntry}) => {
+const ResetPasswordInput = ({value, setValue, placeholder, secureTextEntry}) => {
     return (
             <View style={styles.container}>
             <Text> {placeholder} </Text> 
@@ -34,8 +34,10 @@ const styles = StyleSheet.create({
         
     },
     container:{
-        width: '90%',
-        marginVertical: 5,
+        width: "85%",
+        // height: "7%",
+        // justifyContent: 'center', //Centered horizontally
+        // alignItems: 'center', //Centered vertically
     }
 })
-export default CustomInput
+export default ResetPasswordInput

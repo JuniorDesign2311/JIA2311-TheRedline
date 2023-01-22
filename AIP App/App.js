@@ -32,7 +32,7 @@ export default function App() {
           name="AccountCreation"
           component={AccountCreationScreen}
           options={{title: "Account Creation",
-          headerShown: false}}
+          headerShown: true}}
         />
 
         <Stack.Screen

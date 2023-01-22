@@ -32,41 +32,6 @@ const AccountCreationScreen = ({navigation}) => {
     const [state, setState] = useState('');
     
     const handleSignUp = () => {
-<<<<<<< HEAD
-        var db = firebase.firestore();
-        var usersRef = db.collection("users");
-        usersRef.where("username".toLowerCase(), '==', username.toLowerCase()).get()
-            .then(snapshot => {
-                if (snapshot.empty) {
-                    auth.createUserWithEmailAndPassword(email, password)
-                        .then(userCredential => {
-                            // Signed in 
-                            const user = userCredential.user;
-                            user.firstName = firstName;
-                            user.lastName = lastName;
-                            user.password = password;
-                            user.attendee = attendeeClicked;
-                            user.host = hostClicked;
-                            user.state = state;
-                            user.number = phoneNumber;
-                            console.log(user.firstName, user.lastName, user.state, user.number, user.password, user.email, user.uid, user.attendee, user.host);
-                            getData();
-                            navigation.navigate("Login");
-                        })
-                        .catch(error => alert(error.message))
-                } else {
-                    alert("Username already taken")
-                }
-            })
-            .then(createdUser => {
-                console.log(createdUser);
-                //Create the user doc in the users collection
-                db.collection("users").doc(createdUser.user.uid).set({ username: username });
-            })
-            .catch(err => {
-                console.log("Error: ", err);
-            });
-=======
         auth.createUserWithEmailAndPassword(email, password)
         .then(userCredential => {
             // Signed in 
@@ -83,7 +48,6 @@ const AccountCreationScreen = ({navigation}) => {
             navigation.navigate("AccountCreated");
         })
         .catch(error => alert(error.message))
->>>>>>> 5e6525e6fd0a67a85ab3dbae7331da9e57b7b652
     }
 
     const getData = async () => {

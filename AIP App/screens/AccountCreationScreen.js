@@ -32,22 +32,39 @@ const AccountCreationScreen = ({navigation}) => {
     const [state, setState] = useState('');
     
     const handleSignUp = () => {
-        auth.createUserWithEmailAndPassword(email, password)
-        .then(userCredential => {
-            // Signed in 
-            const user = userCredential.user;
-            user.firstName = firstName;
-            user.lastName = lastName;
-            user.password = password;
-            user.attendee = attendeeClicked;
-            user.host = hostClicked;
-            user.state = state;
-            user.number = phoneNumber;
-            console.log(user.firstName, user.lastName, user.state, user.number, user.password, user.email, user.uid, user.attendee, user.host);
-            getData();
-            navigation.navigate("AccountCreated");
-        })
-        .catch(error => alert(error.message))
+        var db = firebase.firestore();
+        var usersRef = db.collection("users");
+        usersRef.where("username".toLowerCase(), '==', username.toLowerCase()).get()
+            .then(snapshot => {
+                if (snapshot.empty) {
+                    auth.createUserWithEmailAndPassword(email, password)
+                        .then(userCredential => {
+                            // Signed in 
+                            const user = userCredential.user;
+                            user.firstName = firstName;
+                            user.lastName = lastName;
+                            user.password = password;
+                            user.attendee = attendeeClicked;
+                            user.host = hostClicked;
+                            user.state = state;
+                            user.number = phoneNumber;
+                            console.log(user.firstName, user.lastName, user.state, user.number, user.password, user.email, user.uid, user.attendee, user.host);
+                            getData();
+                            navigation.navigate("AccountCreated");
+                        })
+                        .catch(error => alert(error.message))
+                } else {
+                    alert("Username already taken")
+                }
+            })
+            .then(createdUser => {
+                console.log(createdUser);
+                //Create the user doc in the users collection
+                db.collection("users").doc(createdUser.user.uid).set({ username: username });
+            })
+            .catch(err => {
+                console.log("Error: ", err);
+            });
     }
 
     const getData = async () => {

@@ -9,6 +9,9 @@ import {hostClicked} from '../components/AttendeeHostButtons';
 import States from '../components/States';
 import { auth } from '../firebaseConfig';
 import { db } from '../firebaseConfig';
+import firebase from "firebase/app";
+import "firebase/firestore";
+
 
 /*
 const isValidEmail = (email) =>
@@ -29,22 +32,39 @@ const AccountCreationScreen = ({navigation}) => {
     const [state, setState] = useState('');
     
     const handleSignUp = () => {
-        auth.createUserWithEmailAndPassword(email, password)
-        .then(userCredential => {
-            // Signed in 
-            const user = userCredential.user;
-            user.firstName = firstName;
-            user.lastName = lastName;
-            user.password = password;
-            user.attendee = attendeeClicked;
-            user.host = hostClicked;
-            user.state = state;
-            user.number = phoneNumber;
-            console.log(user.firstName, user.lastName, user.state, user.number, user.password, user.email, user.uid, user.attendee, user.host);
-            getData();
-            navigation.navigate("Login");
-        })
-        .catch(error => alert(error.message))
+        var db = firebase.firestore();
+        var usersRef = db.collection("users");
+        usersRef.where("username".toLowerCase(), '==', username.toLowerCase()).get()
+            .then(snapshot => {
+                if (snapshot.empty) {
+                    auth.createUserWithEmailAndPassword(email, password)
+                        .then(userCredential => {
+                            // Signed in 
+                            const user = userCredential.user;
+                            user.firstName = firstName;
+                            user.lastName = lastName;
+                            user.password = password;
+                            user.attendee = attendeeClicked;
+                            user.host = hostClicked;
+                            user.state = state;
+                            user.number = phoneNumber;
+                            console.log(user.firstName, user.lastName, user.state, user.number, user.password, user.email, user.uid, user.attendee, user.host);
+                            getData();
+                            navigation.navigate("Login");
+                        })
+                        .catch(error => alert(error.message))
+                } else {
+                    alert("Username already taken")
+                }
+            })
+            .then(createdUser => {
+                console.log(createdUser);
+                //Create the user doc in the users collection
+                db.collection("users").doc(createdUser.user.uid).set({ username: username });
+            })
+            .catch(err => {
+                console.log("Error: ", err);
+            });
     }
 
     const getData = async () => {
@@ -81,18 +101,24 @@ const AccountCreationScreen = ({navigation}) => {
         if (username === "" || email === "" || password === "" || cpassword === "" || firstName === "" || lastName === "" || phoneNumber === ""
             || (!attendeeClicked && !hostClicked) || (attendeeClicked && hostClicked) || password != cpassword) {
 
-            var errorMessage = "Error:"
+            var errorMessage = ""
 
-            if (username === "" || email === "" || password === "" || cpassword === "" || firstName === "" || lastName === "" || phoneNumber === "" || (attendeeClicked && hostClicked)) {
-                errorMessage = errorMessage + "\nFill out blank field(s)";
+            if (username === "" || email === "" || password === "" || cpassword === "" || firstName === "" || lastName === "" || phoneNumber === "") {
+                errorMessage = errorMessage + "Fill out blank field(s).";
             }
 
-            if (!attendeeClicked && !hostClicked) {
-                errorMessage = errorMessage + "\nPlease only select 1 account type";
+            if ((attendeeClicked && hostClicked) || (!attendeeClicked && !hostClicked)) {
+                if (errorMessage != "") {
+                    errorMessage = errorMessage + "\n"
+                }
+                errorMessage = errorMessage + "Please select 1 account type.";
             }
 
             if (password != cpassword) {
-                errorMessage = errorMessage + "\nPasswords do not match";
+                if (errorMessage != "") {
+                    errorMessage = errorMessage + "\n"
+                }
+                errorMessage = errorMessage + "Passwords do not match.";
             }
 
             alert(errorMessage);

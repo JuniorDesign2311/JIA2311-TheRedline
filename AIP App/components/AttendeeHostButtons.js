@@ -18,9 +18,19 @@ const AttendeeHostButtons = ({onPress, buttonName}) => {
                     attendeeClicked = !attendeeClicked;
                 }
                 {onPress()};
+            } else if (hostClicked && (buttonName === "Attendee") || (attendeeClicked && (buttonName === "Host"))) { //if one option is chosen and they try to choose the other
+                alert("Please only choose one account type.");
+            } else if (hostClicked && !(attendeeClicked)) { //deselecting host
+                setSelected(!selected);
+                hostClicked = false;
+                attendeeClicked = false;
+            } else if (attendeeClicked && !hostClicked) { //deselecting attendee
+                setSelected(!selected);
+                attendeeClicked = !attendeeClicked;
+                hostClicked = false;
+                attendeeClicked = false;
             }
             
-            //{!selected && onPress()};
         }}>
             <Text style= {[styles.text, {color: selected ? "white": "black"}]} >{buttonName}</Text>
         </TouchableOpacity>

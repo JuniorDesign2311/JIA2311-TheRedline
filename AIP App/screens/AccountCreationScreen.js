@@ -108,13 +108,6 @@ const AccountCreationScreen = ({navigation}) => {
                 errorMessage = errorMessage + "Fill out blank field(s).";
             }
 
-            if ((attendeeClicked && hostClicked) || (!attendeeClicked && !hostClicked)) {
-                if (errorMessage != "") {
-                    errorMessage = errorMessage + "\n"
-                }
-                errorMessage = errorMessage + "Please select 1 account type.";
-            }
-
             if (password != cpassword) {
                 if (errorMessage != "") {
                     errorMessage = errorMessage + "\n"

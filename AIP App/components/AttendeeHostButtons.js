@@ -8,16 +8,19 @@ const AttendeeHostButtons = ({onPress, buttonName}) => {
     
     return (
         <TouchableOpacity 
-        style={[styles.container, {backgroundColor: selected ? "black": "white"}]}
+        style={[styles.container, {backgroundColor: selected && (hostClicked ^ attendeeClicked) ? "black": "white"}]}
         onPress={() => {
-            if (buttonName === "Host") {
-                hostClicked = !hostClicked;
-            } else if (buttonName === "Attendee") {
-                attendeeClicked = !attendeeClicked;
+            if (!hostClicked && !attendeeClicked) {
+                setSelected(!selected);
+                if (buttonName === "Host") {
+                    hostClicked = !hostClicked;
+                } else if (buttonName === "Attendee") {
+                    attendeeClicked = !attendeeClicked;
+                }
+                {onPress()};
             }
-
-            setSelected(!selected);
-            {!selected && onPress()};
+            
+            //{!selected && onPress()};
         }}>
             <Text style= {[styles.text, {color: selected ? "white": "black"}]} >{buttonName}</Text>
         </TouchableOpacity>

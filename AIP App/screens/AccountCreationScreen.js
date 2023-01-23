@@ -107,13 +107,7 @@ const AccountCreationScreen = ({navigation}) => {
             if (username === "" || email === "" || password === "" || cpassword === "" || firstName === "" || lastName === "" || phoneNumber === "") {
                 errorMessage = errorMessage + "Fill out blank field(s).";
             }
-
-            // Error message if user did not select 1 account type (attendee or host)
-            if ((attendeeClicked && hostClicked) || (!attendeeClicked && !hostClicked)) {
-                if (errorMessage != "") errorMessage = errorMessage + "\n";
-                errorMessage = errorMessage + "Please select 1 account type.";
-            }
-
+            
             // Error message if password and password confirmation do not match
             if (password != cpassword) {
                 if (errorMessage != "") errorMessage = errorMessage + "\n";

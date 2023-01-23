@@ -34,7 +34,7 @@ const AccountCreationScreen = ({navigation}) => {
     const handleSignUp = () => {
         var db = firebase.firestore();
         var usersRef = db.collection("users");
-        usersRef.where("username".toLowerCase(), '==', username.toLowerCase()).get()
+        usersRef.where("usernameToLowerCase", '==', username.toLowerCase()).get()
             .then(snapshot => {
                 if (snapshot.empty) {
                     auth.createUserWithEmailAndPassword(email, password)
@@ -54,7 +54,7 @@ const AccountCreationScreen = ({navigation}) => {
                         })
                         .catch(error => alert(error.message))
                 } else {
-                    alert("Username already taken")
+                    alert("Username already taken.")
                 }
             })
             .then(createdUser => {
@@ -73,6 +73,7 @@ const AccountCreationScreen = ({navigation}) => {
             last: lastName,
             phoneNumber: phoneNumber,
             username: username,
+            usernameToLowerCase: username.toLowerCase(),
             state: state,
             email: email,
             host: hostClicked,
@@ -87,13 +88,11 @@ const AccountCreationScreen = ({navigation}) => {
     }
 
     const onAttendeePressed = () => {
-        console.log("Attendee Selected"); 
-        
+        console.log("Attendee Selected");
     }
 
     const onHostPressed = () => {
-       console.log("Host Selected");
-      
+        console.log("Host Selected");
     }
 
     const onCreateAccountPressed = () => {
@@ -103,21 +102,20 @@ const AccountCreationScreen = ({navigation}) => {
 
             var errorMessage = ""
 
+            // Error message if a field is not filled out
             if (username === "" || email === "" || password === "" || cpassword === "" || firstName === "" || lastName === "" || phoneNumber === "") {
                 errorMessage = errorMessage + "Fill out blank field(s).";
             }
 
+            // Error message if user did not select 1 account type (attendee or host)
             if ((attendeeClicked && hostClicked) || (!attendeeClicked && !hostClicked)) {
-                if (errorMessage != "") {
-                    errorMessage = errorMessage + "\n"
-                }
+                if (errorMessage != "") errorMessage = errorMessage + "\n";
                 errorMessage = errorMessage + "Please select 1 account type.";
             }
 
+            // Error message if password and password confirmation do not match
             if (password != cpassword) {
-                if (errorMessage != "") {
-                    errorMessage = errorMessage + "\n"
-                }
+                if (errorMessage != "") errorMessage = errorMessage + "\n";
                 errorMessage = errorMessage + "Passwords do not match.";
             }
 

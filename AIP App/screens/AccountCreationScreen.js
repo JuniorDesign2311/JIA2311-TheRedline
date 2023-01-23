@@ -32,6 +32,7 @@ const AccountCreationScreen = ({navigation}) => {
     const [state, setState] = useState('');
     
     const handleSignUp = () => {
+
         var db = firebase.firestore();
         var usersRef = db.collection("users");
         usersRef.where("username".toLowerCase(), '==', username.toLowerCase()).get()

@@ -9,7 +9,7 @@ const CustomButton = ({onPress, buttonName, type = "PRIMARY", color= 'white'}) =
         <Pressable 
             style={[styles.container, styles['container_' + type], {backgroundColor: "white"}]}
             onPress={() => {onPress()}}>
-                <Text style= {[styles.text, {color: "black"}]} >{buttonName}</Text>
+                <Text style= {[styles.text, {color: "black"}, {fontSize: 16}]} >{buttonName}</Text>
             </Pressable>
         )
     }
@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
 
         borderColor: '#e8e8e8',
         borderWidth: 1,
-        borderRadius: 5,
+        borderRadius: 15,
 
         paddingHorizontal: 10,
         paddingVertical: 10,

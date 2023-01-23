@@ -1,15 +1,33 @@
-import React from 'react';
-import MapView from 'react-native-maps';
-import { PROVIDER_GOOGLE } from 'react-native-maps';
-import { StyleSheet, View } from 'react-native';
+import React, { useMemo, useRef, useCallback } from 'react';
+import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
+import { StyleSheet, Text, View } from 'react-native';
+import BottomSheet from '@gorhom/bottom-sheet';
 
-export default function MapScreen() {
+const MapScreen = () => {
+
+  const sheetRef = useRef(null);
+
+  const snapPoints = useMemo(() => [ '80%', '20%' ]);
+
   return (
     <View style={styles.container}>
       <MapView provider={PROVIDER_GOOGLE} style={styles.map} />
+
+      <BottomSheet
+        ref={sheetRef}
+        index={1}
+        snapPoints={snapPoints}
+      >
+
+        <View style={styles.container}>
+          <Text style={styles.headline}>Events</Text>
+        </View>
+        
+      </BottomSheet>
+
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -19,4 +37,11 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
   },
+  headline: {
+    textAlign: 'center',
+    fontWeight: 'bold',
+    fontSize: 18,
+  }
 });
+
+export default MapScreen;

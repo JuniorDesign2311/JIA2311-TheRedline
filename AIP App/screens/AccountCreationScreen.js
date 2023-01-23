@@ -8,6 +8,10 @@ import {hostClicked} from '../components/AttendeeHostButtons';
 
 import States from '../components/States';
 import { auth } from '../firebaseConfig';
+import { db } from '../firebaseConfig';
+import firebase from "firebase/app";
+import "firebase/firestore";
+
 
 /*
 const isValidEmail = (email) =>
@@ -28,51 +32,97 @@ const AccountCreationScreen = ({navigation}) => {
     const [state, setState] = useState('');
     
     const handleSignUp = () => {
-        auth.createUserWithEmailAndPassword(email, password)
-        .then(userCredential => {
-            // Signed in 
-            const user = userCredential.user;
-            // user.updateFirstName(firstName);
-            user.firstName = firstName;
-            user.lastName = lastName;
-            user.password = password;
-            user.state = state;
-            // console.log(phoneNumber);
-            user.number = phoneNumber;        
-            // user.setPhoneNumber(phoneNumber);
-            console.log(user.firstName, user.lastName, user.state, user.number, user.password, user.email, user.uid);
-            navigation.navigate("Map"); 
+
+        var db = firebase.firestore();
+        var usersRef = db.collection("users");
+        usersRef.where("username".toLowerCase(), '==', username.toLowerCase()).get()
+            .then(snapshot => {
+                if (snapshot.empty) {
+                    auth.createUserWithEmailAndPassword(email, password)
+                        .then(userCredential => {
+                            // Signed in 
+                            const user = userCredential.user;
+                            user.firstName = firstName;
+                            user.lastName = lastName;
+                            user.password = password;
+                            user.attendee = attendeeClicked;
+                            user.host = hostClicked;
+                            user.state = state;
+                            user.number = phoneNumber;
+                            console.log(user.firstName, user.lastName, user.state, user.number, user.password, user.email, user.uid, user.attendee, user.host);
+                            getData();
+                            navigation.navigate("AccountCreated");
+                        })
+                        .catch(error => alert(error.message))
+                } else {
+                    alert("Username already taken")
+                }
+            })
+            .then(createdUser => {
+                console.log(createdUser);
+                //Create the user doc in the users collection
+                db.collection("users").doc(createdUser.user.uid).set({ username: username });
+            })
+            .catch(err => {
+                console.log("Error: ", err);
+            });
+    }
+
+    const getData = async () => {
+        db.collection("users").add({
+            first: firstName,
+            last: lastName,
+            phoneNumber: phoneNumber,
+            username: username,
+            state: state,
+            email: email,
+            host: hostClicked,
+            attendee: attendeeClicked
         })
-        .catch(error => alert(error.message))
+        .then((docRef) => {
+            console.log("Document written with ID: ", docRef.id);
+        })
+        .catch((error) => {
+            console.error("Error adding document: ", error);
+        });
     }
 
     const onAttendeePressed = () => {
-        console.warn("Attendee Selected"); 
+        console.log("Attendee Selected"); 
         
     }
 
     const onHostPressed = () => {
-       console.warn("Host Selected");
+       console.log("Host Selected");
       
     }
 
     const onCreateAccountPressed = () => {
-        if (username === "") {
-            alert("Username field is Required.")
-        } else if (email === "") {
-            alert("Email field is required.")
-        } else if (password === "") {
-            alert("Password field is required.")
-        } else if (cpassword === "") {
-            alert("Please confirm your password.")
-        } else if (firstName === "") {
-            alert("First name field is required.")
-        } else if (lastName === "") {
-            alert("Last name field is required.")
-        } else if (phoneNumber === "") {
-            alert("Phone number field is required.")
-        } else if (attendeeClicked && hostClicked) {
-            alert("Please only select 1 account type.")
+        //Error handling
+        if (username === "" || email === "" || password === "" || cpassword === "" || firstName === "" || lastName === "" || phoneNumber === ""
+            || (!attendeeClicked && !hostClicked) || (attendeeClicked && hostClicked) || password != cpassword) {
+
+            var errorMessage = ""
+
+            if (username === "" || email === "" || password === "" || cpassword === "" || firstName === "" || lastName === "" || phoneNumber === "") {
+                errorMessage = errorMessage + "Fill out blank field(s).";
+            }
+
+            if ((attendeeClicked && hostClicked) || (!attendeeClicked && !hostClicked)) {
+                if (errorMessage != "") {
+                    errorMessage = errorMessage + "\n"
+                }
+                errorMessage = errorMessage + "Please select 1 account type.";
+            }
+
+            if (password != cpassword) {
+                if (errorMessage != "") {
+                    errorMessage = errorMessage + "\n"
+                }
+                errorMessage = errorMessage + "Passwords do not match.";
+            }
+
+            alert(errorMessage);
         } else {
             handleSignUp();
             console.warn("Account Created");
@@ -81,26 +131,26 @@ const AccountCreationScreen = ({navigation}) => {
 
     return (
         <ScrollView>
-        <View style={styles.root}> 
-            <Text style={[styles.setTitleFont]}> Create Account </Text>
+            <View style={styles.root}> 
+                <Text style={[styles.setTitleFont]}> Create Account </Text>
                  
-            <CustomInput placeholder="Username" value={username} setValue={setUsername} secureTextEntry={false}/>
-            <CustomInput placeholder="Email" value={email} setValue={setEmail} secureTextEntry={false}/>
-            <CustomInput placeholder="Password" value={password} setValue={setPassword} secureTextEntry={true}/>
-            <CustomInput placeholder="Confirm Password" value={cpassword} setValue={setcPassword} secureTextEntry={true}/>
-            <CustomInput placeholder="First Name" value={firstName} setValue={setFirstName} secureTextEntry={false}/>
-            <CustomInput placeholder="Last Name" value={lastName} setValue={setLastName} secureTextEntry={false}/>
-            <CustomInput placeholder="Phone Number" value={phoneNumber} setValue={setPhoneNumber} secureTextEntry={false}/>
-            <States state={state} setState={setState}/>
+                <CustomInput placeholder="Username" value={username} setValue={setUsername} secureTextEntry={false}/>
+                <CustomInput placeholder="Email" value={email} setValue={setEmail} secureTextEntry={false}/>
+                <CustomInput placeholder="Password" value={password} setValue={setPassword} secureTextEntry={true}/>
+                <CustomInput placeholder="Confirm Password" value={cpassword} setValue={setcPassword} secureTextEntry={true}/>
+                <CustomInput placeholder="First Name" value={firstName} setValue={setFirstName} secureTextEntry={false}/>
+                <CustomInput placeholder="Last Name" value={lastName} setValue={setLastName} secureTextEntry={false}/>
+                <CustomInput placeholder="Phone Number" value={phoneNumber} setValue={setPhoneNumber} secureTextEntry={false}/>
+                <States state={state} setState={setState}/>
 
-            <View style={{flexDirection: "row"}}>
-                
-                <AttendeeHostButtons onPress={onAttendeePressed} buttonName="Attendee"/>
-                <AttendeeHostButtons onPress={onHostPressed} buttonName="Host"/>
-            </View>
+                <View style={{flexDirection: "row"}}>
+                    <AttendeeHostButtons onPress={onAttendeePressed} buttonName="Attendee"/>
+                    <AttendeeHostButtons onPress={onHostPressed} buttonName="Host"/>
+                </View>
 
-            <CustomButton onPress={onCreateAccountPressed} buttonName="Create Account" type="PRIMARY"/>
-        </View>
+                <View style={{flexDirection:"row", marginBottom: 20, marginTop: 20 }}>
+                    <CustomButton onPress={onCreateAccountPressed} buttonName="Create Account" type="PRIMARY"/></View>
+                </View>
         </ScrollView>
     )
 }
@@ -112,7 +162,9 @@ const styles = StyleSheet.create({
         paddingTop: 50,
     },
     setTitleFont: {
-        fontSize: 25
+        fontSize: 20,
+        marginTop: 40,
+        marginBottom: 30,
     },
     text: {
         textAlign: "left"

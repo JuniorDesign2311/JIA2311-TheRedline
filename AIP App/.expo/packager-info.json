@@ -1,9 +1,27 @@
 {
+<<<<<<< HEAD
   "expoServerPort": 19001,
   "packagerPort": 19001,
   "packagerPid": null,
   "expoServerNgrokUrl": null,
   "packagerNgrokUrl": null,
   "ngrokPid": null,
+=======
+<<<<<<< HEAD
+  "expoServerPort": null,
+  "packagerPort": null,
+  "packagerPid": null,
+  "expoServerNgrokUrl": null,
+  "packagerNgrokUrl": null,
+  "ngrokPid": null,
+=======
+  "expoServerPort": 19000,
+  "packagerPort": 19000,
+  "packagerPid": null,
+  "expoServerNgrokUrl": "https://eg-cu5.anonymous.aip-app.exp.direct",
+  "packagerNgrokUrl": "https://eg-cu5.anonymous.aip-app.exp.direct",
+  "ngrokPid": 29040,
+>>>>>>> main
+>>>>>>> parent of 248d8c4b (Revert "Merge pull request #36 from JuniorDesign2311/Felice")
   "webpackServerPort": null
 }

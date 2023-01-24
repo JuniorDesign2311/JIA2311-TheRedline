@@ -3,6 +3,10 @@ import { View, Text, StyleSheet, ScrollView } from 'react-native'
 import CustomInput from '../components/CustomInput';
 import CustomButton from '../components/CustomButton';
 import AttendeeHostButtons, { setAttendeeClicked, setHostClicked } from '../components/AttendeeHostButtons';
+<<<<<<< HEAD
+=======
+
+>>>>>>> parent of 248d8c4b (Revert "Merge pull request #36 from JuniorDesign2311/Felice")
 import States from '../components/States';
 import { auth } from '../firebaseConfig';
 import { db } from '../firebaseConfig';
@@ -137,10 +141,16 @@ const AccountCreationScreen = ({ navigation }) => {
             }
 
             if (!attendeeClicked && !hostClicked) {
+<<<<<<< HEAD
                 if (errorMessage != "") errorMessage = errorMessage + "\n";
                 errorMessage = errorMessage + "Please choose an account type."
             }
 
+=======
+                errorMessage = errorMessage + "Please choose an account type."
+            }
+            
+>>>>>>> parent of 248d8c4b (Revert "Merge pull request #36 from JuniorDesign2311/Felice")
             // Error message if password and password confirmation do not match
             if (password != cpassword) {
                 if (errorMessage != "") errorMessage = errorMessage + "\n";
@@ -160,6 +170,7 @@ const AccountCreationScreen = ({ navigation }) => {
             <View style={styles.root}>
                 <Text style={[styles.setTitleFont]}> Create Account </Text>
 
+<<<<<<< HEAD
                 <CustomInput placeholder="Username" value={username} setValue={setUsername} secureTextEntry={false} />
                 <CustomInput placeholder="Email" value={email} setValue={setEmail} secureTextEntry={false} />
                 <CustomInput placeholder="Password" value={password} setValue={setPassword} secureTextEntry={true} />
@@ -172,6 +183,11 @@ const AccountCreationScreen = ({ navigation }) => {
                 <View style={{ flexDirection: "row" }}>
                     <AttendeeHostButtons onPress={onAttendeePressed} buttonName="Attendee" />
                     <AttendeeHostButtons onPress={onHostPressed} buttonName="Host" />
+=======
+                <View style={{flexDirection: "row"}}>
+                    <AttendeeHostButtons onPress={onAttendeePressed} buttonClicked={attendeeClicked} buttonName = "Attendee"/>
+                    <AttendeeHostButtons onPress={onHostPressed} buttonClicked={hostClicked} buttonName = "Host"/>
+>>>>>>> parent of 248d8c4b (Revert "Merge pull request #36 from JuniorDesign2311/Felice")
                 </View>
 
                 <View style={{ flexDirection: "row", marginBottom: 20, marginTop: 20 }}>

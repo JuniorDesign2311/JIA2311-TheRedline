@@ -1,9 +1,9 @@
 {
-  "expoServerPort": 19003,
-  "packagerPort": 19003,
+  "expoServerPort": 19000,
+  "packagerPort": 19000,
   "packagerPid": null,
   "expoServerNgrokUrl": "https://eg-cu5.anonymous.aip-app.exp.direct",
   "packagerNgrokUrl": "https://eg-cu5.anonymous.aip-app.exp.direct",
-  "ngrokPid": 21452,
+  "ngrokPid": 29040,
   "webpackServerPort": null
 }

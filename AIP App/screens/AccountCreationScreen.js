@@ -1,8 +1,14 @@
-import React, {useState} from 'react'
-import { View, Text, StyleSheet, ScrollView} from 'react-native'
+import React, { useState } from 'react'
+import { View, Text, StyleSheet, ScrollView } from 'react-native'
 import CustomInput from '../components/CustomInput';
 import CustomButton from '../components/CustomButton';
+<<<<<<< HEAD
+import AttendeeHostButtons from '../components/AttendeeHostButtons';
+import { attendeeClicked } from '../components/AttendeeHostButtons';
+import { hostClicked } from '../components/AttendeeHostButtons';
+=======
 import AttendeeHostButtons, { setAttendeeClicked, setHostClicked } from '../components/AttendeeHostButtons';
+>>>>>>> main
 
 import States from '../components/States';
 import { auth } from '../firebaseConfig';
@@ -18,7 +24,7 @@ const isValidEmail = (email) =>
 const isValidPhoneNumber = (phone) =>
 /^(?(\d{3}))?[- ]?(\d{3})[- ]?(\d{4})$/.test(phone);
 */
-const AccountCreationScreen = ({navigation}) => {
+const AccountCreationScreen = ({ navigation }) => {
     /* useState returns the original value argument that's passed in and a function that returns the changed value */
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
@@ -28,32 +34,55 @@ const AccountCreationScreen = ({navigation}) => {
     const [lastName, setLastName] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
     const [state, setState] = useState('');
+<<<<<<< HEAD
+=======
     const [attendeeClicked, setAttendeeClicked] = useState(false);
     const [hostClicked, setHostClicked] = useState(false);
     
     const handleSignUp = () => {
+>>>>>>> main
 
+    const handleSignUp = () => {
         var db = firebase.firestore();
         var usersRef = db.collection("users");
+        // query for inputted username
         usersRef.where("usernameToLowerCase", '==', username.toLowerCase()).get()
             .then(snapshot => {
                 if (snapshot.empty) {
-                    auth.createUserWithEmailAndPassword(email, password)
-                        .then(userCredential => {
-                            // Signed in 
-                            const user = userCredential.user;
-                            user.firstName = firstName;
-                            user.lastName = lastName;
-                            user.password = password;
-                            user.attendee = attendeeClicked;
-                            user.host = hostClicked;
-                            user.state = state;
-                            user.number = phoneNumber;
-                            console.log(user.firstName, user.lastName, user.state, user.number, user.password, user.email, user.uid, user.attendee, user.host);
-                            getData();
-                            navigation.navigate("AccountCreated");
+
+                    // query for inputted phone number
+                    usersRef.where("phoneNumber", "==", phoneNumber).get()
+                        .then(snapshot => {
+                            if (snapshot.empty) {
+                                auth.createUserWithEmailAndPassword(email, password)
+                                    .then(userCredential => {
+                                        // Signed in 
+                                        const user = userCredential.user;
+                                        user.firstName = firstName;
+                                        user.lastName = lastName;
+                                        user.password = password;
+                                        user.attendee = attendeeClicked;
+                                        user.host = hostClicked;
+                                        user.state = state;
+                                        user.number = phoneNumber;
+                                        console.log(user.firstName, user.lastName, user.state, user.number, user.password, user.email, user.uid, user.attendee, user.host);
+                                        getData();
+                                        navigation.navigate("AccountCreated");
+                                    })
+                                    .catch(error => alert(error.message))
+                            } else {
+                                alert("Phone number is already linked to an account.")
+                            }
+
                         })
-                        .catch(error => alert(error.message))
+                        .then(createdUser => {
+                            console.log(createdUser);
+                            db.collection("users").doc(createdUser.user.uid).set({ phoneNumber: phoneNumber });
+                        })
+                        .catch(err => {
+                            console.log("Error: ", err);
+                        })
+
                 } else {
                     alert("Username already taken.")
                 }
@@ -80,12 +109,12 @@ const AccountCreationScreen = ({navigation}) => {
             host: hostClicked,
             attendee: attendeeClicked
         })
-        .then((docRef) => {
-            console.log("Document written with ID: ", docRef.id);
-        })
-        .catch((error) => {
-            console.error("Error adding document: ", error);
-        });
+            .then((docRef) => {
+                console.log("Document written with ID: ", docRef.id);
+            })
+            .catch((error) => {
+                console.error("Error adding document: ", error);
+            });
     }
 
     const onAttendeePressed = () => {
@@ -119,10 +148,13 @@ const AccountCreationScreen = ({navigation}) => {
                 errorMessage = errorMessage + "Fill out blank field(s).";
             }
 
+<<<<<<< HEAD
+=======
             if (!attendeeClicked && !hostClicked) {
                 errorMessage = errorMessage + "Please choose an account type."
             }
             
+>>>>>>> main
             // Error message if password and password confirmation do not match
             if (password != cpassword) {
                 if (errorMessage != "") errorMessage = errorMessage + "\n";
@@ -139,8 +171,10 @@ const AccountCreationScreen = ({navigation}) => {
 
     return (
         <ScrollView>
-            <View style={styles.root}> 
+            <View style={styles.root}>
                 <Text style={[styles.setTitleFont]}> Create Account </Text>
+<<<<<<< HEAD
+=======
                  
                 <CustomInput placeholder="Username" value={username} setValue={setUsername} secureTextEntry={false}/>
                 <CustomInput placeholder="Email" value={email} setValue={setEmail} secureTextEntry={false}/>
@@ -155,10 +189,25 @@ const AccountCreationScreen = ({navigation}) => {
                     <AttendeeHostButtons onPress={onAttendeePressed} buttonClicked={attendeeClicked} buttonName = "Attendee"/>
                     <AttendeeHostButtons onPress={onHostPressed} buttonClicked={hostClicked} buttonName = "Host"/>
                 </View>
+>>>>>>> main
 
-                <View style={{flexDirection:"row", marginBottom: 20, marginTop: 20 }}>
-                    <CustomButton onPress={onCreateAccountPressed} buttonName="Create Account" type="PRIMARY"/></View>
+                <CustomInput placeholder="Username" value={username} setValue={setUsername} secureTextEntry={false} />
+                <CustomInput placeholder="Email" value={email} setValue={setEmail} secureTextEntry={false} />
+                <CustomInput placeholder="Password" value={password} setValue={setPassword} secureTextEntry={true} />
+                <CustomInput placeholder="Confirm Password" value={cpassword} setValue={setcPassword} secureTextEntry={true} />
+                <CustomInput placeholder="First Name" value={firstName} setValue={setFirstName} secureTextEntry={false} />
+                <CustomInput placeholder="Last Name" value={lastName} setValue={setLastName} secureTextEntry={false} />
+                <CustomInput placeholder="Phone Number" value={phoneNumber} setValue={setPhoneNumber} secureTextEntry={false} />
+                <States state={state} setState={setState} />
+
+                <View style={{ flexDirection: "row" }}>
+                    <AttendeeHostButtons onPress={onAttendeePressed} buttonName="Attendee" />
+                    <AttendeeHostButtons onPress={onHostPressed} buttonName="Host" />
                 </View>
+
+                <View style={{ flexDirection: "row", marginBottom: 20, marginTop: 20 }}>
+                    <CustomButton onPress={onCreateAccountPressed} buttonName="Create Account" type="PRIMARY" /></View>
+            </View>
         </ScrollView>
     )
 }

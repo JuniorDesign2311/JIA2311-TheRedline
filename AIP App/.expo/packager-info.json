@@ -1,9 +1,18 @@
 {
+<<<<<<< HEAD
+  "expoServerPort": null,
+  "packagerPort": null,
+  "packagerPid": null,
+  "expoServerNgrokUrl": null,
+  "packagerNgrokUrl": null,
+  "ngrokPid": null,
+=======
   "expoServerPort": 19000,
   "packagerPort": 19000,
   "packagerPid": null,
   "expoServerNgrokUrl": "https://eg-cu5.anonymous.aip-app.exp.direct",
   "packagerNgrokUrl": "https://eg-cu5.anonymous.aip-app.exp.direct",
   "ngrokPid": 29040,
+>>>>>>> main
   "webpackServerPort": null
 }

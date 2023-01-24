@@ -2,14 +2,7 @@ import React, { useState } from 'react'
 import { View, Text, StyleSheet, ScrollView } from 'react-native'
 import CustomInput from '../components/CustomInput';
 import CustomButton from '../components/CustomButton';
-<<<<<<< HEAD
-import AttendeeHostButtons from '../components/AttendeeHostButtons';
-import { attendeeClicked } from '../components/AttendeeHostButtons';
-import { hostClicked } from '../components/AttendeeHostButtons';
-=======
 import AttendeeHostButtons, { setAttendeeClicked, setHostClicked } from '../components/AttendeeHostButtons';
->>>>>>> main
-
 import States from '../components/States';
 import { auth } from '../firebaseConfig';
 import { db } from '../firebaseConfig';
@@ -34,14 +27,9 @@ const AccountCreationScreen = ({ navigation }) => {
     const [lastName, setLastName] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
     const [state, setState] = useState('');
-<<<<<<< HEAD
-=======
     const [attendeeClicked, setAttendeeClicked] = useState(false);
     const [hostClicked, setHostClicked] = useState(false);
     
-    const handleSignUp = () => {
->>>>>>> main
-
     const handleSignUp = () => {
         var db = firebase.firestore();
         var usersRef = db.collection("users");
@@ -148,13 +136,11 @@ const AccountCreationScreen = ({ navigation }) => {
                 errorMessage = errorMessage + "Fill out blank field(s).";
             }
 
-<<<<<<< HEAD
-=======
             if (!attendeeClicked && !hostClicked) {
+                if (errorMessage != "") errorMessage = errorMessage + "\n";
                 errorMessage = errorMessage + "Please choose an account type."
             }
-            
->>>>>>> main
+
             // Error message if password and password confirmation do not match
             if (password != cpassword) {
                 if (errorMessage != "") errorMessage = errorMessage + "\n";
@@ -173,23 +159,6 @@ const AccountCreationScreen = ({ navigation }) => {
         <ScrollView>
             <View style={styles.root}>
                 <Text style={[styles.setTitleFont]}> Create Account </Text>
-<<<<<<< HEAD
-=======
-                 
-                <CustomInput placeholder="Username" value={username} setValue={setUsername} secureTextEntry={false}/>
-                <CustomInput placeholder="Email" value={email} setValue={setEmail} secureTextEntry={false}/>
-                <CustomInput placeholder="Password" value={password} setValue={setPassword} secureTextEntry={true}/>
-                <CustomInput placeholder="Confirm Password" value={cpassword} setValue={setcPassword} secureTextEntry={true}/>
-                <CustomInput placeholder="First Name" value={firstName} setValue={setFirstName} secureTextEntry={false}/>
-                <CustomInput placeholder="Last Name" value={lastName} setValue={setLastName} secureTextEntry={false}/>
-                <CustomInput placeholder="Phone Number" value={phoneNumber} setValue={setPhoneNumber} secureTextEntry={false}/>
-                <States state={state} setState={setState}/>
-
-                <View style={{flexDirection: "row"}}>
-                    <AttendeeHostButtons onPress={onAttendeePressed} buttonClicked={attendeeClicked} buttonName = "Attendee"/>
-                    <AttendeeHostButtons onPress={onHostPressed} buttonClicked={hostClicked} buttonName = "Host"/>
-                </View>
->>>>>>> main
 
                 <CustomInput placeholder="Username" value={username} setValue={setUsername} secureTextEntry={false} />
                 <CustomInput placeholder="Email" value={email} setValue={setEmail} secureTextEntry={false} />

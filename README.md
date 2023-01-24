@@ -3,9 +3,9 @@ There is currently no centralized place for vintage car enthusiasts to connect w
 
 ## Release Notes
 
-### Version 0.1.0
+## Version 0.1.0
 
-#### New Features
+### New Features
 * Login Screen
 * Account Creation Screen
 * Forgot Password Authentication
@@ -13,5 +13,5 @@ There is currently no centralized place for vintage car enthusiasts to connect w
 * App Open Animation
 * Account Successfully Created Screen
 
-#### Bug Fixes
+### Bug Fixes
 N/A

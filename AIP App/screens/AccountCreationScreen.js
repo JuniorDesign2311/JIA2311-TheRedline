@@ -111,7 +111,7 @@ const AccountCreationScreen = ({ navigation }) => {
         console.log("Host Clicked");
     }
 
-    const onContinuePressed = () => {
+    const onCreateAccountPressed = () => {
         //Error handling
         var errorMessage = ""
 

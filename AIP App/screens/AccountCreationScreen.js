@@ -129,6 +129,7 @@ const AccountCreationScreen = ({ navigation }) => {
                 errorMessage = errorMessage + "Passwords do not match.";
             }
 
+            // Error message if password is less than 6 characters
             if (password.length < 6) {
                 if (errorMessage != "") errorMessage = errorMessage + "\n";
                 errorMessage = errorMessage + "Password must have at least 6 charaters.";

@@ -33,6 +33,7 @@ const AccountCreationScreen = ({ navigation }) => {
         usersRef.where("usernameToLowerCase", '==', username.toLowerCase()).get()
             .then(snapshot => {
                 if (snapshot.empty) {
+
                     // query for inputted phone number
                     usersRef.where("phoneNumber", "==", phoneNumber).get()
                         .then(snapshot => {
@@ -48,7 +49,7 @@ const AccountCreationScreen = ({ navigation }) => {
                                     })
                                     .catch(error => alert(error.message))
                             } else {
-                                alert("Phone number is already linked to an account.");
+                                alert("Phone number is already linked to an account.")
                             }
 
                         })
@@ -61,7 +62,7 @@ const AccountCreationScreen = ({ navigation }) => {
                         })
 
                 } else {
-                    alert("Username already taken.");
+                    alert("Username already taken.")
                 }
             })
             .then(createdUser => {
@@ -91,6 +92,24 @@ const AccountCreationScreen = ({ navigation }) => {
             });
     }
 
+    const onAttendeePressed = () => {
+        if (hostClicked)  {
+            alert("Please only choose one account type.");
+        } else {
+            setAttendeeClicked(!attendeeClicked);
+        }  
+        
+        console.log("Attendee Clicked");
+    }
+
+    const onHostPressed = () => {
+        if (attendeeClicked)  {
+            alert("Please only choose one account type.");
+        } else {
+            setHostClicked(!hostClicked);
+        }  
+        console.log("Host Clicked");
+    }
 
     const onContinuePressed = () => {
         //Error handling
@@ -133,17 +152,22 @@ const AccountCreationScreen = ({ navigation }) => {
     }
 
     return (
-        <ScrollView>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
             <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
                 <Text style={[styles.setTitleFont]}> Create Account </Text>
-                <CustomInput placeholder="Username" value={username} setValue={setUsername} secureTextEntry={false}/>
-                <CustomInput placeholder="Email" value={email} setValue={setEmail} secureTextEntry={false} inputMode = "email"/>
-                <CustomInput placeholder="Password" value={password} setValue={setPassword} secureTextEntry={true}/>
-                <CustomInput placeholder="Confirm Password" value={cpassword} setValue={setcPassword} secureTextEntry={true}/>
-                <View style={{flexDirection:"row", marginBottom: 20, marginTop: 20 }}>
-                    <CustomButton onPress={onContinuePressed} buttonName="continue" type="PRIMARY"/></View>
-                </View>
-        </ScrollView>
+
+                <CustomInput placeholder="Username" value={username} setValue={setUsername} secureTextEntry={false} />
+                <CustomInput placeholder="Email" value={email} setValue={setEmail} secureTextEntry={false} />
+                <CustomInput placeholder="Password" value={password} setValue={setPassword} secureTextEntry={true} />
+                <CustomInput placeholder="Confirm Password" value={cpassword} setValue={setcPassword} secureTextEntry={true} />
+                <CustomInput placeholder="Phone Number" value={phoneNumber} setValue={setPhoneNumber} secureTextEntry={false} />
+
+                <View style={{ flexDirection: "row", marginBottom: 20, marginTop: 20 }}>
+                    <CustomButton onPress={onContinuePressed} buttonName="Continue" type="PRIMARY" /></View>
+                    
+            </View>
+        </TouchableWithoutFeedback>
+        
     )
 }
 
@@ -155,7 +179,7 @@ const styles = StyleSheet.create({
     },
     setTitleFont: {
         fontSize: 20,
-        marginTop: 150,
+        marginTop: 40,
         marginBottom: 30,
     },
     text: {

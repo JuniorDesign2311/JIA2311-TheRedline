@@ -4,8 +4,8 @@ import {View, Text, TextInput, StyleSheet } from 'react-native'
 /* CustomInput is the stlye of each input field */
 const CustomInput = ({value, setValue, placeholder, secureTextEntry, inputMode = "text"}) => {
     return (
-            <View style={styles.container}>
-            <Text> {placeholder} </Text> 
+        <View style={styles.container}>
+            <Text> {placeholder} </Text>
             <View style={styles.textField}>
             <TextInput 
                 value={value}
@@ -14,7 +14,7 @@ const CustomInput = ({value, setValue, placeholder, secureTextEntry, inputMode =
                 placeholderTextColor= "#D3D3D3"
                 secureTextEntry = {secureTextEntry}
                 inputMode = {inputMode} />
-        </View>
+            </View>
         </View>
     )
 }

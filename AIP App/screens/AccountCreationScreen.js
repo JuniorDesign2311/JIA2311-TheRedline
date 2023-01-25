@@ -1,24 +1,16 @@
-import React, {useState} from 'react'
-import { View, Text, StyleSheet, ScrollView} from 'react-native'
+import React, { useState } from 'react'
+import { View, Text, StyleSheet, ScrollView, TouchableWithoutFeedback, Keyboard } from 'react-native'
 import CustomInput from '../components/CustomInput';
 import CustomButton from '../components/CustomButton';
 import AttendeeHostButtons, { setAttendeeClicked, setHostClicked } from '../components/AttendeeHostButtons';
-
 import States from '../components/States';
 import { auth } from '../firebaseConfig';
 import { db } from '../firebaseConfig';
 import firebase from "firebase/app";
+import { useNavigation } from '@react-navigation/native';
 import "firebase/firestore";
 
-
-/*
-const isValidEmail = (email) =>
-/^\w+([.-]?\w+)@\w+([.-]?\w+)(.\w{2,3})+$/.test(email);
-
-const isValidPhoneNumber = (phone) =>
-/^(?(\d{3}))?[- ]?(\d{3})[- ]?(\d{4})$/.test(phone);
-*/
-const AccountCreationScreen = ({navigation}) => {
+const AccountCreationScreen = ({ navigation }) => {
     /* useState returns the original value argument that's passed in and a function that returns the changed value */
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
@@ -30,30 +22,45 @@ const AccountCreationScreen = ({navigation}) => {
     const [state, setState] = useState('');
     const [attendeeClicked, setAttendeeClicked] = useState(false);
     const [hostClicked, setHostClicked] = useState(false);
-    
-    const handleSignUp = () => {
 
+    // Document id to distinguish each user within our database
+    const documentId = username+phoneNumber;
+
+    const handleSignUp = () => {
         var db = firebase.firestore();
         var usersRef = db.collection("users");
+        // query for inputted username
         usersRef.where("usernameToLowerCase", '==', username.toLowerCase()).get()
             .then(snapshot => {
                 if (snapshot.empty) {
-                    auth.createUserWithEmailAndPassword(email, password)
-                        .then(userCredential => {
-                            // Signed in 
-                            const user = userCredential.user;
-                            user.firstName = firstName;
-                            user.lastName = lastName;
-                            user.password = password;
-                            user.attendee = attendeeClicked;
-                            user.host = hostClicked;
-                            user.state = state;
-                            user.number = phoneNumber;
-                            console.log(user.firstName, user.lastName, user.state, user.number, user.password, user.email, user.uid, user.attendee, user.host);
-                            getData();
-                            navigation.navigate("AccountCreated");
+
+                    // query for inputted phone number
+                    usersRef.where("phoneNumber", "==", phoneNumber).get()
+                        .then(snapshot => {
+                            if (snapshot.empty) {
+                                auth.createUserWithEmailAndPassword(email, password)
+                                    .then(userCredential => {
+                                        // Signed in 
+                                        getData();
+                                        //Navigates to second creation screen and passes data through
+                                        navigation.navigate('AccountCreation2', {
+                                            docID: (username+phoneNumber)
+                                        });
+                                    })
+                                    .catch(error => alert(error.message))
+                            } else {
+                                alert("Phone number is already linked to an account.")
+                            }
+
                         })
-                        .catch(error => alert(error.message))
+                        .then(createdUser => {
+                            console.log(createdUser);
+                            db.collection("users").doc(createdUser.user.uid).set({ phoneNumber: phoneNumber });
+                        })
+                        .catch(err => {
+                            console.log("Error: ", err);
+                        })
+
                 } else {
                     alert("Username already taken.")
                 }
@@ -69,23 +76,20 @@ const AccountCreationScreen = ({navigation}) => {
     }
 
     const getData = async () => {
-        db.collection("users").add({
-            first: firstName,
-            last: lastName,
+        db.collection("users").doc(documentId).set({
+            first: null,
+            last: null,
             phoneNumber: phoneNumber,
             username: username,
             usernameToLowerCase: username.toLowerCase(),
-            state: state,
+            state: null,
             email: email,
-            host: hostClicked,
-            attendee: attendeeClicked
+            host: null,
+            attendee: null
         })
-        .then((docRef) => {
-            console.log("Document written with ID: ", docRef.id);
-        })
-        .catch((error) => {
-            console.error("Error adding document: ", error);
-        });
+            .catch((error) => {
+                console.error("Error adding document: ", error);
+            });
     }
 
     const onAttendeePressed = () => {
@@ -107,41 +111,49 @@ const AccountCreationScreen = ({navigation}) => {
         console.log("Host Clicked");
     }
 
-    const onCreateAccountPressed = () => {
+    const onContinuePressed = () => {
         //Error handling
-        if (username === "" || email === "" || password === "" || cpassword === "" || firstName === "" || lastName === "" || phoneNumber === ""
-            || (!attendeeClicked && !hostClicked) || (attendeeClicked && hostClicked) || password != cpassword) {
+        var errorMessage = ""
 
-            var errorMessage = ""
+        if (username === "" || email === "" || password === "" || cpassword === ""|| phoneNumber === ""
+            || password != cpassword || password.length < 6 || password.length > 40 || phoneNumber.length != 10) {
 
             // Error message if a field is not filled out
-            if (username === "" || email === "" || password === "" || cpassword === "" || firstName === "" || lastName === "" || phoneNumber === "") {
+            if (username === "" || email === "" || password === "" || cpassword === ""|| phoneNumber === "") {
                 errorMessage = errorMessage + "Fill out blank field(s).";
             }
 
-            if (!attendeeClicked && !hostClicked) {
-                errorMessage = errorMessage + "Please choose an account type."
-            }
-            
             // Error message if password and password confirmation do not match
             if (password != cpassword) {
                 if (errorMessage != "") errorMessage = errorMessage + "\n";
                 errorMessage = errorMessage + "Passwords do not match.";
             }
 
+            if (password.length < 6) {
+                if (errorMessage != "") errorMessage = errorMessage + "\n";
+                errorMessage = errorMessage + "Password must have at least 6 charaters.";
+            }
+
+            if (password.length > 40) {
+                if (errorMessage != "") errorMessage = errorMessage + "\n";
+                errorMessage = errorMessage + "Password can't be longer than 40 charaters.";
+            }
+
+            if (phoneNumber.length != 10) {
+                if (errorMessage != "") errorMessage = errorMessage + "\n";
+                errorMessage = errorMessage + "Your phone number is too long or too short";
+            }
+
             alert(errorMessage);
         } else {
-        
             handleSignUp();
-            console.warn("Account Created");
         }
     }
 
     return (
         <ScrollView>
-            <View style={styles.root}> 
+            <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
                 <Text style={[styles.setTitleFont]}> Create Account </Text>
-                 
                 <CustomInput placeholder="Username" value={username} setValue={setUsername} secureTextEntry={false}/>
                 <CustomInput placeholder="Email" value={email} setValue={setEmail} secureTextEntry={false} inputMode = "email"/>
                 <CustomInput placeholder="Password" value={password} setValue={setPassword} secureTextEntry={true}/>

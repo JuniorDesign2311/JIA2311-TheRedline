@@ -152,6 +152,7 @@ const AccountCreationScreen = ({ navigation }) => {
 
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+            <ScrollView>
             <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
                 <Text style={[styles.setTitleFont]}> Create Account </Text>
                 <CustomInput placeholder="Username" value={username} setValue={setUsername} secureTextEntry={false}/>
@@ -162,7 +163,7 @@ const AccountCreationScreen = ({ navigation }) => {
                 <View style={{flexDirection:"row", marginBottom: 20, marginTop: 20 }}>
                     <CustomButton onPress={onContinuePressed} buttonName="Continue" type="PRIMARY"/></View>
                 </View>
-        </ScrollView>
+                </ScrollView>
         </TouchableWithoutFeedback>
         
     )
@@ -176,7 +177,7 @@ const styles = StyleSheet.create({
     },
     setTitleFont: {
         fontSize: 20,
-        marginTop: 40,
+        marginTop: 150,
         marginBottom: 30,
     },
     text: {

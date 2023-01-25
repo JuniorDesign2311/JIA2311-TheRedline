@@ -126,10 +126,10 @@ const AccountCreationScreen = ({ navigation }) => {
 
     const onCreateAccountPressed = () => {
         //Error handling
-        if (username === "" || email === "" || password === "" || cpassword === "" || firstName === "" || lastName === "" || phoneNumber === ""
-            || (!attendeeClicked && !hostClicked) || (attendeeClicked && hostClicked) || password != cpassword) {
+        var errorMessage = ""
 
-            var errorMessage = ""
+        if (username === "" || email === "" || password === "" || cpassword === "" || firstName === "" || lastName === "" || phoneNumber === ""
+            || (!attendeeClicked && !hostClicked) || (attendeeClicked && hostClicked) || password != cpassword || password.length < 6) {
 
             // Error message if a field is not filled out
             if (username === "" || email === "" || password === "" || cpassword === "" || firstName === "" || lastName === "" || phoneNumber === "") {
@@ -145,6 +145,11 @@ const AccountCreationScreen = ({ navigation }) => {
             if (password != cpassword) {
                 if (errorMessage != "") errorMessage = errorMessage + "\n";
                 errorMessage = errorMessage + "Passwords do not match.";
+            }
+
+            if (password.length < 6) {
+                if (errorMessage != "") errorMessage = errorMessage + "\n";
+                errorMessage = errorMessage + "Password must have at least 6 charaters.";
             }
 
             alert(errorMessage);

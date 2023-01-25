@@ -175,8 +175,8 @@ const AccountCreationScreen = ({ navigation }) => {
                 <States state={state} setState={setState} />
 
                 <View style={{ flexDirection: "row" }}>
-                    <AttendeeHostButtons onPress={onAttendeePressed} buttonName="Attendee" />
-                    <AttendeeHostButtons onPress={onHostPressed} buttonName="Host" />
+                    <AttendeeHostButtons onPress={onAttendeePressed} buttonClicked={attendeeClicked} buttonName="Attendee" />
+                    <AttendeeHostButtons onPress={onHostPressed} buttonClicked={hostClicked} buttonName="Host" />
                 </View>
 
                 <View style={{ flexDirection: "row", marginBottom: 20, marginTop: 20 }}>

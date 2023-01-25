@@ -8,7 +8,6 @@ const AttendeeHostButtons = ({onPress, buttonClicked, buttonName}) => {
         style={[styles.container, {backgroundColor: buttonClicked ? "black": "white"}]}
         onPress={() => { 
             {onPress()};
-            
         }}>
             <Text style= {[styles.text, {color: buttonClicked ? "white": "black"}]} >{buttonName}</Text>
         </TouchableOpacity>

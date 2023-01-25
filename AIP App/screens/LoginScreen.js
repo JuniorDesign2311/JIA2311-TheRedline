@@ -10,8 +10,38 @@ import { db } from '../firebaseConfig';
 const LoginScreen = ({navigation}) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const isValidemail = true;
-    const isValidPassword = true;
+    const [emailError, setEmailError] = useState('');
+    const [passwordError, setPasswordError] = useState('');
+
+    const validateEmail = () => {
+        if (email.length === 0) {
+            setEmailError('Email Field is Empty')
+        }
+        else if (!email.includes('@')) {
+            setEmailError('Invalid Email Address');
+        }
+        else if (email.indexOf(' ') >= 0) {
+            setEmailError('Email Cannot Contain Spaces')
+        }
+        else {
+            setEmailError('');
+        }
+    }
+
+    const validatePassword = () => {
+        if (password.length === 0) {
+            setPasswordError('Password Field is Empty')
+        }
+        else if (password.length < 6) {
+            setPasswordError('Password must be at least 6 characters');
+        }
+        else if (password.indexOf(' ') >= 0) {
+            setPasswordError('Password Cannot Contain Spaces')
+        }
+        else {
+            setPasswordError('');
+        }
+    }
 
     const handleLogin = () => {
         auth.signInWithEmailAndPassword(email, password)
@@ -19,11 +49,13 @@ const LoginScreen = ({navigation}) => {
             var user = userCredential.user;
             navigation.navigate("Map");
         })
-        .catch(error => alert(error.message))
+        .catch(error => console.warn(error.message))
     }
 
 
     const onLoginPressed = () => {
+        validateEmail();
+        validatePassword();
         handleLogin();
     }
 
@@ -39,12 +71,10 @@ const LoginScreen = ({navigation}) => {
             Welcome
             </Text>
             <CustomInput placeholder="Email" value={email} setValue={setEmail} secureTextEntry={false}/>
-            <Text style={styles.errorMsg}> Email is wrong </Text>
+            <Text style={styles.error}> {emailError} </Text>
             <CustomInput placeholder="Password" value={password} setValue={setPassword} secureTextEntry={true}/>
-
+            <Text style={styles.error}> {passwordError} </Text>
             <CustomButton onPress={onLoginPressed} buttonName="Log in" type="PRIMARY"/>
-            {/* <Text>Don't have an account?</Text> */}
-
             <View style={{flexDirection: 'row', alignItems: 'center', marginLeft: 25, marginRight: 25}}>
             <View style={{flex: 1, height: 1, backgroundColor: 'lightgrey'}} />
             <View>
@@ -74,6 +104,9 @@ const styles = StyleSheet.create({
         fontFamily: 'Helvetica Neue',
         marginBottom: 30,
     },
+    error: {
+        color:'red'
+    }
   });
 
 export default LoginScreen

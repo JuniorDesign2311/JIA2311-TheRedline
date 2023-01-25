@@ -7,6 +7,7 @@ import States from '../components/States';
 import { auth } from '../firebaseConfig';
 import { db } from '../firebaseConfig';
 import firebase from "firebase/app";
+import { useNavigation } from '@react-navigation/native';
 import "firebase/firestore";
 
 
@@ -17,25 +18,25 @@ const isValidEmail = (email) =>
 const isValidPhoneNumber = (phone) =>
 /^(?(\d{3}))?[- ]?(\d{3})[- ]?(\d{4})$/.test(phone);
 */
-const AccountCreationScreen2 = ({ navigation }) => {
+const AccountCreationScreen2 = ({ navigation, route }) => {
     /* useState returns the original value argument that's passed in and a function that returns the changed value */
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [state, setState] = useState('');
     const [attendeeClicked, setAttendeeClicked] = useState(false);
     const [hostClicked, setHostClicked] = useState(false);
+    var db = firebase.firestore();
+    var documentId = route.params.docID
 
-
-
-    // const updateData = () => {
-    //     db.collection("users").doc(documentId).update({
-    //         first: firstName,
-    //         last: lastName,
-    //         state: state,
-    //         host: hostClicked,
-    //         attendee: attendeeClicked
-    //     })
-    // }
+    const updateData = () => {
+        db.collection("users").doc(documentId).update({
+            first: firstName,
+            last: lastName,
+            state: state,
+            host: hostClicked,
+            attendee: attendeeClicked
+        })
+    }
 
     const onAttendeePressed = () => {
         if (hostClicked)  {
@@ -76,7 +77,7 @@ const AccountCreationScreen2 = ({ navigation }) => {
             alert(errorMessage);
         } else {
         
-            // updateData();
+            updateData();
             console.warn("Account Created");
             navigation.navigate("AccountCreated");
         }

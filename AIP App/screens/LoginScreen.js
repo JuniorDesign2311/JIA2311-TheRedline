@@ -1,10 +1,11 @@
-import React, {useState} from 'react'
+import React, {useState, useRef, useMemo} from 'react'
 import { View, Text, TouchableOpacity, Keyboard, ScrollView, StyleSheet, TouchableWithoutFeedback } from 'react-native'
 import CustomInput from '../components/CustomInput';
 import CustomButton from '../components/CustomButton';
 import CustomText from '../components/CustomButton';
 import { auth } from '../firebaseConfig';
 import { db } from '../firebaseConfig';
+import BottomSheet from '@gorhom/bottom-sheet';
 
 
 const LoginScreen = ({navigation}) => {
@@ -13,6 +14,8 @@ const LoginScreen = ({navigation}) => {
     const [emailError, setEmailError] = useState('');
     const [passwordError, setPasswordError] = useState('');
 
+    const sheetRef = useRef(null);
+    const snapPoints = useMemo(() => [ '75%', '15%' ]);
     const validateEmail = () => {
         if (email.length === 0) {
             setEmailError('Email Field is Empty')
@@ -76,32 +79,43 @@ const LoginScreen = ({navigation}) => {
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
 
-        <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
+        <View style={{flex:1,justifyContent:'center',alignItems:'center', backgroundColor: '#d796fa'}}>
             <Text style={styles.header}>
             Welcome
             </Text>
-            <CustomInput placeholder="Email" value={email} setValue={setEmail} secureTextEntry={false}/>
-            <Text style={styles.error}> {emailError} </Text>
-            <CustomInput placeholder="Password" value={password} setValue={setPassword} secureTextEntry={true}/>
-            <Text style={styles.error}> {passwordError} </Text>
-            <CustomButton onPress={onLoginPressed} buttonName="Log in" type="PRIMARY"/>
-            <View style={{flexDirection: 'row', alignItems: 'center', marginLeft: 25, marginRight: 25}}>
-            <View style={{flex: 1, height: 1, backgroundColor: 'lightgrey'}} />
-            <View>
-            <Text style={{width: 50, color:'grey', textAlign: 'center', fontFamily: 'Helvetica Neue'}}>or</Text>
-            </View>
-            <View style={{flex: 1, height: 1, backgroundColor: 'lightgrey'}} />
-            </View>
 
-            <CustomButton onPress={onCreateAccountPressed} buttonName="Create Account" type="PRIMARY"/>
-            <TouchableOpacity
-                onPress={onForgotPasswordPressed}
-                style={{alignItems: 'center', marginTop: 20,}}
+            <BottomSheet
+            ref={sheetRef}
+            index={1}
+            snapPoints={snapPoints}
+            style={styles.bottomSheetStyle}
             >
-                <Text style = {{fontSize:13, color: '#039be5'}}>
-                    Forgot password?
-                </Text>
-            </TouchableOpacity>
+                <View style={styles.sheet}>
+                <CustomInput placeholder="Email" value={email} setValue={setEmail} secureTextEntry={false}/>
+                <Text style={styles.error}> {emailError} </Text>
+                <CustomInput placeholder="Password" value={password} setValue={setPassword} secureTextEntry={true}/>
+                <Text style={styles.error}> {passwordError} </Text>
+                <CustomButton onPress={onLoginPressed} buttonName="Log in" type="PRIMARY"/>
+                <View style={{flexDirection: 'row', alignItems: 'center', marginLeft: 25, marginRight: 25}}>
+                <View style={{flex: 1, height: 1, backgroundColor: 'lightgrey'}} />
+                <View>
+                <Text style={{width: 50, color:'grey', textAlign: 'center', fontFamily: 'Helvetica Neue'}}>or</Text>
+                </View>
+
+                <View style={{flex: 1, height: 1, backgroundColor: 'lightgrey'}} />
+                </View>
+
+                <CustomButton onPress={onCreateAccountPressed} buttonName="Create Account" type="PRIMARY"/>
+                <TouchableOpacity
+                    onPress={onForgotPasswordPressed}
+                    style={{alignItems: 'center', marginTop: 20,}}
+                >
+                    <Text style = {{fontSize:13, color: '#039be5'}}>
+                        Forgot password?
+                    </Text>
+                </TouchableOpacity>
+                </View>
+            </BottomSheet>
             </View>
         </TouchableWithoutFeedback>
 
@@ -110,12 +124,22 @@ const LoginScreen = ({navigation}) => {
 
 const styles = StyleSheet.create({
     header: {
-        fontSize: 20,
+        fontSize: 45,
         fontFamily: 'Helvetica Neue',
-        marginBottom: 30,
+        fontWeight: 'bold',
+        paddingTop: 50,
+        marginBottom: 610,
+        marginRight: 170
     },
     error: {
-        color:'red'
+        color:'red',
+        textAlign: 'center'
+    },
+    sheet: {
+        alignItems: 'center',
+    },
+    bottomSheetStyle: {
+        borderRadius: 50
     }
   });
 

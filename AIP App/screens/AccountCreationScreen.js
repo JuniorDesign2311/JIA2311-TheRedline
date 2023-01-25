@@ -22,7 +22,10 @@ const AccountCreationScreen = ({ navigation }) => {
     const [state, setState] = useState('');
     const [attendeeClicked, setAttendeeClicked] = useState(false);
     const [hostClicked, setHostClicked] = useState(false);
-    
+
+    // Document id to distinguish each user within our database
+    const documentId = username+phoneNumber;
+
     const handleSignUp = () => {
         var db = firebase.firestore();
         var usersRef = db.collection("users");
@@ -39,7 +42,10 @@ const AccountCreationScreen = ({ navigation }) => {
                                     .then(userCredential => {
                                         // Signed in 
                                         getData();
-                                        navigation.navigate("AccountCreation2");
+                                        //Navigates to second creation screen and passes data through
+                                        navigation.navigate('AccountCreation2', {
+                                            docID: (username+phoneNumber)
+                                        });
                                     })
                                     .catch(error => alert(error.message))
                             } else {
@@ -48,6 +54,7 @@ const AccountCreationScreen = ({ navigation }) => {
 
                         })
                         .then(createdUser => {
+                            console.log(createdUser);
                             db.collection("users").doc(createdUser.user.uid).set({ phoneNumber: phoneNumber });
                         })
                         .catch(err => {
@@ -59,6 +66,7 @@ const AccountCreationScreen = ({ navigation }) => {
                 }
             })
             .then(createdUser => {
+                console.log(createdUser);
                 //Create the user doc in the users collection
                 db.collection("users").doc(createdUser.user.uid).set({ username: username });
             })
@@ -66,9 +74,6 @@ const AccountCreationScreen = ({ navigation }) => {
                 console.log("Error: ", err);
             });
     }
-
-    // Document id to distinguish each user within our database
-    var documentId = username+phoneNumber;
 
     const getData = async () => {
         db.collection("users").doc(documentId).set({
@@ -111,7 +116,7 @@ const AccountCreationScreen = ({ navigation }) => {
         var errorMessage = ""
 
         if (username === "" || email === "" || password === "" || cpassword === ""|| phoneNumber === ""
-            || password != cpassword || password.length < 6 || password.length > 25 || phoneNumber.length != 10) {
+            || password != cpassword || password.length < 6 || password.length > 40 || phoneNumber.length != 10) {
 
             // Error message if a field is not filled out
             if (username === "" || email === "" || password === "" || cpassword === ""|| phoneNumber === "") {
@@ -124,9 +129,14 @@ const AccountCreationScreen = ({ navigation }) => {
                 errorMessage = errorMessage + "Passwords do not match.";
             }
 
-            if (password.length < 6 || password.length > 25) {
+            if (password.length < 6) {
                 if (errorMessage != "") errorMessage = errorMessage + "\n";
                 errorMessage = errorMessage + "Password must have at least 6 charaters.";
+            }
+
+            if (password.length > 40) {
+                if (errorMessage != "") errorMessage = errorMessage + "\n";
+                errorMessage = errorMessage + "Password can't be longer than 40 charaters.";
             }
 
             if (phoneNumber.length != 10) {
@@ -137,7 +147,6 @@ const AccountCreationScreen = ({ navigation }) => {
             alert(errorMessage);
         } else {
             handleSignUp();
-            console.warn("Account Created");
         }
     }
 
@@ -154,6 +163,7 @@ const AccountCreationScreen = ({ navigation }) => {
 
                 <View style={{ flexDirection: "row", marginBottom: 20, marginTop: 20 }}>
                     <CustomButton onPress={onContinuePressed} buttonName="Continue" type="PRIMARY" /></View>
+                    
             </View>
         </TouchableWithoutFeedback>
         

@@ -6,9 +6,12 @@ import CustomText from '../components/CustomButton';
 import { auth } from '../firebaseConfig';
 import { db } from '../firebaseConfig';
 
+
 const LoginScreen = ({navigation}) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const isValidemail = true;
+    const isValidPassword = true;
 
     const handleLogin = () => {
         auth.signInWithEmailAndPassword(email, password)
@@ -36,7 +39,9 @@ const LoginScreen = ({navigation}) => {
             Welcome
             </Text>
             <CustomInput placeholder="Email" value={email} setValue={setEmail} secureTextEntry={false}/>
+            <Text style={styles.errorMsg}> Email is wrong </Text>
             <CustomInput placeholder="Password" value={password} setValue={setPassword} secureTextEntry={true}/>
+
             <CustomButton onPress={onLoginPressed} buttonName="Log in" type="PRIMARY"/>
             {/* <Text>Don't have an account?</Text> */}
 

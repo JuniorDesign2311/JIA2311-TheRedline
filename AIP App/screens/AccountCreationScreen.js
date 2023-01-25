@@ -32,6 +32,7 @@ const AccountCreationScreen = ({ navigation }) => {
         usersRef.where("usernameToLowerCase", '==', username.toLowerCase()).get()
             .then(snapshot => {
                 if (snapshot.empty) {
+
                     // query for inputted phone number
                     usersRef.where("phoneNumber", "==", phoneNumber).get()
                         .then(snapshot => {
@@ -47,7 +48,7 @@ const AccountCreationScreen = ({ navigation }) => {
                                     })
                                     .catch(error => alert(error.message))
                             } else {
-                                alert("Phone number is already linked to an account.");
+                                alert("Phone number is already linked to an account.")
                             }
 
                         })
@@ -60,7 +61,7 @@ const AccountCreationScreen = ({ navigation }) => {
                         })
 
                 } else {
-                    alert("Username already taken.");
+                    alert("Username already taken.")
                 }
             })
             .then(createdUser => {
@@ -90,6 +91,24 @@ const AccountCreationScreen = ({ navigation }) => {
             });
     }
 
+    const onAttendeePressed = () => {
+        if (hostClicked)  {
+            alert("Please only choose one account type.");
+        } else {
+            setAttendeeClicked(!attendeeClicked);
+        }  
+        
+        console.log("Attendee Clicked");
+    }
+
+    const onHostPressed = () => {
+        if (attendeeClicked)  {
+            alert("Please only choose one account type.");
+        } else {
+            setHostClicked(!hostClicked);
+        }  
+        console.log("Host Clicked");
+    }
 
     const onContinuePressed = () => {
         //Error handling
@@ -109,6 +128,7 @@ const AccountCreationScreen = ({ navigation }) => {
                 errorMessage = errorMessage + "Passwords do not match.";
             }
 
+            // Error message if password is less than 6 characters
             if (password.length < 6) {
                 if (errorMessage != "") errorMessage = errorMessage + "\n";
                 errorMessage = errorMessage + "Password must have at least 6 charaters.";
@@ -131,7 +151,7 @@ const AccountCreationScreen = ({ navigation }) => {
     }
 
     return (
-        <ScrollView>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
             <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
                 <Text style={[styles.setTitleFont]}> Create Account </Text>
                 <CustomInput placeholder="Username" value={username} setValue={setUsername} secureTextEntry={false}/>
@@ -140,9 +160,11 @@ const AccountCreationScreen = ({ navigation }) => {
                 <CustomInput placeholder="Confirm Password" value={cpassword} setValue={setcPassword} secureTextEntry={true}/>
                 <CustomInput placeholder="Phone Number" value={cpassword} setValue={setcPassword} secureTextEntry={true} keyboardType = 'phone-pad'/>
                 <View style={{flexDirection:"row", marginBottom: 20, marginTop: 20 }}>
-                    <CustomButton onPress={onContinuePressed} buttonName="continue" type="PRIMARY"/></View>
+                    <CustomButton onPress={onContinuePressed} buttonName="Continue" type="PRIMARY"/></View>
                 </View>
         </ScrollView>
+        </TouchableWithoutFeedback>
+        
     )
 }
 
@@ -154,7 +176,7 @@ const styles = StyleSheet.create({
     },
     setTitleFont: {
         fontSize: 20,
-        marginTop: 150,
+        marginTop: 40,
         marginBottom: 30,
     },
     text: {

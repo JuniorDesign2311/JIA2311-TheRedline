@@ -33,7 +33,6 @@ const AccountCreationScreen = ({ navigation }) => {
         usersRef.where("usernameToLowerCase", '==', username.toLowerCase()).get()
             .then(snapshot => {
                 if (snapshot.empty) {
-
                     // query for inputted phone number
                     usersRef.where("phoneNumber", "==", phoneNumber).get()
                         .then(snapshot => {
@@ -49,7 +48,7 @@ const AccountCreationScreen = ({ navigation }) => {
                                     })
                                     .catch(error => alert(error.message))
                             } else {
-                                alert("Phone number is already linked to an account.")
+                                alert("Phone number is already linked to an account.");
                             }
 
                         })
@@ -62,7 +61,7 @@ const AccountCreationScreen = ({ navigation }) => {
                         })
 
                 } else {
-                    alert("Username already taken.")
+                    alert("Username already taken.");
                 }
             })
             .then(createdUser => {
@@ -92,26 +91,8 @@ const AccountCreationScreen = ({ navigation }) => {
             });
     }
 
-    const onAttendeePressed = () => {
-        if (hostClicked)  {
-            alert("Please only choose one account type.");
-        } else {
-            setAttendeeClicked(!attendeeClicked);
-        }  
-        
-        console.log("Attendee Clicked");
-    }
 
-    const onHostPressed = () => {
-        if (attendeeClicked)  {
-            alert("Please only choose one account type.");
-        } else {
-            setHostClicked(!hostClicked);
-        }  
-        console.log("Host Clicked");
-    }
-
-    const onCreateAccountPressed = () => {
+    const onContinuePressed = () => {
         //Error handling
         var errorMessage = ""
 
@@ -158,18 +139,8 @@ const AccountCreationScreen = ({ navigation }) => {
                 <CustomInput placeholder="Email" value={email} setValue={setEmail} secureTextEntry={false} inputMode = "email"/>
                 <CustomInput placeholder="Password" value={password} setValue={setPassword} secureTextEntry={true}/>
                 <CustomInput placeholder="Confirm Password" value={cpassword} setValue={setcPassword} secureTextEntry={true}/>
-                <CustomInput placeholder="First Name" value={firstName} setValue={setFirstName} secureTextEntry={false}/>
-                <CustomInput placeholder="Last Name" value={lastName} setValue={setLastName} secureTextEntry={false}/>
-                <CustomInput placeholder="Phone Number" value={phoneNumber} setValue={setPhoneNumber} secureTextEntry={false} inputMode = "tel"/>
-                <States state={state} setState={setState}/>
-
-                <View style={{flexDirection: "row"}}>
-                    <AttendeeHostButtons onPress={onAttendeePressed} buttonClicked={attendeeClicked} buttonName = "Attendee"/>
-                    <AttendeeHostButtons onPress={onHostPressed} buttonClicked={hostClicked} buttonName = "Host"/>
-                </View>
-
                 <View style={{flexDirection:"row", marginBottom: 20, marginTop: 20 }}>
-                    <CustomButton onPress={onCreateAccountPressed} buttonName="Create Account" type="PRIMARY"/></View>
+                    <CustomButton onPress={onContinuePressed} buttonName="continue" type="PRIMARY"/></View>
                 </View>
         </ScrollView>
     )
@@ -183,7 +154,7 @@ const styles = StyleSheet.create({
     },
     setTitleFont: {
         fontSize: 20,
-        marginTop: 40,
+        marginTop: 150,
         marginBottom: 30,
     },
     text: {

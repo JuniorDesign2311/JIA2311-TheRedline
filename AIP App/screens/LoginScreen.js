@@ -47,9 +47,17 @@ const LoginScreen = ({navigation}) => {
         auth.signInWithEmailAndPassword(email, password)
         .then(userCredential => {
             var user = userCredential.user;
+            setEmailError('');
+            setPasswordError('');
             navigation.navigate("Map");
         })
         .catch(error => console.warn(error.message))
+    }
+
+    const onForgotPasswordPressed = () => {
+        navigation.navigate("ResetPassword");   
+        setEmailError('');
+        setPasswordError('');
     }
 
 
@@ -61,6 +69,8 @@ const LoginScreen = ({navigation}) => {
 
     const onCreateAccountPressed = () => {
         navigation.navigate("AccountCreation");
+        setEmailError('');
+        setPasswordError('');
     }
     
     return (
@@ -85,7 +95,7 @@ const LoginScreen = ({navigation}) => {
 
             <CustomButton onPress={onCreateAccountPressed} buttonName="Create Account" type="PRIMARY"/>
             <TouchableOpacity
-                onPress={()=>navigation.navigate("ResetPassword")}
+                onPress={onForgotPasswordPressed}
                 style={{alignItems: 'center', marginTop: 20,}}
             >
                 <Text style = {{fontSize:13, color: '#039be5'}}>

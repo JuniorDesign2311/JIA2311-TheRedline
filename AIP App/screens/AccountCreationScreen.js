@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import { View, Text, StyleSheet, ScrollView, TouchableWithoutFeedback, Keyboard } from 'react-native'
 import CustomInput from '../components/CustomInput';
 import CustomButton from '../components/CustomButton';
-import AttendeeHostButtons, { setAttendeeClicked, setHostClicked } from '../components/AttendeeHostButtons';
 import States from '../components/States';
 import { auth } from '../firebaseConfig';
 import { db } from '../firebaseConfig';
@@ -155,17 +154,15 @@ const AccountCreationScreen = ({ navigation }) => {
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
             <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
                 <Text style={[styles.setTitleFont]}> Create Account </Text>
-
-                <CustomInput placeholder="Username" value={username} setValue={setUsername} secureTextEntry={false} />
-                <CustomInput placeholder="Email" value={email} setValue={setEmail} secureTextEntry={false} />
-                <CustomInput placeholder="Password" value={password} setValue={setPassword} secureTextEntry={true} />
-                <CustomInput placeholder="Confirm Password" value={cpassword} setValue={setcPassword} secureTextEntry={true} />
-                <CustomInput placeholder="Phone Number" value={phoneNumber} setValue={setPhoneNumber} secureTextEntry={false} />
-
-                <View style={{ flexDirection: "row", marginBottom: 20, marginTop: 20 }}>
-                    <CustomButton onPress={onContinuePressed} buttonName="Continue" type="PRIMARY" /></View>
-                    
-            </View>
+                <CustomInput placeholder="Username" value={username} setValue={setUsername} secureTextEntry={false}/>
+                <CustomInput placeholder="Email" value={email} setValue={setEmail} secureTextEntry={false} keyboardType = 'email-address'/>
+                <CustomInput placeholder="Password" value={password} setValue={setPassword} secureTextEntry={true}/>
+                <CustomInput placeholder="Confirm Password" value={cpassword} setValue={setcPassword} secureTextEntry={true}/>
+                <CustomInput placeholder="Phone Number" value={cpassword} setValue={setcPassword} secureTextEntry={true} keyboardType = 'phone-pad'/>
+                <View style={{flexDirection:"row", marginBottom: 20, marginTop: 20 }}>
+                    <CustomButton onPress={onContinuePressed} buttonName="Continue" type="PRIMARY"/></View>
+                </View>
+        </ScrollView>
         </TouchableWithoutFeedback>
         
     )

@@ -1,9 +1,9 @@
 {
   "expoServerPort": null,
-  "packagerPort": null,
+  "packagerPort": 19000,
   "packagerPid": null,
-  "expoServerNgrokUrl": null,
-  "packagerNgrokUrl": null,
-  "ngrokPid": null,
+  "expoServerNgrokUrl": "https://eg-cu5.fxie48.aip-app.exp.direct",
+  "packagerNgrokUrl": "https://eg-cu5.fxie48.aip-app.exp.direct",
+  "ngrokPid": 28566,
   "webpackServerPort": null
 }

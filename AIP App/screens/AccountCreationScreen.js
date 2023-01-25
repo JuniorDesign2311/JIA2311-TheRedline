@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { View, Text, StyleSheet, ScrollView } from 'react-native'
+import { View, Text, StyleSheet, ScrollView, TouchableWithoutFeedback, Keyboard } from 'react-native'
 import CustomInput from '../components/CustomInput';
 import CustomButton from '../components/CustomButton';
 import AttendeeHostButtons, { setAttendeeClicked, setHostClicked } from '../components/AttendeeHostButtons';
@@ -7,16 +7,9 @@ import States from '../components/States';
 import { auth } from '../firebaseConfig';
 import { db } from '../firebaseConfig';
 import firebase from "firebase/app";
+import { useNavigation } from '@react-navigation/native';
 import "firebase/firestore";
 
-
-/*
-const isValidEmail = (email) =>
-/^\w+([.-]?\w+)@\w+([.-]?\w+)(.\w{2,3})+$/.test(email);
-
-const isValidPhoneNumber = (phone) =>
-/^(?(\d{3}))?[- ]?(\d{3})[- ]?(\d{4})$/.test(phone);
-*/
 const AccountCreationScreen = ({ navigation }) => {
     /* useState returns the original value argument that's passed in and a function that returns the changed value */
     const [username, setUsername] = useState('');
@@ -29,7 +22,10 @@ const AccountCreationScreen = ({ navigation }) => {
     const [state, setState] = useState('');
     const [attendeeClicked, setAttendeeClicked] = useState(false);
     const [hostClicked, setHostClicked] = useState(false);
-    
+
+    // Document id to distinguish each user within our database
+    const documentId = username+phoneNumber;
+
     const handleSignUp = () => {
         var db = firebase.firestore();
         var usersRef = db.collection("users");
@@ -45,17 +41,11 @@ const AccountCreationScreen = ({ navigation }) => {
                                 auth.createUserWithEmailAndPassword(email, password)
                                     .then(userCredential => {
                                         // Signed in 
-                                        const user = userCredential.user;
-                                        user.firstName = firstName;
-                                        user.lastName = lastName;
-                                        user.password = password;
-                                        user.attendee = attendeeClicked;
-                                        user.host = hostClicked;
-                                        user.state = state;
-                                        user.number = phoneNumber;
-                                        console.log(user.firstName, user.lastName, user.state, user.number, user.password, user.email, user.uid, user.attendee, user.host);
                                         getData();
-                                        navigation.navigate("AccountCreated");
+                                        //Navigates to second creation screen and passes data through
+                                        navigation.navigate('AccountCreation2', {
+                                            docID: (username+phoneNumber)
+                                        });
                                     })
                                     .catch(error => alert(error.message))
                             } else {
@@ -86,20 +76,17 @@ const AccountCreationScreen = ({ navigation }) => {
     }
 
     const getData = async () => {
-        db.collection("users").add({
-            first: firstName,
-            last: lastName,
+        db.collection("users").doc(documentId).set({
+            first: null,
+            last: null,
             phoneNumber: phoneNumber,
             username: username,
             usernameToLowerCase: username.toLowerCase(),
-            state: state,
+            state: null,
             email: email,
-            host: hostClicked,
-            attendee: attendeeClicked
+            host: null,
+            attendee: null
         })
-            .then((docRef) => {
-                console.log("Document written with ID: ", docRef.id);
-            })
             .catch((error) => {
                 console.error("Error adding document: ", error);
             });
@@ -124,21 +111,16 @@ const AccountCreationScreen = ({ navigation }) => {
         console.log("Host Clicked");
     }
 
-    const onCreateAccountPressed = () => {
+    const onContinuePressed = () => {
         //Error handling
-        if (username === "" || email === "" || password === "" || cpassword === "" || firstName === "" || lastName === "" || phoneNumber === ""
-            || (!attendeeClicked && !hostClicked) || (attendeeClicked && hostClicked) || password != cpassword) {
+        var errorMessage = ""
 
-            var errorMessage = ""
+        if (username === "" || email === "" || password === "" || cpassword === ""|| phoneNumber === ""
+            || password != cpassword || password.length < 6 || password.length > 40 || phoneNumber.length != 10) {
 
             // Error message if a field is not filled out
-            if (username === "" || email === "" || password === "" || cpassword === "" || firstName === "" || lastName === "" || phoneNumber === "") {
+            if (username === "" || email === "" || password === "" || cpassword === ""|| phoneNumber === "") {
                 errorMessage = errorMessage + "Fill out blank field(s).";
-            }
-
-            if (!attendeeClicked && !hostClicked) {
-                if (errorMessage != "") errorMessage = errorMessage + "\n";
-                errorMessage = errorMessage + "Please choose an account type."
             }
 
             // Error message if password and password confirmation do not match
@@ -147,37 +129,44 @@ const AccountCreationScreen = ({ navigation }) => {
                 errorMessage = errorMessage + "Passwords do not match.";
             }
 
+            if (password.length < 6) {
+                if (errorMessage != "") errorMessage = errorMessage + "\n";
+                errorMessage = errorMessage + "Password must have at least 6 charaters.";
+            }
+
+            if (password.length > 40) {
+                if (errorMessage != "") errorMessage = errorMessage + "\n";
+                errorMessage = errorMessage + "Password can't be longer than 40 charaters.";
+            }
+
+            if (phoneNumber.length != 10) {
+                if (errorMessage != "") errorMessage = errorMessage + "\n";
+                errorMessage = errorMessage + "Your phone number is too long or too short";
+            }
+
             alert(errorMessage);
         } else {
-        
             handleSignUp();
-            console.warn("Account Created");
         }
     }
 
     return (
-        <ScrollView>
-            <View style={styles.root}>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+            <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
                 <Text style={[styles.setTitleFont]}> Create Account </Text>
 
                 <CustomInput placeholder="Username" value={username} setValue={setUsername} secureTextEntry={false} />
                 <CustomInput placeholder="Email" value={email} setValue={setEmail} secureTextEntry={false} />
                 <CustomInput placeholder="Password" value={password} setValue={setPassword} secureTextEntry={true} />
                 <CustomInput placeholder="Confirm Password" value={cpassword} setValue={setcPassword} secureTextEntry={true} />
-                <CustomInput placeholder="First Name" value={firstName} setValue={setFirstName} secureTextEntry={false} />
-                <CustomInput placeholder="Last Name" value={lastName} setValue={setLastName} secureTextEntry={false} />
                 <CustomInput placeholder="Phone Number" value={phoneNumber} setValue={setPhoneNumber} secureTextEntry={false} />
-                <States state={state} setState={setState} />
-
-                <View style={{ flexDirection: "row" }}>
-                    <AttendeeHostButtons onPress={onAttendeePressed} buttonName="Attendee" />
-                    <AttendeeHostButtons onPress={onHostPressed} buttonName="Host" />
-                </View>
 
                 <View style={{ flexDirection: "row", marginBottom: 20, marginTop: 20 }}>
-                    <CustomButton onPress={onCreateAccountPressed} buttonName="Create Account" type="PRIMARY" /></View>
+                    <CustomButton onPress={onContinuePressed} buttonName="Continue" type="PRIMARY" /></View>
+                    
             </View>
-        </ScrollView>
+        </TouchableWithoutFeedback>
+        
     )
 }
 

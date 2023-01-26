@@ -1,77 +1,137 @@
-import React, {useState} from 'react'
+import React, {useState, useRef, useMemo} from 'react'
 import { View, Text, TouchableOpacity, Keyboard, ScrollView, StyleSheet, TouchableWithoutFeedback } from 'react-native'
 import CustomInput from '../components/CustomInput';
 import CustomButton from '../components/CustomButton';
 import CustomText from '../components/CustomButton';
 import { auth } from '../firebaseConfig';
 import { db } from '../firebaseConfig';
-import {password} from '../screens/AccountCreationScreen';
-import {email} from '../screens/AccountCreationScreen';
 
+//import {password} from '../screens/AccountCreationScreen';
+//import {email} from '../screens/AccountCreationScreen';
 
-const LoginScreen = ({navigation}) => {
-
-        //const [password, setPassword] = useState('');
-        const [apassword, setPassword] = useState({password});
-   
-   
-       // const [email, setEmail] = useState('');
- 
-        const [aemail, setEmail] = useState({email});
+import BottomSheet from '@gorhom/bottom-sheet';
+import Animated, { AnimatedLayout, SlideInRight, FadeInLeft, FadeInDown} from 'react-native-reanimated');
     
     
     const isValidemail = true;
     const isValidPassword = true;
 
+const LoginScreen = ({navigation}) => {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [emailError, setEmailError] = useState('');
+    const [passwordError, setPasswordError] = useState('');
+    const [isValidEmail, setIsValidEmail] = useState(false);
+    
+    // const [apassword, setPassword] = useState({password});
+    // const [aemail, setEmail] = useState({email});
+
+    const sheetRef = useRef(null);
+    const snapPoints = useMemo(() => [ '75%', '75%' ]);
+    
+    const validateEmail = () => {
+        if (email.length === 0) {
+            setEmailError('Email Field is Empty')
+        }
+        else if (!email.includes('@')) {
+            setEmailError('Invalid Email Address');
+        }
+        else if (email.indexOf(' ') >= 0) {
+            setEmailError('Email Cannot Contain Spaces')
+        }
+        else {
+            setEmailError('');
+        }
+    }
+
+    const validatePassword = () => {
+        if (password.length === 0) {
+            setPasswordError('Password Field is Empty')
+        }
+        else if (password.length < 6) {
+            setPasswordError('Password must be at least 6 characters');
+        }
+        else if (password.indexOf(' ') >= 0) {
+            setPasswordError('Password Cannot Contain Spaces')
+        }
+        else {
+            setPasswordError('');
+        }
+    }
+
+
     const handleLogin = () => {
         auth.signInWithEmailAndPassword(aemail, apassword)
         .then(userCredential => {
             var user = userCredential.user;
+            setEmailError('');
+            setPasswordError('');
             navigation.navigate("Map");
         })
-        .catch(error => alert(error.message))
+        .catch(error => console.warn(error.message))
+    }
+
+    const onForgotPasswordPressed = () => {
+        navigation.navigate("ResetPassword");   
+        setEmailError('');
+        setPasswordError('');
     }
 
 
     const onLoginPressed = () => {
+        validateEmail();
+        validatePassword();
         handleLogin();
     }
 
     const onCreateAccountPressed = () => {
         navigation.navigate("AccountCreation");
+        setEmailError('');
+        setPasswordError('');
     }
     
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
 
-        <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
+        <View style={{flex:1,justifyContent:'center',alignItems:'center', backgroundColor: '#d796fa'}}>
             <Text style={styles.header}>
             Welcome
             </Text>
-            <CustomInput placeholder="Email" value={aemail} setValue={setEmail} secureTextEntry={false}/>
-            <Text style={styles.errorMsg}> Email is wrong </Text>
-            <CustomInput placeholder="Password" value={apassword} setValue={setPassword} secureTextEntry={true}/>
 
-            <CustomButton onPress={onLoginPressed} buttonName="Log in" type="PRIMARY"/>
-            {/* <Text>Don't have an account?</Text> */}
 
-            <View style={{flexDirection: 'row', alignItems: 'center', marginLeft: 25, marginRight: 25}}>
-            <View style={{flex: 1, height: 1, backgroundColor: 'lightgrey'}} />
-            <View>
-            <Text style={{width: 50, color:'grey', textAlign: 'center', fontFamily: 'Helvetica Neue'}}>or</Text>
-            </View>
-            <View style={{flex: 1, height: 1, backgroundColor: 'lightgrey'}} />
-            </View>
-
-            <CustomButton onPress={onCreateAccountPressed} buttonName="Create Account" type="PRIMARY"/>
-            <TouchableOpacity
-                onPress={()=>navigation.navigate("ResetPassword")}
-                style={{alignItems: 'center', marginTop: 20,}}
+            <BottomSheet
+            ref={sheetRef}
+            index={1}
+            snapPoints={snapPoints}
+            style={styles.bottomSheetStyle}
+            handleIndicatorStyle={{ display: "none" }}
             >
-                <Text style = {{fontSize:13, color: '#039be5'}}>
-                    Forgot password?
-                </Text>
-            </TouchableOpacity>
+                <Animated.View style={styles.sheet}>
+                <CustomInput placeholder="Email" value={email} setValue={setEmail} secureTextEntry={false}/>
+                <Text style={styles.error}> {emailError} </Text>
+                <CustomInput placeholder="Password" value={password} setValue={setPassword} secureTextEntry={true}/>
+                <Text style={styles.error}> {passwordError} </Text>
+                <CustomButton onPress={onLoginPressed} buttonName="Log in" type="PRIMARY"/>
+                <View style={{flexDirection: 'row', alignItems: 'center', marginLeft: 25, marginRight: 25}}>
+                <View style={{flex: 1, height: 1, backgroundColor: 'lightgrey'}} />
+                <View>
+                <Text style={{width: 50, color:'grey', textAlign: 'center', fontFamily: 'Helvetica Neue'}}>or</Text>
+                </View>
+
+                <View style={{flex: 1, height: 1, backgroundColor: 'lightgrey'}} />
+                </View>
+
+                <CustomButton onPress={onCreateAccountPressed} buttonName="Create Account" type="PRIMARY"/>
+                <TouchableOpacity
+                    onPress={onForgotPasswordPressed}
+                    style={{alignItems: 'center', marginTop: 20,}}
+                >
+                    <Text style = {{fontSize:13, color: '#039be5'}}>
+                        Forgot password?
+                    </Text>
+                </TouchableOpacity>
+                </Animated.View>
+            </BottomSheet>
             </View>
         </TouchableWithoutFeedback>
 
@@ -80,10 +140,22 @@ const LoginScreen = ({navigation}) => {
 
 const styles = StyleSheet.create({
     header: {
-        fontSize: 20,
+        fontSize: 45,
         fontFamily: 'Helvetica Neue',
-        marginBottom: 30,
+        fontWeight: 'bold',
+        paddingTop: 50,
+        marginBottom: 650,
+        marginRight: 170
     },
+    error: {
+        color:'red'
+    },
+    sheet: {
+        alignItems: 'center',
+    },
+    bottomSheetStyle: {
+        borderRadius: 50
+    }
   });
 
 export default LoginScreen

@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { View, Text, StyleSheet, ScrollView, TouchableWithoutFeedback, Keyboard } from 'react-native'
+import React, {useState, useRef, useMemo} from 'react'
+import { View, Text, StyleSheet, ScrollView, TouchableWithoutFeedback, Keyboard, TouchableOpacity } from 'react-native'
 import CustomInput from '../components/CustomInput';
 import CustomButton from '../components/CustomButton';
 import States from '../components/States';
@@ -8,6 +8,7 @@ import { db } from '../firebaseConfig';
 import firebase from "firebase/app";
 import { useNavigation } from '@react-navigation/native';
 import "firebase/firestore";
+import BottomSheet from '@gorhom/bottom-sheet';
 
 const AccountCreationScreen = ({ navigation }) => {
     /* useState returns the original value argument that's passed in and a function that returns the changed value */
@@ -18,6 +19,13 @@ const AccountCreationScreen = ({ navigation }) => {
     const [phoneNumber, setPhoneNumber] = useState('');
     const [attendeeClicked, setAttendeeClicked] = useState(false);
     const [hostClicked, setHostClicked] = useState(false);
+    const sheetRef = useRef(null);
+    const snapPoints = useMemo(() => [ '75%', '75%' ]);
+    // Error Handling
+    const [usernameError, setUsernameError] = useState('');
+    const [emailError, setEmailError] = useState('');
+    const [passwordError, setPasswordError] = useState('');
+    const [phoneNumberError, setPhoneNumberError] = useState('');
 
     // Document id to distinguish each user within our database
     const documentId = username+phoneNumber;
@@ -29,23 +37,34 @@ const AccountCreationScreen = ({ navigation }) => {
         usersRef.where("usernameToLowerCase", '==', username.toLowerCase()).get()
             .then(snapshot => {
                 if (snapshot.empty) {
-
                     // query for inputted phone number
                     usersRef.where("phoneNumber", "==", phoneNumber).get()
                         .then(snapshot => {
                             if (snapshot.empty) {
-                                auth.createUserWithEmailAndPassword(email, password)
-                                    .then(userCredential => {
-                                        // Signed in 
-                                        getData();
-                                        //Navigates to second creation screen and passes data through
-                                        navigation.navigate('AccountCreation2', {
-                                            docID: (username+phoneNumber)
-                                        });
+                                usersRef.where("emailToLowerCase", "==", email.toLowerCase()).get()
+                                    .then(snapshot => {
+                                        if (snapshot.empty) {
+                                            navigation.navigate('AccountCreation2', {
+                                                docID: (username+phoneNumber),
+                                                username: username,
+                                                email: email,
+                                                phoneNumber: phoneNumber,
+                                                password: password
+                                            });
+                                        } else {
+                                            console.warn("Email is already linked to an account.")
+                                        }
+            
                                     })
-                                    .catch(error => alert(error.message))
+                                    .then(createdUser => {
+                                        console.log(createdUser);
+                                        db.collection("users").doc(createdUser.user.uid).set({ email: email });
+                                    })
+                                    .catch(err => {
+                                        console.log("Error: ", err);
+                                    })
                             } else {
-                                alert("Phone number is already linked to an account.")
+                                console.warn("Phone number is already linked to an account.")
                             }
 
                         })
@@ -58,7 +77,7 @@ const AccountCreationScreen = ({ navigation }) => {
                         })
 
                 } else {
-                    alert("Username already taken.")
+                    console.warn("Username already taken.")
                 }
             })
             .then(createdUser => {
@@ -71,43 +90,74 @@ const AccountCreationScreen = ({ navigation }) => {
             });
     }
 
-    const getData = async () => {
-        db.collection("users").doc(documentId).set({
-            first: null,
-            last: null,
-            phoneNumber: phoneNumber,
-            username: username,
-            usernameToLowerCase: username.toLowerCase(),
-            state: null,
-            email: email,
-            host: null,
-            attendee: null
-        })
-            .catch((error) => {
-                console.error("Error adding document: ", error);
-            });
+    const validateEmail = () => {
+        if (email.length === 0) {
+            setEmailError('Email Field is Empty')
+        }
+        else if (!email.includes('@')) {
+            setEmailError('Invalid Email Address');
+        }
+        else if (!email.includes('.')) {
+            setEmailError('Invalid Email Address');
+        }
+        else if (email.indexOf(' ') >= 0) {
+            setEmailError('Email Cannot Contain Spaces')
+        }
+        else {
+            setEmailError('');
+        }
     }
 
-    const onAttendeePressed = () => {
-        if (hostClicked)  {
-            alert("Please only choose one account type.");
-        } else {
-            setAttendeeClicked(!attendeeClicked);
-        }  
-        
-        console.log("Attendee Clicked");
+    const validatePassword = () => {
+        if (password.length === 0) {
+            setPasswordError('Password Field is Empty')
+        }
+        else if (password.length < 6) {
+            setPasswordError('Password must be at least 6 characters');
+        }
+        else if (password.indexOf(' ') >= 0) {
+            setPasswordError('Password Cannot Contain Spaces')
+        }
+        else if (password != cpassword) {
+            setPasswordError('Passwords do not match')
+        }
+        else {
+            setPasswordError('');
+        }
     }
 
-    const onHostPressed = () => {
-        if (attendeeClicked)  {
-            alert("Please only choose one account type.");
-        } else {
-            setHostClicked(!hostClicked);
-        }  
-        console.log("Host Clicked");
+    const validatePhone = () => {
+        if (phoneNumber.length === 0) {
+            setPhoneNumberError('Phone Number Field is Empty')
+        }
+        else if (phoneNumber.length != 10) {
+            setPhoneNumberError('Phone Number is incorrect');
+        }
+        else {
+            setPhoneNumberError('');
+        }
+    }
+
+    const validateUsername = () => {
+        if (username.length === 0) {
+            setUsernameError('Username Field is Empty')
+        }
+        // else if (password.length < 6) {
+        //     setUsernameError('Password must be at least 6 characters');
+        // }
+        else if (username.indexOf(' ') >= 0) {
+            setUsernameError('Username Cannot Contain Spaces')
+        }
+        else {
+            setUsernameError('');
+        }
     }
 
     const onContinuePressed = () => {
+        validateEmail();
+        validatePassword();
+        validatePhone();
+        validateUsername();
         //Error handling
         var errorMessage = ""
 
@@ -125,42 +175,56 @@ const AccountCreationScreen = ({ navigation }) => {
                 errorMessage = errorMessage + "Passwords do not match.";
             }
 
-            // Error message if password is less than 6 characters
-            if (password.length < 6) {
-                if (errorMessage != "") errorMessage = errorMessage + "\n";
-                errorMessage = errorMessage + "Password must have at least 6 charaters.";
-            }
-
             if (password.length > 40) {
                 if (errorMessage != "") errorMessage = errorMessage + "\n";
                 errorMessage = errorMessage + "Password can't be longer than 40 charaters.";
             }
 
-            if (phoneNumber.length != 10) {
-                if (errorMessage != "") errorMessage = errorMessage + "\n";
-                errorMessage = errorMessage + "Your phone number is too long or too short";
-            }
-
-            alert(errorMessage);
+            console.warn(errorMessage);
         } else {
             handleSignUp();
         }
     }
 
+    const onCancelPressed = () => {
+        navigation.navigate("Login");
+    }
+
     return (
-        <ScrollView>
-            <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
-                <Text style={[styles.setTitleFont]}> Create Account </Text>
-                <CustomInput placeholder="Username" value={username} setValue={setUsername} secureTextEntry={false}/>
-                <CustomInput placeholder="Email" value={email} setValue={setEmail} secureTextEntry={false} keyboardType = 'email-address'/>
-                <CustomInput placeholder="Password" value={password} setValue={setPassword} secureTextEntry={true}/>
-                <CustomInput placeholder="Confirm Password" value={cpassword} setValue={setcPassword} secureTextEntry={true}/>
-                <CustomInput placeholder="Phone Number" value={cpassword} setValue={setPhoneNumber} secureTextEntry={true} keyboardType = 'phone-pad'/>
-                <View style={{flexDirection:"row", marginBottom: 20, marginTop: 20 }}>
-                    <CustomButton onPress={onContinuePressed} buttonName="Continue" type="PRIMARY"/></View>
+
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+        <View style={{flex:1,justifyContent:'center',alignItems:'center',backgroundColor: '#d796fa'}}>
+                <Text style={[styles.header]}> Create Account </Text>
+                <BottomSheet
+                ref={sheetRef}
+                index={1}
+                snapPoints={snapPoints}
+                handleIndicatorStyle={{ display: "none" }}
+                >
+                    <View style={styles.sheet}>
+                    <CustomInput placeholder="Username" value={username} setValue={setUsername} secureTextEntry={false}/>
+                    <Text style={styles.error}> {usernameError} </Text>
+                    <CustomInput placeholder="Email" value={email} setValue={setEmail} secureTextEntry={false} keyboardType = 'email-address'/>
+                    <Text style={styles.error}> {emailError} </Text>
+                    <CustomInput placeholder="Password" value={password} setValue={setPassword} secureTextEntry={true}/>
+                    <CustomInput placeholder="Confirm Password" value={cpassword} setValue={setcPassword} secureTextEntry={true}/>
+                    <Text style={styles.error}> {passwordError} </Text>
+                    <CustomInput placeholder="Phone Number" value={phoneNumber} setValue={setPhoneNumber} secureTextEntry={false} keyboardType = 'phone-pad'/>
+                    <Text style={styles.error}> {phoneNumberError} </Text>
+                    <View style={{flexDirection:"row", marginBottom: 0, marginTop: 0 }}>
+                        <CustomButton onPress={onContinuePressed} buttonName="Continue" type="PRIMARY"/>
+                    </View>
+                   
+                    <TouchableOpacity onPress={onCancelPressed}>
+                        <Text style = {{fontSize:13, marginTop: 0,  color: '#039be5'}}>
+                            Back To Login
+                        </Text>
+                    </TouchableOpacity>
+                    </View>
+                </BottomSheet>
                 </View>
-               
-        </ScrollView>
+        </TouchableWithoutFeedback>
+
         
     )
 }
@@ -178,6 +242,24 @@ const styles = StyleSheet.create({
     },
     text: {
         textAlign: "left"
+    },
+    header: {
+        fontSize: 45,
+        fontFamily: 'Helvetica Neue',
+        fontWeight: 'bold',
+        paddingTop: 50,
+        marginBottom: 600,
+        textAlign: 'left',
+    },
+    error: {
+        color:'red',
+        textAlign: 'center'
+    },
+    sheet: {
+        alignItems: 'center',
+    },
+    bottomSheetStyle: {
+        borderRadius: 50
     }
 })
 export default AccountCreationScreen;

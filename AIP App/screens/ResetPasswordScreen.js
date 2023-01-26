@@ -9,39 +9,51 @@ import BottomSheet from '@gorhom/bottom-sheet';
 
 const LoginScreen = ({navigation}) => {
     const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const [emailError, setEmailError] = useState('');
     const sheetRef = useRef(null);
     const snapPoints = useMemo(() => [ '80%', '80%' ]);
 
-    const handleLogin = () => {
-        auth.signInWithEmailAndPassword(email, password)
-        .then(userCredential => {
-            var user = userCredential.user;
-            navigation.navigate("Map");
-        })
-        .catch(error => alert(error.message))
+    const validateEmail = () => {
+        if (email.length === 0) {
+            setEmailError('Email Field is Empty')
+        }
+        else if (!email.includes('@')) {
+            setEmailError('Invalid Email Address');
+        }
+        else if (!email.includes('.')) {
+            setEmailError('Invalid Email Address');
+        }
+        else if (email.indexOf(' ') >= 0) {
+            setEmailError('Email Cannot Contain Spaces')
+        }
+        else {
+            setEmailError('');
+        }
     }
 
     const handlePasswordReset = async () => {
         auth.sendPasswordResetEmail(email)
         .then(userCredential => {
             console.log("Email sent")
+            navigation.navigate("Login");
         })
-        .catch(error => alert(error.message))
+        .catch(error => console.warn(error.message))
       }
 
 
     const SendLinkPressed = () => {
-        if (email === "") {
-            alert("Please enter your email address")
-        } else {
+        validateEmail();
+        if (emailError === '') {
             handlePasswordReset();
-            alert("A reset link has been sent to your email")
+            console.warn("A reset link has been sent to your email")
+        } else {
+            validateEmail();
         }
     }
 
     const onCancelPressed = () => {
         navigation.navigate("Login");
+        setEmailError('');
     }
     
     return (
@@ -61,6 +73,7 @@ const LoginScreen = ({navigation}) => {
                     Please enter the email address you'd like your password reset information to be sent to.
                 </Text>
                     <ResetPasswordInput placeholder="Enter email address" value={email} setValue={setEmail} secureTextEntry={false}/>
+                <Text style={styles.error}> {emailError} </Text>
                     <CustomButton onPress={SendLinkPressed} buttonName="Request Reset Link" type="PRIMARY"/>
                     <TouchableOpacity
                         onPress={onCancelPressed}

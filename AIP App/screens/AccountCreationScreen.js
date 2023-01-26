@@ -24,6 +24,11 @@ const AccountCreationScreen = ({ navigation }) => {
     const [hostClicked, setHostClicked] = useState(false);
     const sheetRef = useRef(null);
     const snapPoints = useMemo(() => [ '75%', '75%' ]);
+    // Error Handling
+    const [usernameError, setUsernameError] = useState('');
+    const [emailError, setEmailError] = useState('');
+    const [passwordError, setPasswordError] = useState('');
+    const [phoneNumberError, setPhoneNumberError] = useState('');
 
     // Document id to distinguish each user within our database
     const documentId = username+phoneNumber;
@@ -42,16 +47,6 @@ const AccountCreationScreen = ({ navigation }) => {
                                 usersRef.where("emailToLowerCase", "==", email.toLowerCase()).get()
                                     .then(snapshot => {
                                         if (snapshot.empty) {
-                                            // auth.createUserWithEmailAndPassword(email, password)
-                                            //     .then(userCredential => {
-                                            //         // Signed in 
-                                                    getData();
-                                            //         //Navigates to second creation screen and passes data through
-                                            //         navigation.navigate('AccountCreation2', {
-                                            //             docID: (username+phoneNumber)
-                                            //         });
-                                            //     })
-                                            //     .catch(error => alert(error.message))
                                             navigation.navigate('AccountCreation2', {
                                                 docID: (username+phoneNumber),
                                                 username: username,
@@ -60,7 +55,7 @@ const AccountCreationScreen = ({ navigation }) => {
                                                 password: password
                                             });
                                         } else {
-                                            alert("Email is already linked to an account.")
+                                            console.warn("Email is already linked to an account.")
                                         }
             
                                     })
@@ -72,7 +67,7 @@ const AccountCreationScreen = ({ navigation }) => {
                                         console.log("Error: ", err);
                                     })
                             } else {
-                                alert("Phone number is already linked to an account.")
+                                console.warn("Phone number is already linked to an account.")
                             }
 
                         })
@@ -85,7 +80,7 @@ const AccountCreationScreen = ({ navigation }) => {
                         })
 
                 } else {
-                    alert("Username already taken.")
+                    console.warn("Username already taken.")
                 }
             })
             .then(createdUser => {
@@ -98,44 +93,74 @@ const AccountCreationScreen = ({ navigation }) => {
             });
     }
 
-    const getData = async () => {
-        db.collection("users").doc(documentId).set({
-            first: null,
-            last: null,
-            phoneNumber: phoneNumber,
-            username: username,
-            usernameToLowerCase: username.toLowerCase(),
-            state: null,
-            email: email,
-            emailToLowerCase: email.toLower(),
-            host: null,
-            attendee: null
-        })
-            .catch((error) => {
-                console.error("Error adding document: ", error);
-            });
+    const validateEmail = () => {
+        if (email.length === 0) {
+            setEmailError('Email Field is Empty')
+        }
+        else if (!email.includes('@')) {
+            setEmailError('Invalid Email Address');
+        }
+        else if (!email.includes('.')) {
+            setEmailError('Invalid Email Address');
+        }
+        else if (email.indexOf(' ') >= 0) {
+            setEmailError('Email Cannot Contain Spaces')
+        }
+        else {
+            setEmailError('');
+        }
     }
 
-    const onAttendeePressed = () => {
-        if (hostClicked)  {
-            alert("Please only choose one account type.");
-        } else {
-            setAttendeeClicked(!attendeeClicked);
-        }  
-        
-        console.log("Attendee Clicked");
+    const validatePassword = () => {
+        if (password.length === 0) {
+            setPasswordError('Password Field is Empty')
+        }
+        else if (password.length < 6) {
+            setPasswordError('Password must be at least 6 characters');
+        }
+        else if (password.indexOf(' ') >= 0) {
+            setPasswordError('Password Cannot Contain Spaces')
+        }
+        else if (password != cpassword) {
+            setPasswordError('Passwords do not match')
+        }
+        else {
+            setPasswordError('');
+        }
     }
 
-    const onHostPressed = () => {
-        if (attendeeClicked)  {
-            alert("Please only choose one account type.");
-        } else {
-            setHostClicked(!hostClicked);
-        }  
-        console.log("Host Clicked");
+    const validatePhone = () => {
+        if (phoneNumber.length === 0) {
+            setPhoneNumberError('Phone Number Field is Empty')
+        }
+        else if (phoneNumber.length != 10) {
+            setPhoneNumberError('Phone Number is incorrect');
+        }
+        else {
+            setPhoneNumberError('');
+        }
+    }
+
+    const validateUsername = () => {
+        if (username.length === 0) {
+            setUsernameError('Username Field is Empty')
+        }
+        // else if (password.length < 6) {
+        //     setUsernameError('Password must be at least 6 characters');
+        // }
+        else if (username.indexOf(' ') >= 0) {
+            setUsernameError('Username Cannot Contain Spaces')
+        }
+        else {
+            setUsernameError('');
+        }
     }
 
     const onContinuePressed = () => {
+        validateEmail();
+        validatePassword();
+        validatePhone();
+        validateUsername();
         //Error handling
         var errorMessage = ""
 
@@ -153,23 +178,12 @@ const AccountCreationScreen = ({ navigation }) => {
                 errorMessage = errorMessage + "Passwords do not match.";
             }
 
-            // Error message if password is less than 6 characters
-            if (password.length < 6) {
-                if (errorMessage != "") errorMessage = errorMessage + "\n";
-                errorMessage = errorMessage + "Password must have at least 6 charaters.";
-            }
-
             if (password.length > 40) {
                 if (errorMessage != "") errorMessage = errorMessage + "\n";
                 errorMessage = errorMessage + "Password can't be longer than 40 charaters.";
             }
 
-            if (phoneNumber.length != 10) {
-                if (errorMessage != "") errorMessage = errorMessage + "\n";
-                errorMessage = errorMessage + "Your phone number is too long or too short";
-            }
-
-            alert(errorMessage);
+            console.warn(errorMessage);
         } else {
             handleSignUp();
         }
@@ -191,11 +205,15 @@ const AccountCreationScreen = ({ navigation }) => {
                 >
                     <View style={styles.sheet}>
                     <CustomInput placeholder="Username" value={username} setValue={setUsername} secureTextEntry={false}/>
+                    <Text style={styles.error}> {usernameError} </Text>
                     <CustomInput placeholder="Email" value={email} setValue={setEmail} secureTextEntry={false} keyboardType = 'email-address'/>
+                    <Text style={styles.error}> {emailError} </Text>
                     <CustomInput placeholder="Password" value={password} setValue={setPassword} secureTextEntry={true}/>
                     <CustomInput placeholder="Confirm Password" value={cpassword} setValue={setcPassword} secureTextEntry={true}/>
+                    <Text style={styles.error}> {passwordError} </Text>
                     <CustomInput placeholder="Phone Number" value={phoneNumber} setValue={setPhoneNumber} secureTextEntry={false} keyboardType = 'phone-pad'/>
-                    <View style={{flexDirection:"row", marginBottom: 20, marginTop: 10 }}>
+                    <Text style={styles.error}> {phoneNumberError} </Text>
+                    <View style={{flexDirection:"row", marginBottom: 0, marginTop: 0 }}>
                         <CustomButton onPress={onContinuePressed} buttonName="Continue" type="PRIMARY"/>
                     </View>
                    

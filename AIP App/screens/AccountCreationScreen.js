@@ -15,10 +15,7 @@ const AccountCreationScreen = ({ navigation }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [cpassword, setcPassword] = useState('');
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
-    const [state, setState] = useState('');
     const [attendeeClicked, setAttendeeClicked] = useState(false);
     const [hostClicked, setHostClicked] = useState(false);
 
@@ -151,20 +148,19 @@ const AccountCreationScreen = ({ navigation }) => {
     }
 
     return (
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-            <ScrollView>
+        <ScrollView>
             <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
                 <Text style={[styles.setTitleFont]}> Create Account </Text>
                 <CustomInput placeholder="Username" value={username} setValue={setUsername} secureTextEntry={false}/>
                 <CustomInput placeholder="Email" value={email} setValue={setEmail} secureTextEntry={false} keyboardType = 'email-address'/>
                 <CustomInput placeholder="Password" value={password} setValue={setPassword} secureTextEntry={true}/>
                 <CustomInput placeholder="Confirm Password" value={cpassword} setValue={setcPassword} secureTextEntry={true}/>
-                <CustomInput placeholder="Phone Number" value={cpassword} setValue={setcPassword} secureTextEntry={true} keyboardType = 'phone-pad'/>
+                <CustomInput placeholder="Phone Number" value={cpassword} setValue={setPhoneNumber} secureTextEntry={true} keyboardType = 'phone-pad'/>
                 <View style={{flexDirection:"row", marginBottom: 20, marginTop: 20 }}>
                     <CustomButton onPress={onContinuePressed} buttonName="Continue" type="PRIMARY"/></View>
                 </View>
-                </ScrollView>
-        </TouchableWithoutFeedback>
+               
+        </ScrollView>
         
     )
 }
@@ -184,4 +180,4 @@ const styles = StyleSheet.create({
         textAlign: "left"
     }
 })
-export default AccountCreationScreen
+export default AccountCreationScreen;

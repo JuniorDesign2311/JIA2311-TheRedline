@@ -5,16 +5,26 @@ import CustomButton from '../components/CustomButton';
 import CustomText from '../components/CustomButton';
 import { auth } from '../firebaseConfig';
 import { db } from '../firebaseConfig';
+import {password} from '../screens/AccountCreationScreen';
+import {email} from '../screens/AccountCreationScreen';
 
 
 const LoginScreen = ({navigation}) => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+
+        //const [password, setPassword] = useState('');
+        const [apassword, setPassword] = useState({password});
+   
+   
+       // const [email, setEmail] = useState('');
+ 
+        const [aemail, setEmail] = useState({email});
+    
+    
     const isValidemail = true;
     const isValidPassword = true;
 
     const handleLogin = () => {
-        auth.signInWithEmailAndPassword(email, password)
+        auth.signInWithEmailAndPassword(aemail, apassword)
         .then(userCredential => {
             var user = userCredential.user;
             navigation.navigate("Map");
@@ -38,9 +48,9 @@ const LoginScreen = ({navigation}) => {
             <Text style={styles.header}>
             Welcome
             </Text>
-            <CustomInput placeholder="Email" value={email} setValue={setEmail} secureTextEntry={false}/>
+            <CustomInput placeholder="Email" value={aemail} setValue={setEmail} secureTextEntry={false}/>
             <Text style={styles.errorMsg}> Email is wrong </Text>
-            <CustomInput placeholder="Password" value={password} setValue={setPassword} secureTextEntry={true}/>
+            <CustomInput placeholder="Password" value={apassword} setValue={setPassword} secureTextEntry={true}/>
 
             <CustomButton onPress={onLoginPressed} buttonName="Log in" type="PRIMARY"/>
             {/* <Text>Don't have an account?</Text> */}

@@ -101,6 +101,8 @@ const styles = StyleSheet.create({
     },
     error: {
         color:'red',
+        fontSize: 15,
+        fontWeight: 'bold',
         textAlign: 'center'
     },
     sheet: {

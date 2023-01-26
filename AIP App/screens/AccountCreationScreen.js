@@ -22,11 +22,11 @@ const AccountCreationScreen = ({ navigation }) => {
     const sheetRef = useRef(null);
     const snapPoints = useMemo(() => [ '75%', '75%' ]);
     // Error Handling
-    const [usernameError, setUsernameError] = useState('');
-    const [emailError, setEmailError] = useState('');
-    const [passwordError, setPasswordError] = useState('');
-    const [phoneNumberError, setPhoneNumberError] = useState('');
-
+    // const [usernameError, setUsernameError] = useState('');
+    // const [emailError, setEmailError] = useState('');
+    // const [passwordError, setPasswordError] = useState('');
+    // const [phoneNumberError, setPhoneNumberError] = useState('');
+    const [inputError, setInputError] = useState('');
     // Document id to distinguish each user within our database
     const documentId = username+phoneNumber;
 
@@ -90,74 +90,50 @@ const AccountCreationScreen = ({ navigation }) => {
             });
     }
 
-    const validateEmail = () => {
-        if (email.length === 0) {
-            setEmailError('Email Field is Empty')
+    const validateInput = () => {
+        if (username.length === 0) {
+            setInputError('Username Field is Empty')
+        }
+        else if (username.indexOf(' ') >= 0) {
+            setInputError('Username Cannot Contain Spaces')
+        }
+        else if (email.length === 0) {
+            setInputError('Email Field is Empty')
         }
         else if (!email.includes('@')) {
-            setEmailError('Invalid Email Address');
+            setInputError('Invalid Email Address');
         }
         else if (!email.includes('.')) {
-            setEmailError('Invalid Email Address');
+            setInputError('Invalid Email Address');
         }
         else if (email.indexOf(' ') >= 0) {
-            setEmailError('Email Cannot Contain Spaces')
+            setInputError('Email Cannot Contain Spaces')
         }
-        else {
-            setEmailError('');
-        }
-    }
-
-    const validatePassword = () => {
-        if (password.length === 0) {
-            setPasswordError('Password Field is Empty')
+        else if (password.length === 0) {
+            setInputError('Password Field is Empty')
         }
         else if (password.length < 6) {
-            setPasswordError('Password must be at least 6 characters');
+            setInputError('Password must be at least 6 characters');
         }
         else if (password.indexOf(' ') >= 0) {
-            setPasswordError('Password Cannot Contain Spaces')
+            setInputError('Password Cannot Contain Spaces')
         }
         else if (password != cpassword) {
-            setPasswordError('Passwords do not match')
+            setInputError('Passwords do not match')
         }
-        else {
-            setPasswordError('');
-        }
-    }
-
-    const validatePhone = () => {
-        if (phoneNumber.length === 0) {
-            setPhoneNumberError('Phone Number Field is Empty')
+        else if (phoneNumber.length === 0) {
+            setInputError('Phone Number Field is Empty')
         }
         else if (phoneNumber.length != 10) {
-            setPhoneNumberError('Phone Number is incorrect');
+            setInputError('Phone Number is incorrect');
         }
         else {
-            setPhoneNumberError('');
-        }
-    }
-
-    const validateUsername = () => {
-        if (username.length === 0) {
-            setUsernameError('Username Field is Empty')
-        }
-        // else if (password.length < 6) {
-        //     setUsernameError('Password must be at least 6 characters');
-        // }
-        else if (username.indexOf(' ') >= 0) {
-            setUsernameError('Username Cannot Contain Spaces')
-        }
-        else {
-            setUsernameError('');
+            setInputError('');
         }
     }
 
     const onContinuePressed = () => {
-        validateEmail();
-        validatePassword();
-        validatePhone();
-        validateUsername();
+        validateInput();
         //Error handling
         var errorMessage = ""
 
@@ -202,15 +178,16 @@ const AccountCreationScreen = ({ navigation }) => {
                 handleIndicatorStyle={{ display: "none" }}
                 >
                     <View style={styles.sheet}>
+                    <Text style={styles.error}> {inputError} </Text>
                     <CustomInput placeholder="Username" value={username} setValue={setUsername} secureTextEntry={false}/>
-                    <Text style={styles.error}> {usernameError} </Text>
+                    {/* <Text style={styles.error}> {usernameError} </Text> */}
                     <CustomInput placeholder="Email" value={email} setValue={setEmail} secureTextEntry={false} keyboardType = 'email-address'/>
-                    <Text style={styles.error}> {emailError} </Text>
+                    {/* <Text style={styles.error}> {emailError} </Text> */}
                     <CustomInput placeholder="Password" value={password} setValue={setPassword} secureTextEntry={true}/>
                     <CustomInput placeholder="Confirm Password" value={cpassword} setValue={setcPassword} secureTextEntry={true}/>
-                    <Text style={styles.error}> {passwordError} </Text>
+                    {/* <Text style={styles.error}> {passwordError} </Text> */}
                     <CustomInput placeholder="Phone Number" value={phoneNumber} setValue={setPhoneNumber} secureTextEntry={false} keyboardType = 'phone-pad'/>
-                    <Text style={styles.error}> {phoneNumberError} </Text>
+                    {/* <Text style={styles.error}> {phoneNumberError} </Text> */}
                     <View style={{flexDirection:"row", marginBottom: 0, marginTop: 0 }}>
                         <CustomButton onPress={onContinuePressed} buttonName="Continue" type="PRIMARY"/>
                     </View>
@@ -253,6 +230,8 @@ const styles = StyleSheet.create({
     },
     error: {
         color:'red',
+        fontSize: 15,
+        fontWeight: 'bold',
         textAlign: 'center'
     },
     sheet: {

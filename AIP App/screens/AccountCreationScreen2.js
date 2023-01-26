@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { View, Text, StyleSheet, ScrollView, TouchableWithoutFeedback, Keyboard } from 'react-native'
+import React, {useState, useRef, useMemo} from 'react'
+import { View, Text, StyleSheet, ScrollView, TouchableWithoutFeedback, Keyboard, TouchableOpacity } from 'react-native'
 import CustomInput from '../components/CustomInput';
 import CustomButton from '../components/CustomButton';
 import AttendeeHostButtons from '../components/AttendeeHostButtons';
@@ -9,6 +9,7 @@ import { db } from '../firebaseConfig';
 import firebase from "firebase/app";
 import { useNavigation } from '@react-navigation/native';
 import "firebase/firestore";
+import BottomSheet from '@gorhom/bottom-sheet';
 
 
 /*
@@ -25,17 +26,57 @@ const AccountCreationScreen2 = ({ navigation, route }) => {
     const [state, setState] = useState('');
     const [attendeeClicked, setAttendeeClicked] = useState(false);
     const [hostClicked, setHostClicked] = useState(false);
+    const sheetRef = useRef(null);
+    const snapPoints = useMemo(() => [ '80%', '80%' ]);
     var db = firebase.firestore();
+    var usersRef = db.collection("users");
     var documentId = route.params.docID
+    var username = route.params.username
+    var email = route.params.email
+    var phoneNumber = route.params.phoneNumber
+    var password = route.params.password
 
-    const updateData = () => {
-        db.collection("users").doc(documentId).update({
+    // const updateData = () => {
+    //     db.collection("users").doc(documentId).update({
+    //         first: firstName,
+    //         last: lastName,
+    //         state: state,
+    //         host: hostClicked,
+    //         attendee: attendeeClicked
+    //     })
+    // }
+
+    
+
+    const createUser = async () => {
+        auth.createUserWithEmailAndPassword(email, password)
+        .then(userCredential => {
+            // Signed in 
+            console.log("made it");
+            writeUserData();
+            //Navigates to second creation screen and passes data through
+            console.log("made it 2");
+            navigation.navigate('AccountCreated')
+        })
+        .catch(error => alert(error.message))
+    }
+
+    const writeUserData = async () => {
+        db.collection("users").doc(documentId).set({
             first: firstName,
             last: lastName,
+            phoneNumber: phoneNumber,
+            username: username,
+            usernameToLowerCase: username.toLowerCase(),
             state: state,
+            email: email,
+            emailToLowerCase: email.toLowerCase(),
             host: hostClicked,
             attendee: attendeeClicked
         })
+            .catch((error) => {
+                console.error("Error adding document: ", error);
+            });
     }
 
     const onAttendeePressed = () => {
@@ -77,32 +118,51 @@ const AccountCreationScreen2 = ({ navigation, route }) => {
             alert(errorMessage);
         } else {
         
-            updateData();
+            createUser();
             console.warn("Account Created");
-            navigation.navigate("AccountCreated");
         }
     }
 
+    const onGoBackPressed = () => {
+        navigation.navigate("AccountCreation");
+    }
+
+
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-            <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
-                <Text style={[styles.setTitleFont]}> Create Account </Text>
+            <View style={{flex:1,justifyContent:'center',alignItems:'center',backgroundColor: '#d796fa'}}>
+                <Text style={[styles.header]}> Create Account </Text>
+                <BottomSheet
+                ref={sheetRef}
+                index={1}
+                snapPoints={snapPoints}
+                style={styles.bottomSheetStyle}
+                >
+                    <View style={styles.sheet}>
+                    <CustomInput placeholder="First Name" value={firstName} setValue={setFirstName} secureTextEntry={false} />
+                    <CustomInput placeholder="Last Name" value={lastName} setValue={setLastName} secureTextEntry={false} />
+                    <States state={state} setState={setState} />
 
-                <CustomInput placeholder="First Name" value={firstName} setValue={setFirstName} secureTextEntry={false} />
-                <CustomInput placeholder="Last Name" value={lastName} setValue={setLastName} secureTextEntry={false} />
-                <States state={state} setState={setState} />
+                    <View style={{ flexDirection: "row" }}>
+                        <AttendeeHostButtons onPress={onAttendeePressed} buttonClicked={attendeeClicked} buttonName="Attendee" />
+                        <AttendeeHostButtons onPress={onHostPressed} buttonClicked={hostClicked} buttonName="Host" />
+                    </View>
 
-                <View style={{ flexDirection: "row" }}>
-                    <AttendeeHostButtons onPress={onAttendeePressed} buttonClicked={attendeeClicked} buttonName="Attendee" />
-                    <AttendeeHostButtons onPress={onHostPressed} buttonClicked={hostClicked} buttonName="Host" />
-                </View>
-
-                <View style={{ flexDirection: "row", marginBottom: 20, marginTop: 20 }}>
-                    <CustomButton onPress={onCreateAccountPressed} buttonName="Create Account" type="PRIMARY" /></View>
+                    <View style={{ flexDirection: "row", marginBottom: 20, marginTop: 20 }}>
+                        <CustomButton onPress={onCreateAccountPressed} buttonName="Create Account" type="PRIMARY" /></View>
+                        <TouchableOpacity onPress={onGoBackPressed}>
+                        <Text style = {{fontSize:13, marginTop: 0,  color: '#039be5'}}>
+                            Go Back
+                        </Text>
+                    </TouchableOpacity>
+                    </View>
+                </BottomSheet>
             </View>
         </TouchableWithoutFeedback>
     )
 }
+
+
 
 const styles = StyleSheet.create({
     root: {
@@ -117,6 +177,24 @@ const styles = StyleSheet.create({
     },
     text: {
         textAlign: "left"
+    },
+    header: {
+        fontSize: 45,
+        fontFamily: 'Helvetica Neue',
+        fontWeight: 'bold',
+        paddingTop: 50,
+        marginBottom: 650,
+        textAlign: 'left',
+    },
+    error: {
+        color:'red',
+        textAlign: 'center'
+    },
+    sheet: {
+        alignItems: 'center',
+    },
+    bottomSheetStyle: {
+        borderRadius: 50
     }
 })
 export default AccountCreationScreen2

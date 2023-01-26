@@ -11,7 +11,7 @@ const LoginScreen = ({navigation}) => {
     const [email, setEmail] = useState('');
     const [emailError, setEmailError] = useState('');
     const sheetRef = useRef(null);
-    const snapPoints = useMemo(() => [ '80%', '80%' ]);
+    const snapPoints = useMemo(() => [ '75%', '75%' ]);
 
     const validateEmail = () => {
         if (email.length === 0) {
@@ -67,6 +67,7 @@ const LoginScreen = ({navigation}) => {
                 index={1}
                 snapPoints={snapPoints}
                 style={styles.bottomSheetStyle}
+                handleIndicatorStyle={{ display: "none" }}
                 >
                     <View style={styles.sheet}>
                 <Text style = {{fontSize:14, textAlign: 'center', color: 'grey', marginRight:15, marginLeft:15, marginBottom:20, textAlign: 'center'}}>
@@ -96,7 +97,7 @@ const styles = StyleSheet.create({
         fontFamily: 'Helvetica Neue',
         fontWeight: 'bold',
         paddingTop: 50,
-        marginBottom: 650
+        marginBottom: 600
     },
     error: {
         color:'red',

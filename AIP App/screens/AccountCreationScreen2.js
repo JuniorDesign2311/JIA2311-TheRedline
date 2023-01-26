@@ -136,7 +136,7 @@ const AccountCreationScreen2 = ({ navigation, route }) => {
                 ref={sheetRef}
                 index={1}
                 snapPoints={snapPoints}
-                style={styles.bottomSheetStyle}
+                handleIndicatorStyle={{ display: "none" }}
                 >
                     <View style={styles.sheet}>
                     <CustomInput placeholder="First Name" value={firstName} setValue={setFirstName} secureTextEntry={false} />

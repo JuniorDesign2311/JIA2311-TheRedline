@@ -90,6 +90,7 @@ const LoginScreen = ({navigation}) => {
             index={1}
             snapPoints={snapPoints}
             style={styles.bottomSheetStyle}
+            handleIndicatorStyle={{ display: "none" }}
             >
                 <View style={styles.sheet}>
                 <CustomInput placeholder="Email" value={email} setValue={setEmail} secureTextEntry={false}/>

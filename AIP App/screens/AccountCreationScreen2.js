@@ -27,7 +27,7 @@ const AccountCreationScreen2 = ({ navigation, route }) => {
     const [attendeeClicked, setAttendeeClicked] = useState(false);
     const [hostClicked, setHostClicked] = useState(false);
     const sheetRef = useRef(null);
-    const snapPoints = useMemo(() => [ '80%', '80%' ]);
+    const snapPoints = useMemo(() => [ '75%', '75%' ]);
     var db = firebase.firestore();
     var usersRef = db.collection("users");
     var documentId = route.params.docID

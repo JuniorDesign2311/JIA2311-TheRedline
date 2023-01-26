@@ -15,7 +15,7 @@ const LoginScreen = ({navigation}) => {
     const [passwordError, setPasswordError] = useState('');
 
     const sheetRef = useRef(null);
-    const snapPoints = useMemo(() => [ '80%', '80%' ]);
+    const snapPoints = useMemo(() => [ '75%', '75%' ]);
     
     const validateEmail = () => {
         if (email.length === 0) {

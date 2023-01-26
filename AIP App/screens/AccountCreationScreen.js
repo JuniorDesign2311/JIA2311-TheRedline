@@ -23,7 +23,7 @@ const AccountCreationScreen = ({ navigation }) => {
     const [attendeeClicked, setAttendeeClicked] = useState(false);
     const [hostClicked, setHostClicked] = useState(false);
     const sheetRef = useRef(null);
-    const snapPoints = useMemo(() => [ '80%', '80%' ]);
+    const snapPoints = useMemo(() => [ '75%', '75%' ]);
 
     // Document id to distinguish each user within our database
     const documentId = username+phoneNumber;

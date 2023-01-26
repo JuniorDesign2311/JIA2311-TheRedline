@@ -7,7 +7,7 @@ const MapScreen = () => {
 
   const sheetRef = useRef(null);
 
-  const snapPoints = useMemo(() => [ '80%', '20%' ]);
+  const snapPoints = useMemo(() => [ '20%', '80%' ]);
 
   return (
     <View style={styles.container}>

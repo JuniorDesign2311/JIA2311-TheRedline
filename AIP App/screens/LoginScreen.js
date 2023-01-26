@@ -82,7 +82,7 @@ const LoginScreen = ({navigation}) => {
 
         <View style={{flex:1,justifyContent:'center',alignItems:'center', backgroundColor: '#d796fa'}}>
             <Text style={styles.header}>
-            Welcome
+            Welcome!
             </Text>
 
             <BottomSheet
@@ -130,8 +130,8 @@ const styles = StyleSheet.create({
         fontFamily: 'Helvetica Neue',
         fontWeight: 'bold',
         paddingTop: 50,
-        marginBottom: 650,
-        marginRight: 170
+        marginBottom: 600,
+        marginRight: 150
     },
     error: {
         color:'red',

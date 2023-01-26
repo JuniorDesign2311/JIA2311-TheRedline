@@ -11,7 +11,7 @@ const LoginScreen = ({navigation}) => {
     const [email, setEmail] = useState('');
     const [emailError, setEmailError] = useState('');
     const sheetRef = useRef(null);
-    const snapPoints = useMemo(() => [ '80%', '80%' ]);
+    const snapPoints = useMemo(() => [ '75%', '75%' ]);
 
     const validateEmail = () => {
         if (email.length === 0) {
@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
         fontFamily: 'Helvetica Neue',
         fontWeight: 'bold',
         paddingTop: 50,
-        marginBottom: 650
+        marginBottom: 600
     },
     error: {
         color:'red',

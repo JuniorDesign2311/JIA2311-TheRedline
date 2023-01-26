@@ -249,7 +249,7 @@ const styles = StyleSheet.create({
         fontFamily: 'Helvetica Neue',
         fontWeight: 'bold',
         paddingTop: 50,
-        marginBottom: 650,
+        marginBottom: 600,
         textAlign: 'left',
     },
     error: {

@@ -16,10 +16,7 @@ const AccountCreationScreen = ({ navigation }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [cpassword, setcPassword] = useState('');
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
-    const [state, setState] = useState('');
     const [attendeeClicked, setAttendeeClicked] = useState(false);
     const [hostClicked, setHostClicked] = useState(false);
     const sheetRef = useRef(null);
@@ -194,6 +191,7 @@ const AccountCreationScreen = ({ navigation }) => {
     }
 
     return (
+
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
         <View style={{flex:1,justifyContent:'center',alignItems:'center',backgroundColor: '#d796fa'}}>
                 <Text style={[styles.header]}> Create Account </Text>
@@ -226,6 +224,7 @@ const AccountCreationScreen = ({ navigation }) => {
                 </BottomSheet>
                 </View>
         </TouchableWithoutFeedback>
+
         
     )
 }
@@ -263,4 +262,4 @@ const styles = StyleSheet.create({
         borderRadius: 50
     }
 })
-export default AccountCreationScreen
+export default AccountCreationScreen;

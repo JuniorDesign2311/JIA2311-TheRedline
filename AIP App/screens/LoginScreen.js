@@ -5,9 +5,16 @@ import CustomButton from '../components/CustomButton';
 import CustomText from '../components/CustomButton';
 import { auth } from '../firebaseConfig';
 import { db } from '../firebaseConfig';
-import BottomSheet from '@gorhom/bottom-sheet';
-import Animated, { AnimatedLayout, SlideInRight, FadeInLeft, FadeInDown} from 'react-native-reanimated';
 
+//import {password} from '../screens/AccountCreationScreen';
+//import {email} from '../screens/AccountCreationScreen';
+
+import BottomSheet from '@gorhom/bottom-sheet';
+import Animated, { AnimatedLayout, SlideInRight, FadeInLeft, FadeInDown} from 'react-native-reanimated');
+    
+    
+    const isValidemail = true;
+    const isValidPassword = true;
 
 const LoginScreen = ({navigation}) => {
     const [email, setEmail] = useState('');
@@ -15,6 +22,9 @@ const LoginScreen = ({navigation}) => {
     const [emailError, setEmailError] = useState('');
     const [passwordError, setPasswordError] = useState('');
     const [isValidEmail, setIsValidEmail] = useState(false);
+    
+    // const [apassword, setPassword] = useState({password});
+    // const [aemail, setEmail] = useState({email});
 
     const sheetRef = useRef(null);
     const snapPoints = useMemo(() => [ '75%', '75%' ]);
@@ -49,8 +59,9 @@ const LoginScreen = ({navigation}) => {
         }
     }
 
+
     const handleLogin = () => {
-        auth.signInWithEmailAndPassword(email, password)
+        auth.signInWithEmailAndPassword(aemail, apassword)
         .then(userCredential => {
             var user = userCredential.user;
             setEmailError('');
@@ -86,6 +97,7 @@ const LoginScreen = ({navigation}) => {
             <Text style={styles.header}>
             Welcome
             </Text>
+
 
             <BottomSheet
             ref={sheetRef}

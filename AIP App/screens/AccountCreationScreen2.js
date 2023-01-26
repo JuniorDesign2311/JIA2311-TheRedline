@@ -37,10 +37,7 @@ const AccountCreationScreen2 = ({ navigation, route }) => {
     var password = route.params.password
 
     // Error Handling
-    const [firstNameError, setfirstNameError] = useState('');
-    const [lastNameError, setlastNameError] = useState('');
-    const [stateError, setstateError] = useState('');
-    const [accountTypeError, setAccountTypeError] = useState('');
+    const [inputError, setInputError] = useState('');
 
     const createUser = async () => {
         auth.createUserWithEmailAndPassword(email, password)
@@ -90,47 +87,26 @@ const AccountCreationScreen2 = ({ navigation, route }) => {
         console.log("Host Clicked");
     }
 
-    const validateAccountType = () => {
-        if (attendeeClicked === false && hostClicked === false) {
-            setAccountTypeError('Please select an account type')
-        }
-        else {
-            setAccountTypeError('');
-        }
-    }
-
-    const validateState = () => {
-        if (state.length === 0) {
-            setstateError('Please Select a State')
-        }
-        else {
-            setstateError('');
-        }
-    }
-
-    const validateLastName = () => {
-        if (lastName.length === 0) {
-            setlastNameError('Last Name is Empty')
-        }
-        else {
-            setlastNameError('');
-        }
-    }
-
-    const validateFirstName = () => {
+    const validateInputs = () => {
         if (firstName.length === 0) {
-            setfirstNameError('First Name is Empty')
+            setInputError('First Name is Empty')
+        }
+        else if (lastName.length === 0) {
+            setInputError('Last Name is Empty')
+        }
+        else if (state.length === 0) {
+            setInputError('Please Select a State')
+        }
+        else if (attendeeClicked === false && hostClicked === false) {
+            setInputError('Please select an account type')
         }
         else {
-            setfirstNameError('');
+            setInputError('');
         }
     }
 
     const onCreateAccountPressed = () => {
-        validateFirstName();
-        validateLastName();
-        validateState();
-        validateAccountType();
+        validateInputs();
         //Error handling
         var errorMessage = ""
 
@@ -171,18 +147,15 @@ const AccountCreationScreen2 = ({ navigation, route }) => {
                 handleIndicatorStyle={{ display: "none" }}
                 >
                     <View style={styles.sheet}>
+                    <Text style={styles.error}> {inputError} </Text>
                     <CustomInput placeholder="First Name" value={firstName} setValue={setFirstName} secureTextEntry={false} />
-                    <Text style={styles.error}> {firstNameError} </Text>
                     <CustomInput placeholder="Last Name" value={lastName} setValue={setLastName} secureTextEntry={false} />
-                    <Text style={styles.error}> {lastNameError} </Text>
                     <States state={state} setState={setState} />
-                    <Text style={styles.error}> {stateError} </Text>
 
                     <View style={{ flexDirection: "row" }}>
                         <AttendeeHostButtons onPress={onAttendeePressed} buttonClicked={attendeeClicked} buttonName="Attendee" />
                         <AttendeeHostButtons onPress={onHostPressed} buttonClicked={hostClicked} buttonName="Host" />
                     </View>
-                    <Text style={styles.error}> {accountTypeError} </Text>
 
                     <View style={{ flexDirection: "row"}}>
                         <CustomButton onPress={onCreateAccountPressed} buttonName="Create Account" type="PRIMARY" /></View>
@@ -224,6 +197,8 @@ const styles = StyleSheet.create({
     },
     error: {
         color:'red',
+        fontSize: 15,
+        fontWeight: 'bold',
         textAlign: 'center'
     },
     sheet: {

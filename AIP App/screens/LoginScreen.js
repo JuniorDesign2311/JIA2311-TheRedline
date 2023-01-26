@@ -10,7 +10,7 @@ import { db } from '../firebaseConfig';
 //import {email} from '../screens/AccountCreationScreen';
 
 import BottomSheet from '@gorhom/bottom-sheet';
-import Animated, { AnimatedLayout, SlideInRight, FadeInLeft, FadeInDown} from 'react-native-reanimated');
+import Animated, { AnimatedLayout, SlideInRight, FadeInLeft, FadeInDown} from 'react-native-reanimated';
     
     
     const isValidemail = true;
@@ -19,8 +19,7 @@ import Animated, { AnimatedLayout, SlideInRight, FadeInLeft, FadeInDown} from 'r
 const LoginScreen = ({navigation}) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [emailError, setEmailError] = useState('');
-    const [passwordError, setPasswordError] = useState('');
+    const [loginError, setLoginError] = useState('');
     const [isValidEmail, setIsValidEmail] = useState(false);
     
     // const [apassword, setPassword] = useState({password});
@@ -29,43 +28,35 @@ const LoginScreen = ({navigation}) => {
     const sheetRef = useRef(null);
     const snapPoints = useMemo(() => [ '75%', '75%' ]);
     
-    const validateEmail = () => {
+    const validateLogin = () => {
         if (email.length === 0) {
-            setEmailError('Email Field is Empty')
+            setLoginError('Email Field is Empty')
         }
         else if (!email.includes('@')) {
-            setEmailError('Invalid Email Address');
+            setLoginError('Invalid Email Address');
         }
         else if (email.indexOf(' ') >= 0) {
-            setEmailError('Email Cannot Contain Spaces')
+            setLoginError('Email Cannot Contain Spaces')
         }
-        else {
-            setEmailError('');
-        }
-    }
-
-    const validatePassword = () => {
-        if (password.length === 0) {
-            setPasswordError('Password Field is Empty')
+        else if (password.length === 0) {
+            setLoginError('Password Field is Empty')
         }
         else if (password.length < 6) {
-            setPasswordError('Password must be at least 6 characters');
+            setLoginError('Password must be at least 6 characters');
         }
         else if (password.indexOf(' ') >= 0) {
-            setPasswordError('Password Cannot Contain Spaces')
+            setLoginError('Password Cannot Contain Spaces')
         }
         else {
-            setPasswordError('');
+            setLoginError('');
         }
     }
 
-
     const handleLogin = () => {
-        auth.signInWithEmailAndPassword(aemail, apassword)
+        auth.signInWithEmailAndPassword(email, password)
         .then(userCredential => {
             var user = userCredential.user;
-            setEmailError('');
-            setPasswordError('');
+            setLoginError('');
             navigation.navigate("Map");
         })
         .catch(error => console.warn(error.message))
@@ -73,21 +64,18 @@ const LoginScreen = ({navigation}) => {
 
     const onForgotPasswordPressed = () => {
         navigation.navigate("ResetPassword");   
-        setEmailError('');
-        setPasswordError('');
+        setLoginError('');
     }
 
 
     const onLoginPressed = () => {
-        validateEmail();
-        validatePassword();
+        validateLogin();
         handleLogin();
     }
 
     const onCreateAccountPressed = () => {
         navigation.navigate("AccountCreation");
-        setEmailError('');
-        setPasswordError('');
+        setLoginError('');
     }
     
     return (
@@ -107,10 +95,9 @@ const LoginScreen = ({navigation}) => {
             handleIndicatorStyle={{ display: "none" }}
             >
                 <Animated.View style={styles.sheet}>
+                <Text style={styles.error}> {loginError} </Text>
                 <CustomInput placeholder="Email" value={email} setValue={setEmail} secureTextEntry={false}/>
-                <Text style={styles.error}> {emailError} </Text>
                 <CustomInput placeholder="Password" value={password} setValue={setPassword} secureTextEntry={true}/>
-                <Text style={styles.error}> {passwordError} </Text>
                 <CustomButton onPress={onLoginPressed} buttonName="Log in" type="PRIMARY"/>
                 <View style={{flexDirection: 'row', alignItems: 'center', marginLeft: 25, marginRight: 25}}>
                 <View style={{flex: 1, height: 1, backgroundColor: 'lightgrey'}} />
@@ -148,6 +135,8 @@ const styles = StyleSheet.create({
         marginRight: 170
     },
     error: {
+        fontSize: 15,
+        fontWeight: 'bold',
         color:'red'
     },
     sheet: {

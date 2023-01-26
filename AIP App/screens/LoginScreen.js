@@ -6,6 +6,7 @@ import CustomText from '../components/CustomButton';
 import { auth } from '../firebaseConfig';
 import { db } from '../firebaseConfig';
 import BottomSheet from '@gorhom/bottom-sheet';
+import Animated, { AnimatedLayout, SlideInRight, FadeInLeft, FadeInDown} from 'react-native-reanimated';
 
 
 const LoginScreen = ({navigation}) => {
@@ -13,6 +14,7 @@ const LoginScreen = ({navigation}) => {
     const [password, setPassword] = useState('');
     const [emailError, setEmailError] = useState('');
     const [passwordError, setPasswordError] = useState('');
+    const [isValidEmail, setIsValidEmail] = useState(false);
 
     const sheetRef = useRef(null);
     const snapPoints = useMemo(() => [ '75%', '75%' ]);
@@ -82,7 +84,7 @@ const LoginScreen = ({navigation}) => {
 
         <View style={{flex:1,justifyContent:'center',alignItems:'center', backgroundColor: '#d796fa'}}>
             <Text style={styles.header}>
-            Welcome!
+            Welcome
             </Text>
 
             <BottomSheet
@@ -92,7 +94,7 @@ const LoginScreen = ({navigation}) => {
             style={styles.bottomSheetStyle}
             handleIndicatorStyle={{ display: "none" }}
             >
-                <View style={styles.sheet}>
+                <Animated.View style={styles.sheet}>
                 <CustomInput placeholder="Email" value={email} setValue={setEmail} secureTextEntry={false}/>
                 <Text style={styles.error}> {emailError} </Text>
                 <CustomInput placeholder="Password" value={password} setValue={setPassword} secureTextEntry={true}/>
@@ -116,7 +118,7 @@ const LoginScreen = ({navigation}) => {
                         Forgot password?
                     </Text>
                 </TouchableOpacity>
-                </View>
+                </Animated.View>
             </BottomSheet>
             </View>
         </TouchableWithoutFeedback>
@@ -130,12 +132,11 @@ const styles = StyleSheet.create({
         fontFamily: 'Helvetica Neue',
         fontWeight: 'bold',
         paddingTop: 50,
-        marginBottom: 600,
-        marginRight: 150
+        marginBottom: 650,
+        marginRight: 170
     },
     error: {
-        color:'red',
-        textAlign: 'center'
+        color:'red'
     },
     sheet: {
         alignItems: 'center',

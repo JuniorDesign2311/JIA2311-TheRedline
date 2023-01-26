@@ -36,7 +36,6 @@ const styles = StyleSheet.create({
     },
     container:{
         width: '90%',
-        marginVertical: 5,
     }
 })
 export default CustomInput

@@ -67,6 +67,7 @@ const LoginScreen = ({navigation}) => {
                 index={1}
                 snapPoints={snapPoints}
                 style={styles.bottomSheetStyle}
+                handleIndicatorStyle={{ display: "none" }}
                 >
                     <View style={styles.sheet}>
                 <Text style = {{fontSize:14, textAlign: 'center', color: 'grey', marginRight:15, marginLeft:15, marginBottom:20, textAlign: 'center'}}>

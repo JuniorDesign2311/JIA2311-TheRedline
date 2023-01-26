@@ -36,29 +36,21 @@ const AccountCreationScreen2 = ({ navigation, route }) => {
     var phoneNumber = route.params.phoneNumber
     var password = route.params.password
 
-    // const updateData = () => {
-    //     db.collection("users").doc(documentId).update({
-    //         first: firstName,
-    //         last: lastName,
-    //         state: state,
-    //         host: hostClicked,
-    //         attendee: attendeeClicked
-    //     })
-    // }
-
-    
+    // Error Handling
+    const [firstNameError, setfirstNameError] = useState('');
+    const [lastNameError, setlastNameError] = useState('');
+    const [stateError, setstateError] = useState('');
+    const [accountTypeError, setAccountTypeError] = useState('');
 
     const createUser = async () => {
         auth.createUserWithEmailAndPassword(email, password)
         .then(userCredential => {
             // Signed in 
-            console.log("made it");
             writeUserData();
             //Navigates to second creation screen and passes data through
-            console.log("made it 2");
             navigation.navigate('AccountCreated')
         })
-        .catch(error => alert(error.message))
+        .catch(error => console.warn(error.message))
     }
 
     const writeUserData = async () => {
@@ -81,7 +73,7 @@ const AccountCreationScreen2 = ({ navigation, route }) => {
 
     const onAttendeePressed = () => {
         if (hostClicked)  {
-            alert("Please only choose one account type.");
+            console.warn("Please only choose one account type.");
         } else {
             setAttendeeClicked(!attendeeClicked);
         }  
@@ -91,14 +83,54 @@ const AccountCreationScreen2 = ({ navigation, route }) => {
 
     const onHostPressed = () => {
         if (attendeeClicked)  {
-            alert("Please only choose one account type.");
+            console.warn("Please only choose one account type.");
         } else {
             setHostClicked(!hostClicked);
         }  
         console.log("Host Clicked");
     }
 
+    const validateAccountType = () => {
+        if (attendeeClicked === false && hostClicked === false) {
+            setAccountTypeError('Please select an account type')
+        }
+        else {
+            setAccountTypeError('');
+        }
+    }
+
+    const validateState = () => {
+        if (state.length === 0) {
+            setstateError('Please Select a State')
+        }
+        else {
+            setstateError('');
+        }
+    }
+
+    const validateLastName = () => {
+        if (lastName.length === 0) {
+            setlastNameError('Last Name is Empty')
+        }
+        else {
+            setlastNameError('');
+        }
+    }
+
+    const validateFirstName = () => {
+        if (firstName.length === 0) {
+            setfirstNameError('First Name is Empty')
+        }
+        else {
+            setfirstNameError('');
+        }
+    }
+
     const onCreateAccountPressed = () => {
+        validateFirstName();
+        validateLastName();
+        validateState();
+        validateAccountType();
         //Error handling
         var errorMessage = ""
 
@@ -115,7 +147,7 @@ const AccountCreationScreen2 = ({ navigation, route }) => {
                 errorMessage = errorMessage + "Please choose an account type."
             }
 
-            alert(errorMessage);
+            console.warn(errorMessage);
         } else {
         
             createUser();
@@ -140,15 +172,19 @@ const AccountCreationScreen2 = ({ navigation, route }) => {
                 >
                     <View style={styles.sheet}>
                     <CustomInput placeholder="First Name" value={firstName} setValue={setFirstName} secureTextEntry={false} />
+                    <Text style={styles.error}> {firstNameError} </Text>
                     <CustomInput placeholder="Last Name" value={lastName} setValue={setLastName} secureTextEntry={false} />
+                    <Text style={styles.error}> {lastNameError} </Text>
                     <States state={state} setState={setState} />
+                    <Text style={styles.error}> {stateError} </Text>
 
                     <View style={{ flexDirection: "row" }}>
                         <AttendeeHostButtons onPress={onAttendeePressed} buttonClicked={attendeeClicked} buttonName="Attendee" />
                         <AttendeeHostButtons onPress={onHostPressed} buttonClicked={hostClicked} buttonName="Host" />
                     </View>
+                    <Text style={styles.error}> {accountTypeError} </Text>
 
-                    <View style={{ flexDirection: "row", marginBottom: 20, marginTop: 20 }}>
+                    <View style={{ flexDirection: "row"}}>
                         <CustomButton onPress={onCreateAccountPressed} buttonName="Create Account" type="PRIMARY" /></View>
                         <TouchableOpacity onPress={onGoBackPressed}>
                         <Text style = {{fontSize:13, marginTop: 0,  color: '#039be5'}}>

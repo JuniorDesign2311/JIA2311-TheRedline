@@ -46,10 +46,8 @@ const AccountCreationScreen2 = ({ navigation, route }) => {
         auth.createUserWithEmailAndPassword(email, password)
         .then(userCredential => {
             // Signed in 
-            console.log("made it");
             writeUserData();
             //Navigates to second creation screen and passes data through
-            console.log("made it 2");
             navigation.navigate('AccountCreated')
         })
         .catch(error => console.warn(error.message))
@@ -93,7 +91,7 @@ const AccountCreationScreen2 = ({ navigation, route }) => {
     }
 
     const validateAccountType = () => {
-        if (attendeeClicked === false || hostClicked === false) {
+        if (attendeeClicked === false && hostClicked === false) {
             setAccountTypeError('Please select an account type')
         }
         else {

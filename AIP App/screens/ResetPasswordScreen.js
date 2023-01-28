@@ -6,6 +6,7 @@ import CustomButton from '../components/CustomButton';
 import { auth } from '../firebaseConfig';
 import { db } from '../firebaseConfig';
 import BottomSheet from '@gorhom/bottom-sheet';
+import CustomInput from '../components/CustomInput';
 
 const LoginScreen = ({navigation}) => {
     const [email, setEmail] = useState('');
@@ -70,11 +71,11 @@ const LoginScreen = ({navigation}) => {
                 handleIndicatorStyle={{ display: "none" }}
                 >
                     <View style={styles.sheet}>
-                <Text style = {{fontSize:14, textAlign: 'center', color: 'grey', marginRight:15, marginLeft:15, marginBottom:20, textAlign: 'center'}}>
+                <Text style = {{fontSize:14, textAlign: 'center', color: 'grey', marginRight:15, marginLeft:15, marginBottom:5, textAlign: 'center'}}>
                     Please enter the email address you'd like your password reset information to be sent to.
                 </Text>
-                    <ResetPasswordInput placeholder="Enter email address" value={email} setValue={setEmail} secureTextEntry={false}/>
                 <Text style={styles.error}> {emailError} </Text>
+                    <CustomInput placeholder="Enter email address" value={email} setValue={setEmail} secureTextEntry={false} iconName="email-outline"/>
                     <CustomButton onPress={SendLinkPressed} buttonName="Request Reset Link" type="PRIMARY"/>
                     <TouchableOpacity
                         onPress={onCancelPressed}

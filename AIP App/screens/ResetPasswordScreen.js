@@ -75,7 +75,7 @@ const LoginScreen = ({navigation}) => {
                     Please enter the email address you'd like your password reset information to be sent to.
                 </Text>
                 <Text style={styles.error}> {emailError} </Text>
-                    <CustomInput placeholder="Enter email address" value={email} setValue={setEmail} secureTextEntry={false} iconName="email-outline"/>
+                    <CustomInput placeholder="Enter Email Address" value={email} setValue={setEmail} secureTextEntry={false} iconName="email-outline"/>
                     <CustomButton onPress={SendLinkPressed} buttonName="Request Reset Link" type="PRIMARY"/>
                     <TouchableOpacity
                         onPress={onCancelPressed}

@@ -83,7 +83,7 @@ const LoginScreen = ({navigation}) => {
 
         <View style={{flex:1,justifyContent:'center',alignItems:'center', backgroundColor: '#d796fa'}}>
             <Text style={styles.header}>
-            Welcome
+            Welcome!
             </Text>
 
 
@@ -96,14 +96,14 @@ const LoginScreen = ({navigation}) => {
             >
                 <Animated.View style={styles.sheet}>
                 <Text style={styles.error}> {loginError} </Text>
-                <CustomInput placeholder="Email" value={email} setValue={setEmail} secureTextEntry={false} iconName="email-outline"/>
+                <CustomInput placeholder="Email Address" value={email} setValue={setEmail} secureTextEntry={false} iconName="email-outline"/>
                 <CustomInput placeholder="Password" value={password} setValue={setPassword} secureTextEntry={true} iconName="lock-outline"/>
                 <CustomButton onPress={onLoginPressed} buttonName="Log in" type="PRIMARY"/>
                 <View style={{flexDirection: 'row', alignItems: 'center', marginLeft: 25, marginRight: 25}}>
                 <View style={{flex: 1, height: 1, backgroundColor: 'lightgrey'}} />
-                <View>
-                <Text style={{width: 50, color:'grey', textAlign: 'center', fontFamily: 'Helvetica Neue'}}>or</Text>
-                </View>
+                    <View>
+                    <Text style={{width: 50, color:'grey', textAlign: 'center', fontFamily: 'Helvetica Neue'}}>or</Text>
+                    </View>
 
                 <View style={{flex: 1, height: 1, backgroundColor: 'lightgrey'}} />
                 </View>
@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         paddingTop: 50,
         marginBottom: 600,
-        marginRight: 170
+        marginRight: 150
     },
     error: {
         fontSize: 15,

@@ -181,7 +181,7 @@ const AccountCreationScreen = ({ navigation }) => {
                     <Text style={styles.error}> {inputError} </Text>
                     <CustomInput placeholder="Username" value={username} setValue={setUsername} secureTextEntry={false} iconName="account-outline"/>
                     {/* <Text style={styles.error}> {usernameError} </Text> */}
-                    <CustomInput placeholder="Email" value={email} setValue={setEmail} secureTextEntry={false} keyboardType = 'email-address' iconName="email-outline"/>
+                    <CustomInput placeholder="Email Address" value={email} setValue={setEmail} secureTextEntry={false} keyboardType = 'email-address' iconName="email-outline"/>
                     {/* <Text style={styles.error}> {emailError} </Text> */}
                     <CustomInput placeholder="Password" value={password} setValue={setPassword} secureTextEntry={true} iconName="lock-outline"/>
                     <CustomInput placeholder="Confirm Password" value={cpassword} setValue={setcPassword} secureTextEntry={true} iconName="lock-outline"/>

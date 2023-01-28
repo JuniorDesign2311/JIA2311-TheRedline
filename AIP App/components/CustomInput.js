@@ -7,11 +7,13 @@ const CustomInput = ({value, setValue, placeholder, secureTextEntry, iconName, k
     return (
         <View style={styles.container}>
             <View style={styles.textField}>
-                <Icon name = { iconName } style={{fontSize: 22, marginRight: 10}}/>
+                <Icon name = { iconName } style={{fontSize: 22, marginRight: 5}}/>
             <TextInput 
                 value={value}
+                autoCorrect={false}
                 onChangeText={setValue}
-                style={styles.input} placeholder={placeholder}
+                style={{flex: 1}}
+                placeholder={placeholder}
                 placeholderTextColor= "#D3D3D3"
                 secureTextEntry = {secureTextEntry}
                 keyboardType = {keyboardType} />
@@ -37,7 +39,7 @@ const styles = StyleSheet.create({
         
     },
     container:{
-        width: '90%',
+        width: '90%'
     }
 })
 export default CustomInput

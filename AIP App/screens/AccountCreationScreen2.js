@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, ScrollView, TouchableWithoutFeedback, Keyboard,
 import CustomInput from '../components/CustomInput';
 import CustomButton from '../components/CustomButton';
 import AttendeeHostButtons from '../components/AttendeeHostButtons';
+import HostButton from '../components/HostButton';
 import States from '../components/States';
 import { auth } from '../firebaseConfig';
 import { db } from '../firebaseConfig';
@@ -154,7 +155,7 @@ const AccountCreationScreen2 = ({ navigation, route }) => {
 
                     <View style={{ flexDirection: "row" }}>
                         <AttendeeHostButtons onPress={onAttendeePressed} buttonClicked={attendeeClicked} buttonName="Attendee" />
-                        <AttendeeHostButtons onPress={onHostPressed} buttonClicked={hostClicked} buttonName="Host" />
+                        <HostButton onPress={onHostPressed} buttonClicked={hostClicked} buttonName="Host" />
                     </View>
 
                     <View style={{ flexDirection: "row"}}>

@@ -111,8 +111,7 @@ const LoginScreen = ({navigation}) => {
                 <CustomButton onPress={onCreateAccountPressed} buttonName="Create Account" type="PRIMARY"/>
                 <TouchableOpacity
                     onPress={onForgotPasswordPressed}
-                    style={{alignItems: 'center', marginTop: 20,}}
-                >
+                    style={{alignItems: 'center', marginTop: 5,}}>
                     <Text style = {{fontSize:13, color: '#039be5'}}>
                         Forgot password?
                     </Text>

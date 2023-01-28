@@ -148,8 +148,8 @@ const AccountCreationScreen2 = ({ navigation, route }) => {
                 >
                     <View style={styles.sheet}>
                     <Text style={styles.error}> {inputError} </Text>
-                    <CustomInput placeholder="First Name" value={firstName} setValue={setFirstName} secureTextEntry={false} />
-                    <CustomInput placeholder="Last Name" value={lastName} setValue={setLastName} secureTextEntry={false} />
+                    <CustomInput placeholder="First Name" value={firstName} setValue={setFirstName} secureTextEntry={false}/>
+                    <CustomInput placeholder="Last Name" value={lastName} setValue={setLastName} secureTextEntry={false}/>
                     <States state={state} setState={setState} />
 
                     <View style={{ flexDirection: "row" }}>

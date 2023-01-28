@@ -96,8 +96,8 @@ const LoginScreen = ({navigation}) => {
             >
                 <Animated.View style={styles.sheet}>
                 <Text style={styles.error}> {loginError} </Text>
-                <CustomInput placeholder="Email" value={email} setValue={setEmail} secureTextEntry={false}/>
-                <CustomInput placeholder="Password" value={password} setValue={setPassword} secureTextEntry={true}/>
+                <CustomInput placeholder="Email" value={email} setValue={setEmail} secureTextEntry={false} iconName="email-outline"/>
+                <CustomInput placeholder="Password" value={password} setValue={setPassword} secureTextEntry={true} iconName="lock-outline"/>
                 <CustomButton onPress={onLoginPressed} buttonName="Log in" type="PRIMARY"/>
                 <View style={{flexDirection: 'row', alignItems: 'center', marginLeft: 25, marginRight: 25}}>
                 <View style={{flex: 1, height: 1, backgroundColor: 'lightgrey'}} />

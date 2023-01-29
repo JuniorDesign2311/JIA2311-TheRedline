@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native'
 
-const AttendeeHostButtons = ({onPress, buttonClicked, buttonName}) => {
+const HostButton = ({onPress, buttonClicked, buttonName}) => {
     
     return (
         <TouchableOpacity 
@@ -21,8 +21,8 @@ const styles = StyleSheet.create({
 
         borderColor: '#e8e8e8',
         borderWidth: 1,
-        borderBottomLeftRadius: 15,
-        borderTopLeftRadius: 15,
+        borderBottomRightRadius: 15,
+        borderTopRightRadius: 15,
 
         paddingHorizontal: 10,
         paddingVertical: 10,
@@ -37,5 +37,5 @@ const styles = StyleSheet.create({
 
 });
 
-export default AttendeeHostButtons
+export default HostButton
 

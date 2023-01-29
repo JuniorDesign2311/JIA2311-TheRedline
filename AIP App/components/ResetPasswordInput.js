@@ -35,9 +35,6 @@ const styles = StyleSheet.create({
     },
     container:{
         width: "85%",
-        // height: "7%",
-        // justifyContent: 'center', //Centered horizontally
-        // alignItems: 'center', //Centered vertically
     }
 })
 export default ResetPasswordInput

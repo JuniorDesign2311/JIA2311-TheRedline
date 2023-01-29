@@ -67,6 +67,7 @@ return (
     <View style={{ flexDirection: "row", alignItems: "center", paddingTop: 8 }}>
       <SelectDropdown
         data={states}
+        buttonStyle={styles.dropdown1BtnStyle}
         onSelect={(state) => {
           setState(state);
         }}
@@ -81,7 +82,6 @@ return (
         }}
         defaultButtonText="Select a state"
         dropdownIconPosition={"right"}
-        buttonStyle={styles.dropdown1BtnStyle}
         buttonTextStyle={styles.dropdown1BtnTxtStyle}
         dropdownStyle={styles.dropdown1DropdownStyle}
         rowStyle={styles.dropdown1RowStyle}
@@ -105,12 +105,12 @@ return (
 
 const styles = StyleSheet.create({
   dropdown1BtnStyle: {
-    backgroundColor: "#FAFBFC",
+    backgroundColor: "white",
     height: 40,
-    borderColor: "#D9D9D9",
+    borderColor: "#e8e8e8",
     borderWidth: 1,
-    borderRadius: 4,
-    width: "90%",
+    borderRadius: 15,
+    width: "90%"
   },
   dropdown1BtnTxtStyle: {
     textAlign: "left",

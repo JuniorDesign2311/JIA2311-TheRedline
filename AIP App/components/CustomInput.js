@@ -6,6 +6,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 const CustomInput = ({value, setValue, placeholder, secureTextEntry, iconName, keyboardType = "default"}) => {
     return (
         <View style={styles.container}>
+        <Text> {placeholder} </Text>
             <View style={styles.textField}>
                 <Icon name = { iconName } style={{fontSize: 22, marginRight: 5}}/>
             <TextInput 

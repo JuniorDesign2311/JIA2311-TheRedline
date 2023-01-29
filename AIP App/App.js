@@ -9,6 +9,7 @@ import AccountCreationScreen2 from "./screens/AccountCreationScreen2";
 import LoginScreen from './screens/LoginScreen'
 import ResetPasswordScreen from './screens/ResetPasswordScreen';
 import AccountCreatedScreen from "./screens/AccountCreatedScreen";
+import TermsOfServiceScreen from './screens/TermsOfServiceScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -33,6 +34,13 @@ export default function App() {
           name="AccountCreation"
           component={AccountCreationScreen}
           options={{title: "Account Creation",
+          headerShown: false}}
+        />
+
+        <Stack.Screen
+          name="TermsOfService"
+          component={TermsOfServiceScreen}
+          options={{title: "Terms Of Service",
           headerShown: false}}
         />
 

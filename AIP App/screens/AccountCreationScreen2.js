@@ -158,13 +158,6 @@ const AccountCreationScreen2 = ({ navigation, route }) => {
                         <HostButton onPress={onHostPressed} buttonClicked={hostClicked} buttonName="Host" />
                     </View>
                     
-                    <View>
-                            <Text style = {{textAlign: 'center'}}>By clicking Create Account, you accept the </Text>
-                            
-                            <Text  onPress={() => navigation.navigate("TermsAndConditions")}
-                            style={{color: '#039be5', textAlign: 'center'}}>Terms of Service and Privacy Policy</Text>
-                            
-                        </View>
                     <View style={{ flexDirection: "row"}}>
                         
                         <CustomButton onPress={onCreateAccountPressed} buttonName="Create Account" type="PRIMARY" /></View>

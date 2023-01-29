@@ -22,15 +22,11 @@ const AccountCreationScreen = ({ navigation }) => {
     const sheetRef = useRef(null);
     const snapPoints = useMemo(() => [ '75%', '75%' ]);
     // Error Handling
-    // const [usernameError, setUsernameError] = useState('');
-    // const [emailError, setEmailError] = useState('');
-    // const [passwordError, setPasswordError] = useState('');
-    // const [phoneNumberError, setPhoneNumberError] = useState('');
     const [inputError, setInputError] = useState('');
     // Document id to distinguish each user within our database
     const documentId = username+phoneNumber;
 
-    const handleSignUp = () => {
+    const validateUser = () => {
         var db = firebase.firestore();
         var usersRef = db.collection("users");
         // query for inputted username
@@ -44,7 +40,7 @@ const AccountCreationScreen = ({ navigation }) => {
                                 usersRef.where("emailToLowerCase", "==", email.toLowerCase()).get()
                                     .then(snapshot => {
                                         if (snapshot.empty) {
-                                            navigation.navigate('AccountCreation2', {
+                                            navigation.navigate('TermsOfService', {
                                                 docID: (username+phoneNumber),
                                                 username: username,
                                                 email: email,
@@ -158,7 +154,7 @@ const AccountCreationScreen = ({ navigation }) => {
 
             console.warn(errorMessage);
         } else {
-            handleSignUp();
+            validateUser();
         }
     }
 

@@ -40,7 +40,7 @@ const AccountCreationScreen = ({ navigation }) => {
                                 usersRef.where("emailToLowerCase", "==", email.toLowerCase()).get()
                                     .then(snapshot => {
                                         if (snapshot.empty) {
-                                            navigation.navigate('TermsOfService', {
+                                            navigation.navigate('AccountCreation2', {
                                                 docID: (username+phoneNumber),
                                                 username: username,
                                                 email: email,

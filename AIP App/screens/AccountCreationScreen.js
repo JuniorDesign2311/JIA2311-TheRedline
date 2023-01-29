@@ -48,7 +48,8 @@ const AccountCreationScreen = ({ navigation }) => {
                                                 password: password
                                             });
                                         } else {
-                                            console.warn("Email is already linked to an account.")
+                                            setInputError('Email already linked to an account')
+                                            console.warn("Email already linked to an account.")
                                         }
             
                                     })
@@ -60,7 +61,8 @@ const AccountCreationScreen = ({ navigation }) => {
                                         console.log("Error: ", err);
                                     })
                             } else {
-                                console.warn("Phone number is already linked to an account.")
+                                setInputError('Phone number already linked to an account')
+                                console.warn("Phone number already linked to an account.")
                             }
 
                         })
@@ -73,6 +75,7 @@ const AccountCreationScreen = ({ navigation }) => {
                         })
 
                 } else {
+                    setInputError('Username already taken')
                     console.warn("Username already taken.")
                 }
             })
@@ -87,6 +90,9 @@ const AccountCreationScreen = ({ navigation }) => {
     }
 
     const validateInput = () => {
+        // Error Handling
+        var noError = false;
+
         if (username.length === 0) {
             setInputError('Username Field is Empty')
         }
@@ -111,6 +117,9 @@ const AccountCreationScreen = ({ navigation }) => {
         else if (password.length < 6) {
             setInputError('Password must be at least 6 characters');
         }
+        else if (password.length > 40) {
+            setInputError("Password can't be longer than 40 charaters");
+        }
         else if (password.indexOf(' ') >= 0) {
             setInputError('Password Cannot Contain Spaces')
         }
@@ -125,34 +134,15 @@ const AccountCreationScreen = ({ navigation }) => {
         }
         else {
             setInputError('');
+            noError = true;
         }
+        return noError;
     }
 
     const onContinuePressed = () => {
-        validateInput();
-        //Error handling
-        var errorMessage = ""
-
-        if (username === "" || email === "" || password === "" || cpassword === ""|| phoneNumber === ""
-            || password != cpassword || password.length < 6 || password.length > 40 || phoneNumber.length != 10) {
-
-            // Error message if a field is not filled out
-            if (username === "" || email === "" || password === "" || cpassword === ""|| phoneNumber === "") {
-                errorMessage = errorMessage + "Fill out blank field(s).";
-            }
-
-            // Error message if password and password confirmation do not match
-            if (password != cpassword) {
-                if (errorMessage != "") errorMessage = errorMessage + "\n";
-                errorMessage = errorMessage + "Passwords do not match.";
-            }
-
-            if (password.length > 40) {
-                if (errorMessage != "") errorMessage = errorMessage + "\n";
-                errorMessage = errorMessage + "Password can't be longer than 40 charaters.";
-            }
-
-            console.warn(errorMessage);
+        if (!validateInput()) {
+            // If validateInput returns false, then user had error creating account
+            console.warn("Account could not be created");
         } else {
             validateUser();
         }

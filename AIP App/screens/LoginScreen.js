@@ -62,7 +62,7 @@ const LoginScreen = ({navigation}) => {
             })
             .catch(error =>
                 console.warn(error.message),
-                setLoginError("Invalid credentials")
+                setLoginError("Invalid credentials.")
             )
     }
 

@@ -130,7 +130,7 @@ const AccountCreationScreen = ({ navigation }) => {
             setInputError('Phone Number Field is Empty')
         }
         else if (phoneNumber.length != 10) {
-            setInputError('Phone Number is incorrect');
+            setInputError("Phone Number is badly formatted");
         }
         else {
             setInputError('');
@@ -166,14 +166,10 @@ const AccountCreationScreen = ({ navigation }) => {
                     <View style={styles.sheet}>
                     <Text style={styles.error}> {inputError} </Text>
                     <CustomInput placeholder="Username" value={username} setValue={setUsername} secureTextEntry={false} iconName="account-outline"/>
-                    {/* <Text style={styles.error}> {usernameError} </Text> */}
                     <CustomInput placeholder="Email Address" value={email} setValue={setEmail} secureTextEntry={false} keyboardType = 'email-address' iconName="email-outline"/>
-                    {/* <Text style={styles.error}> {emailError} </Text> */}
                     <CustomInput placeholder="Password" value={password} setValue={setPassword} secureTextEntry={true} iconName="lock-outline"/>
                     <CustomInput placeholder="Confirm Password" value={cpassword} setValue={setcPassword} secureTextEntry={true} iconName="lock-outline"/>
-                    {/* <Text style={styles.error}> {passwordError} </Text> */}
                     <CustomInput placeholder="Phone Number" value={phoneNumber} setValue={setPhoneNumber} secureTextEntry={false} keyboardType = 'phone-pad' iconName="phone-outline"/>
-                    {/* <Text style={styles.error}> {phoneNumberError} </Text> */}
                     <View style={{flexDirection:"row", marginBottom: 0, marginTop: 0 }}>
                         <CustomButton onPress={onContinuePressed} buttonName="Continue" type="PRIMARY"/>
                     </View>

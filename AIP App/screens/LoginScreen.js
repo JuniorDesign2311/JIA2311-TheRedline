@@ -74,7 +74,7 @@ const LoginScreen = ({navigation}) => {
     }
 
     const onCreateAccountPressed = () => {
-        navigation.navigate("AccountCreation");
+        navigation.navigate("TermsOfService");
         setLoginError('');
     }
     

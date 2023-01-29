@@ -12,23 +12,13 @@ import BottomSheet from '@gorhom/bottom-sheet';
 const TermsOfServiceScreen = ({navigation, route}) => {
     const sheetRef = useRef(null);
     const snapPoints = useMemo(() => [ '75%', '75%' ]);
-    var username = route.params.username
-    var email = route.params.email
-    var phoneNumber = route.params.phoneNumber
-    var password = route.params.password
     
     const returnToLoginPressed = () => {
         navigation.navigate("Login");
     }
 
     const onContinuePressed = () => {
-        navigation.navigate('AccountCreation2', {
-            docID: (username+phoneNumber),
-            username: username,
-            email: email,
-            phoneNumber: phoneNumber,
-            password: password
-        });
+        navigation.navigate('AccountCreation');
     }
 
     return (

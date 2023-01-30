@@ -47,7 +47,7 @@ const LoginScreen = ({navigation, route}) => {
         else if (email.indexOf(' ') >= 0) {
             setLoginError('Email Cannot Contain Spaces')
         }
-        else if (password.length === 0) {
+        else if (!password) {
             console.log(password);
             setLoginError('Password Field is Empty')
         }
@@ -76,7 +76,7 @@ const LoginScreen = ({navigation, route}) => {
             .catch(error => {
                 console.warn(error.message);
                 if (!loginSuccessful) {
-                    setLoginError("Invalid credentials.")
+                    setLoginError("Invalid credentials")
                 }
             }
         )

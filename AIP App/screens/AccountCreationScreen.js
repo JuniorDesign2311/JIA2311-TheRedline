@@ -33,6 +33,7 @@ const AccountCreationScreen = ({ navigation }) => {
     const [hasConfirmError, setHasConfirmError] = useState('false');
     const [hasPhoneError, setHasPhoneError] = useState('false');
 
+
     // Document id to distinguish each user within our database
     const documentId = username+phoneNumber;
 
@@ -108,86 +109,86 @@ const AccountCreationScreen = ({ navigation }) => {
         if (username.length === 0) {
             noError = false;
             setUsernameError('Username Field is Empty');
-            setHasUsernameError(true);
+            setHasUsernameError(false);
         }
         else if (username.indexOf(' ') >= 0) {
             noError = false;
             setUsernameError('Username Cannot Contain Spaces');
-            setHasUsernameError(true);
+            setHasUsernameError(false);
         } else {
             setUsernameError('');
-            setHasUsernameError(false);
+            setHasUsernameError(true);
         }
 
         if (email.length === 0) {
             noError = false;
             setEmailError('Email Field is Empty');
-            setHasEmailError(true);
+            setHasEmailError(false);
         } 
         if (!email.includes('@')) {
             noError = false;
             setEmailError('Invalid Email Address');
-            setHasEmailError(true);
+            setHasEmailError(false);
         }
         else if (!email.includes('.')) {
             noError = false;
             setEmailError('Invalid Email Address');
-            setHasEmailError(true);
+            setHasEmailError(false);
         } else if (email.indexOf(' ') >= 0) {
             noError = false;
             setEmailError('Email Cannot Contain Spaces');
-            setHasEmailError(true);
+            setHasEmailError(false);
         } else {
             setEmailError('');
-            setHasEmailError(false);
+            setHasEmailError(true);
         }
 
         if (password.length === 0) {
             noError = false;
             setPasswordError('Password Field is Empty');
-            setHasPasswordError(true);
+            setHasPasswordError(false);
         }
         else if (password.length < 6) {
             noError = false;
             setPasswordError('Password must be at least 6 characters');
-            setHasPasswordError(true);
+            setHasPasswordError(false);
         }
         else if (password.length > 40) {
             noError = false;
             setPasswordError("Password can't be longer than 40 charaters");
-            setHasPasswordError(true);
+            setHasPasswordError(false);
         }
         else if (password.indexOf(' ') >= 0) {
             noError = false;
             setPasswordError('Password Cannot Contain Spaces');
-            setHasPasswordError(true);
+            setHasPasswordError(false);
         } else {
             setPasswordError('');
-            setHasPasswordError(false);
+            setHasPasswordError(true);
         }
 
         if (password != cpassword) {
             noError = false;
             setConfirmError('Passwords do not match');
-            setHasConfirmError(true);
+            setHasConfirmError(false);
         }  else {
             setConfirmError('');
-            setConfirmError(false);
+            setHasConfirmError(true);
         }
 
         if (phoneNumber.length === 0) {
             noError = false;
             setPhoneError('Phone Number Field is Empty');
-            setHasPhoneError(true);
+            setHasPhoneError(false);
         }
         else if (phoneNumber.length != 10) {
             noError = false;
             setPhoneError('Phone Number is not valid');
-            setHasPhoneError(true);
+            setHasPhoneError(false);
         }
         else {
             setPhoneError('');
-            setHasPhoneError(false);
+            setHasPhoneError(true);
         }
 
         return noError;

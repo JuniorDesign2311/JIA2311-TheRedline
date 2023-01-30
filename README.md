@@ -23,3 +23,4 @@ even though certain fields/parameters were incorrect.
 This was an issue because users are allowed to go back to change their email address, phone number, etc. and thus
 not allowing them to reuse their information previously chosen.
 * Fixed an error where typing in the "Confirm Password" field would automatically fill in the "Phone Number" field.
+* Fixed an error where "Confirm Password" would require a strong password

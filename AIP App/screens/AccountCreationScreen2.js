@@ -89,44 +89,38 @@ const AccountCreationScreen2 = ({ navigation, route }) => {
     }
 
     const validateInputs = () => {
+        var noError = false;
+
         if (firstName.length === 0) {
             setInputError('First Name is Empty')
         }
+        else if (firstName.indexOf(' ') >= 0) {
+            setInputError('Name Cannot Contain Spaces')
+        }
         else if (lastName.length === 0) {
             setInputError('Last Name is Empty')
+        }
+        else if (lastName.indexOf(' ') >= 0) {
+            setInputError('Name Cannot Contain Spaces')
         }
         else if (state.length === 0) {
             setInputError('Please Select a State')
         }
         else if (attendeeClicked === false && hostClicked === false) {
-            setInputError('Please select an account type')
-        }
+            setInputError('Please Select an Account Type')
+        } 
         else {
             setInputError('');
+            noError = true;
         }
+
+        return noError;
     }
 
-    const onCreateAccountPressed = () => {
-        validateInputs();
-        //Error handling
-        var errorMessage = ""
-
-        if (firstName === "" || lastName === ""
-            || (!attendeeClicked && !hostClicked) || (attendeeClicked && hostClicked)) {
-
-            // Error message if a field is not filled out
-            if (firstName === "" || lastName === "") {
-                errorMessage = errorMessage + "Fill out blank field(s).";
-            }
-
-            if (!attendeeClicked && !hostClicked) {
-                if (errorMessage != "") errorMessage = errorMessage + "\n";
-                errorMessage = errorMessage + "Please choose an account type."
-            }
-
-            console.warn(errorMessage);
+    const onCreateAccountPressed = () => {       
+        if (!validateInputs()) {
+            console.warn("Error creating account")
         } else {
-        
             createUser();
             console.warn("Account Created");
         }

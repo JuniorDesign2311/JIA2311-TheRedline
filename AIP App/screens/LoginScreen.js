@@ -38,7 +38,7 @@ const LoginScreen = ({navigation, route}) => {
     const snapPoints = useMemo(() => [ '75%', '75%' ]);
     
     const validateLogin = () => {
-        if (email.length === 0) {
+        if (!email) {
             setLoginError('Email Field is Empty')
         }
         else if (!email.includes('@')) {

@@ -117,18 +117,18 @@ const AccountCreationScreen = ({ navigation }) => {
             setHasUsernameError(false);
         }
 
-        if (email.length === 0) {
+        if (email && email.length === 0) {
             setEmailError('Email Field is Empty');
             setHasEmailError(true);
         } 
-        if (!email.includes('@')) {
+        if (email && !email.includes('@')) {
             setEmailError('Invalid Email Address');
             setHasEmailError(true);
         }
-        else if (!email.includes('.')) {
+        else if (email && !email.includes('.')) {
             setEmailError('Invalid Email Address');
             setHasEmailError(true);
-        } else if (email.indexOf(' ') >= 0) {
+        } else if (email && email.indexOf(' ') >= 0) {
             setEmailError('Email Cannot Contain Spaces');
             setHasEmailError(true);
         } else {

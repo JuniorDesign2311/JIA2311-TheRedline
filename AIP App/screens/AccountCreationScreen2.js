@@ -104,7 +104,7 @@ const AccountCreationScreen2 = ({ navigation, route }) => {
     const validateInputs = () => {
         var noError = true;
 
-        if (firstName.length === 0) {
+        if (!firstName) {
             noError = false;
             setFirstNameError('First Name is Empty');
             setHasFirstNameError(true);
@@ -117,7 +117,7 @@ const AccountCreationScreen2 = ({ navigation, route }) => {
             setHasFirstNameError(false);
         }
 
-        if (lastName.length === 0) {
+        if (!lastName) {
             noError = false;
             setLastNameError('Last Name is Empty');
             setHasLastNameError(true);
@@ -130,7 +130,7 @@ const AccountCreationScreen2 = ({ navigation, route }) => {
             setHasLastNameError(false);
         }
 
-        if (state.length === 0) {
+        if (!state) {
             noError = false;
             setStateError('Please Select a State')
             setHasStateError(true);
@@ -148,13 +148,12 @@ const AccountCreationScreen2 = ({ navigation, route }) => {
             setAttendeeHostError('');
             setHasAttendeeHostError(false);
         }
-        
         return noError;
     }
 
 
-    const onCreateAccountPressed = () => {       
-        if (validateInputs()) {
+    const onCreateAccountPressed = () => {    
+        if (!validateInputs()) {
             console.warn("Error creating account")
         } else {
             createUser();

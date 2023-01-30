@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { KeyboardAvoidingView, Platform, StyleSheet, Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from 'react-native-screens/native-stack';
 
@@ -15,7 +15,12 @@ const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
+    
     <NavigationContainer>
+        <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      style={{ flex: 1}}
+    >
       <Stack.Navigator
         screenOptions={{
             headerStyle: {
@@ -73,7 +78,9 @@ export default function App() {
         />
         
       </Stack.Navigator>
+      </KeyboardAvoidingView>
     </NavigationContainer>
+    
   );
 };
 

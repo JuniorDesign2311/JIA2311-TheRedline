@@ -19,7 +19,7 @@ const AccountCreationScreen = ({ navigation }) => {
     const [cpassword, setcPassword] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
     const sheetRef = useRef(null);
-    const snapPoints = useMemo(() => [ '75%', '75%' ]);
+    const snapPoints = useMemo(() => [ '75%', '77%' ]);
     // Error Handling
     const [usernameError, setUsernameError] = useState('');
     const [emailError, setEmailError] = useState('');
@@ -207,28 +207,28 @@ const AccountCreationScreen = ({ navigation }) => {
     }
 
     return (
-
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+        
+        <ScrollView showsVerticalScrollIndicator={false}>
+        <TouchableWithoutFeedback onPress={()=>Keyboard.dismiss} accessible={false}>
+       
         <View style={{flex:1,justifyContent:'center',alignItems:'center',backgroundColor: '#d796fa'}}>
                 <Text style={[styles.header]}> Create Account </Text>
+
+                
                 <BottomSheet
                 ref={sheetRef}
                 index={1}
                 snapPoints={snapPoints}
                 handleIndicatorStyle={{ display: "none" }}
-                >      
-                    
-                    <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding": "height"} >
-                    <ScrollView pagingEnabled showsHorizontalScrollIndicator={false}>
-                    <View style={styles.sheet}>
+                >   
 
+                  
+
+                    <View style={styles.sheet}>
                     <CustomInput placeholder="Username" value={username} setValue={setUsername} secureTextEntry={false} iconName="account-outline" inputError={usernameError} hasError={hasUsernameError}/>
-                   
                     <CustomInput placeholder="Email Address" value={email} setValue={setEmail} secureTextEntry={false} keyboardType = 'email-address' iconName="email-outline" inputError={emailError} hasError={hasEmailError}/>
-                   
                     <CustomInput placeholder="Password" value={password} setValue={setPassword} secureTextEntry={true} iconName="lock-outline" inputError={passwordError} hasError={hasPasswordError}/>
                     <CustomInput placeholder="Confirm Password" value={cpassword} setValue={setcPassword} secureTextEntry={true} iconName="lock-outline" inputError={confirmError} hasError={hasConfirmError}/>
-                    
                     <CustomInput placeholder="Phone Number" value={phoneNumber} setValue={setPhoneNumber} secureTextEntry={false} keyboardType = 'phone-pad' iconName="phone-outline" inputError={phoneError} hasError={hasPhoneError}/>
                    
                     <View style={{flexDirection:"row", marginBottom: 0, marginTop: 0 }}>
@@ -240,13 +240,17 @@ const AccountCreationScreen = ({ navigation }) => {
                             Back To Login
                         </Text>
                     </TouchableOpacity>
-                    </View>
-                    </ScrollView>
-                    </KeyboardAvoidingView>
+                    </View>  
+                   
+                    
                 </BottomSheet>
-                </View>
                 
+        </View>
+        
         </TouchableWithoutFeedback>
+        </ScrollView>
+                
+      
 
         
     )
@@ -270,8 +274,8 @@ const styles = StyleSheet.create({
         fontSize: 45,
         fontFamily: 'Helvetica Neue',
         fontWeight: 'bold',
-        paddingTop: 50,
-        marginBottom: 600,
+        paddingTop: "30%",
+        marginBottom: "175%",
         textAlign: 'left',
     },
     error: {
@@ -284,7 +288,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     bottomSheetStyle: {
-        borderRadius: 50
+        borderRadius: 50,
     }
 })
 export default AccountCreationScreen;

@@ -14,20 +14,29 @@ import BottomSheet from '@gorhom/bottom-sheet';
 import Animated, { AnimatedLayout, SlideInRight, FadeInLeft, FadeInDown} from 'react-native-reanimated';
     
     
-    const isValidemail = true;
-    const isValidPassword = true;
 
 const LoginScreen = ({navigation, route}) => {
     const [email, setEmail] = useState(route?.params?.email);
     const [password, setPassword] = useState(route?.params?.password);
-    const [loginError, setLoginError] = useState('');
-    const [isValidEmail, setIsValidEmail] = useState(false);
+
+    const [emailError, setEmailError] = useState("");
+    const [passwordError, setPasswordError] = useState("");
+    
+    const [hasValidEmail, setHasValidEmail] = useState(true);
+    const [hasValidPassword, setHasValidPassword] = useState(true);
+
+    const [loginError, setLoginError] = useState(false);
 
     const focus = useIsFocused();
     useEffect(() => {
         if (focus) {
         setEmail(route?.params?.email);
         setPassword(route?.params?.password);
+        setHasValidEmail(true);
+        setHasValidPassword(true);
+        setEmailError("");
+        setPasswordError("");
+        
         }
     }, [focus]);
     
@@ -38,27 +47,41 @@ const LoginScreen = ({navigation, route}) => {
     const snapPoints = useMemo(() => [ '75%', '75%' ]);
     
     const validateLogin = () => {
+        var noErrors = true;
+
         if (!email) {
-            setLoginError('Email Field is Empty')
+            noErrors = false;
+            setEmailError('Email Field is Empty');
+            setHasValidEmail(false);
+
         }
         else if (!email.includes('@')) {
-            setLoginError('Invalid Email Address');
+            noErrors = false;
+            setEmailError('Invalid Email Address');
+            setHasValidEmail(false);
         }
         else if (email.indexOf(' ') >= 0) {
-            setLoginError('Email Cannot Contain Spaces')
+            noErrors = false;
+            setEmailError('Email Cannot Contain Spaces');
+            setHasValidEmail(false);
         }
-        else if (!password) {
+        
+        if (!password) {
             console.log(password);
-            setLoginError('Password Field is Empty')
+            setPasswordError('Password Field is Empty');
+            setHasValidPassword(false);
         }
         else if (password.length < 6) {
-            setLoginError('Password must be at least 6 characters');
+            setPasswordError('Password must be at least 6 characters');
+            setHasValidPassword(false);
         }
         else if (password.indexOf(' ') >= 0) {
-            setLoginError('Password Cannot Contain Spaces')
+            setPasswordError('Password Cannot Contain Spaces')
+            setHasValidPassword(false);
         }
-        else {
-            setLoginError('');
+       
+
+        if (noErrors) {
             handleLogin();
         }
     }
@@ -70,7 +93,6 @@ const LoginScreen = ({navigation, route}) => {
             .then(userCredential => {
                 var user = userCredential.user;
                 loginSuccessful = true;
-                setLoginError('');
                 navigation.navigate("Map");
             })
             .catch(error => {
@@ -115,8 +137,8 @@ const LoginScreen = ({navigation, route}) => {
             >
                 <Animated.View style={styles.sheet}>
                 <Text style={styles.error}> {loginError} </Text>
-                <CustomInput placeholder="Email Address" value={email} setValue={setEmail} secureTextEntry={false} iconName="email-outline" defaultValue={route?.params?.username}/>
-                <CustomInput placeholder="Password" value={password} setValue={setPassword} secureTextEntry={true} iconName="lock-outline" defaultValue={route?.params?.password}/>
+                <CustomInput placeholder="Email Address" value={email} setValue={setEmail} secureTextEntry={false} iconName="email-outline" defaultValue={route?.params?.username} isValid = {hasValidEmail} inputError = {emailError}/>
+                <CustomInput placeholder="Password" value={password} setValue={setPassword} secureTextEntry={true} iconName="lock-outline" defaultValue={route?.params?.password} isValid = {hasValidPassword} inputError = {passwordError}/>
                 <CustomButton onPress={onLoginPressed} buttonName="Log in" type="PRIMARY"/>
                 <View style={{flexDirection: 'row', alignItems: 'center', marginLeft: 25, marginRight: 25}}>
                 <View style={{flex: 1, height: 1, backgroundColor: 'lightgrey'}} />

@@ -43,12 +43,12 @@ const AccountCreationScreen2 = ({ navigation, route }) => {
     const [stateError, setStateError] = useState('');
     const [attendeeHostError, setAttendeeHostError] = useState('');
     
-    const [hasFirstNameError, setHasFirstNameError] = useState('false');
-    const [hasLastNameError, setHasLastNameError] = useState('false');
-    const [hasStateError, setHasStateError] = useState('false');
-    const [hasAttendeeHostError, setHasAttendeeHostError] = useState('false');
+    const [isValidFirstName, setIsValidFirstName] = useState(true);
+    const [isValidLastName, setIsValidLastName] = useState(true);
+    const [hasStateError, setHasStateError] = useState(false);
+    const [hasAttendeeHostError, setHasAttendeeHostError] = useState(false);
    
-
+    
 
     const createUser = async () => {
         auth.createUserWithEmailAndPassword(email, password)
@@ -107,27 +107,27 @@ const AccountCreationScreen2 = ({ navigation, route }) => {
         if (!firstName) {
             noError = false;
             setFirstNameError('First Name is Empty');
-            setHasFirstNameError(true);
+            setIsValidFirstName(false);
         } else if (firstName.indexOf(' ') >= 0) {
             noError = false;
             setFirstNameError('Name Cannot Contain Spaces');
-            setHasFirstNameError(true);
+            setIsValidFirstName(false);
         } else {
             setFirstNameError('');
-            setHasFirstNameError(false);
+            setIsValidFirstName(true);
         }
 
         if (!lastName) {
             noError = false;
             setLastNameError('Last Name is Empty');
-            setHasLastNameError(true);
+            setIsValidLastName(false);
         } else if (lastName.indexOf(' ') >= 0) {
             noError = false;
             setLastNameError('Name Cannot Contain Spaces');
-            setHasLastNameError(true);
+            setIsValidLastName(false);
         } else {
             setLastNameError('')
-            setHasLastNameError(false);
+            setIsValidLastName(true);
         }
 
         if (!state) {
@@ -165,7 +165,6 @@ const AccountCreationScreen2 = ({ navigation, route }) => {
         navigation.navigate("AccountCreation");
     }
 
-
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
             <View style={{flex:1,justifyContent:'center',alignItems:'center',backgroundColor: '#d796fa'}}>
@@ -178,8 +177,9 @@ const AccountCreationScreen2 = ({ navigation, route }) => {
                 >
                     <View style={styles.sheet}>
                     
-                    <CustomInput placeholder="First Name" value={firstName} setValue={setFirstName} secureTextEntry={false} inputError={firstNameError} hasError={hasFirstNameError}/>
-                    <CustomInput placeholder="Last Name" value={lastName} setValue={setLastName} secureTextEntry={false} inputError={lastNameError} hasError={hasLastNameError}/>
+                    
+                    <CustomInput placeholder="First Name" value={firstName} setValue={setFirstName} secureTextEntry={false} inputError={firstNameError} isValid={isValidFirstName}/>
+                    <CustomInput placeholder="Last Name" value={lastName} setValue={setLastName} secureTextEntry={false} inputError={lastNameError} isValid={isValidLastName}/>
                     <States state={state} setState={setState} />
                     <Text style={{color: "red"}}> {stateError} </Text>
 

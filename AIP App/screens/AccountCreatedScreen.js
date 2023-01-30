@@ -8,11 +8,14 @@ import { db } from '../firebaseConfig';
 import BottomSheet from '@gorhom/bottom-sheet';
 
 
-const AccountCreatedScreen = ({navigation}) => {
+const AccountCreatedScreen = ({navigation, route}) => {
     const sheetRef = useRef(null);
     const snapPoints = useMemo(() => [ '75%', '75%' ]);
     const returnToLoginPressed = () => {
-        navigation.navigate("Login");
+        navigation.navigate("Login", {
+            email: route.params.email1,
+            password: route.params.password1,
+        });
     }
 
     return (

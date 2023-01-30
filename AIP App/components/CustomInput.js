@@ -3,12 +3,12 @@ import {View, Text, TextInput, StyleSheet } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 
 /* CustomInput is the stlye of each input field */
-const CustomInput = ({value, setValue, placeholder, secureTextEntry, iconName, keyboardType = "default", inputError, hasError, suggestPassword = ""}) => {
+const CustomInput = ({value, setValue, placeholder, secureTextEntry, iconName, keyboardType = "default", inputError, hasError}) => {
     return (
         
         <View style={styles.container}>
         <Text> {placeholder} </Text>
-            <View style={[styles.textField, {borderColor: hasError ? 'red': 'black'}]}>
+            <View style={[styles.textField, {borderColor: hasError ? 'black': 'red'}]}>
             
                 <Icon name = { iconName } style={{fontSize: 22, marginRight: 5}}/>
             <TextInput 
@@ -20,7 +20,6 @@ const CustomInput = ({value, setValue, placeholder, secureTextEntry, iconName, k
                 secureTextEntry = {secureTextEntry}
                 keyboardType = {keyboardType}
                 autoCorrect={false}
-                textContentType={suggestPassword}
                 />
                 
             </View>

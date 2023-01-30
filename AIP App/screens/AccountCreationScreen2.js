@@ -142,6 +142,7 @@ const AccountCreationScreen2 = ({ navigation, route }) => {
             setAttendeeHostError('');
             setHasAttendeeHostError(false);
         }
+    }
 
 
     const onCreateAccountPressed = () => {       

@@ -115,22 +115,22 @@ const AccountCreationScreen = ({ navigation }) => {
             setInputError('Password Field is Empty')
         }
         else if (password.length < 6) {
-            setInputError('Password must be at least 6 characters');
+            setInputError('Password Must be at Least 6 Characters');
         }
         else if (password.length > 40) {
-            setInputError("Password can't be longer than 40 charaters");
+            setInputError("Password Can't be Longer Than 40 Charaters");
         }
         else if (password.indexOf(' ') >= 0) {
             setInputError('Password Cannot Contain Spaces')
         }
         else if (password != cpassword) {
-            setInputError('Passwords do not match')
+            setInputError('Passwords do not Match')
         }
         else if (phoneNumber.length === 0) {
             setInputError('Phone Number Field is Empty')
         }
         else if (phoneNumber.length != 10) {
-            setInputError('Phone Number is incorrect');
+            setInputError('Phone Number is Incorrect');
         }
         else {
             setInputError('');
@@ -142,7 +142,7 @@ const AccountCreationScreen = ({ navigation }) => {
     const onContinuePressed = () => {
         if (!validateInput()) {
             // If validateInput returns false, then user had error creating account
-            console.warn("Account could not be created");
+            console.warn("Error creating account");
         } else {
             validateUser();
         }

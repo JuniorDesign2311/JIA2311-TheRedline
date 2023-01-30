@@ -56,7 +56,10 @@ const AccountCreationScreen2 = ({ navigation, route }) => {
             // Signed in 
             writeUserData();
             //Navigates to second creation screen and passes data through
-            navigation.navigate('AccountCreated')
+            navigation.navigate('AccountCreated', {
+                email1: route.params.email,
+                password1: route.params.password,
+            })
         })
         .catch(error => console.warn(error.message))
     }
@@ -99,8 +102,13 @@ const AccountCreationScreen2 = ({ navigation, route }) => {
     }
 
     const validateInputs = () => {
+        var noError = false;
+
         if (firstName.length === 0) {
             setFirstNameError('First Name is Empty');
+            setHasFirstNameError(true);
+        } else if (firstName.indexOf(' ') >= 0) {
+            setFirstNameError('Name Cannot Contain Spaces');
             setHasFirstNameError(true);
         } else {
             setFirstNameError('');
@@ -109,6 +117,9 @@ const AccountCreationScreen2 = ({ navigation, route }) => {
 
         if (lastName.length === 0) {
             setLastNameError('Last Name is Empty');
+            setHasLastNameError(true);
+        } else if (lastName.indexOf(' ') >= 0) {
+            setLastNameError('Name Cannot Contain Spaces');
             setHasLastNameError(true);
         } else {
             setLastNameError('')
@@ -131,30 +142,12 @@ const AccountCreationScreen2 = ({ navigation, route }) => {
             setAttendeeHostError('');
             setHasAttendeeHostError(false);
         }
-    }
 
-    const onCreateAccountPressed = () => {
-        validateInputs();
-        //Error handling
-        var errorMessage = ""
 
-        if (firstName === "" || lastName === ""
-            || (!attendeeClicked && !hostClicked) || (attendeeClicked && hostClicked)) {
-
-            // Error message if a field is not filled out
-            if (firstName === "" || lastName === "") {
-                errorMessage = errorMessage + "Fill out blank field(s).";
-            }
-
-            if (!attendeeClicked && !hostClicked) {
-                if (errorMessage != "") errorMessage = errorMessage + "\n";
-                setAttendeeHostError("Please choose an account type.")
-                errorMessage = errorMessage + "Please choose an account type."
-            }
-
-            console.warn(errorMessage);
+    const onCreateAccountPressed = () => {       
+        if (!validateInputs()) {
+            console.warn("Error creating account")
         } else {
-        
             createUser();
             console.warn("Account Created");
         }

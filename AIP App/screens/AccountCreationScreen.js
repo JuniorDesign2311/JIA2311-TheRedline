@@ -156,6 +156,7 @@ const AccountCreationScreen = ({ navigation }) => {
             setHasPasswordError(false);
         }
 
+
         if (password != cpassword) {
             setConfirmError('Passwords do not match');
             setHasConfirmError(true);
@@ -169,6 +170,7 @@ const AccountCreationScreen = ({ navigation }) => {
             setHasPhoneError(true);
         }
         else if (phoneNumber.length != 10) {
+
             setPhoneError('Phone Number is not valid');
             setHasPhoneError(true);
         }
@@ -184,7 +186,7 @@ const AccountCreationScreen = ({ navigation }) => {
     const onContinuePressed = () => {
         if (!validateInput()) {
             // If validateInput returns false, then user had error creating account
-            console.warn("Account could not be created");
+            console.warn("Error creating account");
         } else {
             validateUser();
         }

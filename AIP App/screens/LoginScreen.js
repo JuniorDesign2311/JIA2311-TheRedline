@@ -1,10 +1,11 @@
-import React, {useState, useRef, useMemo} from 'react'
-import { View, Text, TouchableOpacity, Keyboard, ScrollView, StyleSheet, TouchableWithoutFeedback } from 'react-native'
+import React, {useState, useRef, useMemo, useEffect} from 'react';
+import { View, Text, TouchableOpacity, Keyboard, ScrollView, StyleSheet, TouchableWithoutFeedback } from 'react-native';
 import CustomInput from '../components/CustomInput';
 import CustomButton from '../components/CustomButton';
 import CustomText from '../components/CustomButton';
 import { auth } from '../firebaseConfig';
 import { db } from '../firebaseConfig';
+import { useIsFocused } from '@react-navigation/native';
 
 //import {password} from '../screens/AccountCreationScreen';
 //import {email} from '../screens/AccountCreationScreen';
@@ -16,11 +17,19 @@ import Animated, { AnimatedLayout, SlideInRight, FadeInLeft, FadeInDown} from 'r
     const isValidemail = true;
     const isValidPassword = true;
 
-const LoginScreen = ({navigation}) => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+const LoginScreen = ({navigation, route}) => {
+    const [email, setEmail] = useState(route?.params?.email);
+    const [password, setPassword] = useState(route?.params?.password);
     const [loginError, setLoginError] = useState('');
     const [isValidEmail, setIsValidEmail] = useState(false);
+
+    const focus = useIsFocused();
+    useEffect(() => {
+        if (focus) {
+        setEmail(route?.params?.email);
+        setPassword(route?.params?.password);
+        }
+    }, [focus]);
     
     // const [apassword, setPassword] = useState({password});
     // const [aemail, setEmail] = useState({email});
@@ -54,16 +63,22 @@ const LoginScreen = ({navigation}) => {
     }
 
     const handleLogin = () => {
+        var loginSuccessful = false;
+
         auth.signInWithEmailAndPassword(email, password)
-        .then(userCredential => {
-            var user = userCredential.user;
+            .then(userCredential => {
+                var user = userCredential.user;
+                loginSuccessful = true;
                 setLoginError('');
-            navigation.navigate("Map");
-        })
-            .catch(error =>
-                console.warn(error.message),
-                setLoginError("Invalid credentials.")
-            )
+                navigation.navigate("Map");
+            })
+            .catch(error => {
+                console.warn(error.message);
+                if (!loginSuccessful) {
+                    setLoginError("Invalid credentials.")
+                }
+            }
+        )
     }
 
     const onForgotPasswordPressed = () => {
@@ -99,22 +114,20 @@ const LoginScreen = ({navigation}) => {
             >
                 <Animated.View style={styles.sheet}>
                 <Text style={styles.error}> {loginError} </Text>
-                <CustomInput placeholder="Email Address" value={email} setValue={setEmail} secureTextEntry={false} iconName="email-outline"/>
-                <CustomInput placeholder="Password" value={password} setValue={setPassword} secureTextEntry={true} iconName="lock-outline"/>
-            <CustomButton onPress={onLoginPressed} buttonName="Log in" type="PRIMARY"/>
-            {/* <Text>Don't have an account?</Text> */}
+                <CustomInput placeholder="Email Address" value={email} setValue={setEmail} secureTextEntry={false} iconName="email-outline" defaultValue={route?.params?.username}/>
+                <CustomInput placeholder="Password" value={password} setValue={setPassword} secureTextEntry={true} iconName="lock-outline" defaultValue={route?.params?.password}/>
+                <CustomButton onPress={onLoginPressed} buttonName="Log in" type="PRIMARY"/>
+                <View style={{flexDirection: 'row', alignItems: 'center', marginLeft: 25, marginRight: 25}}>
+                <View style={{flex: 1, height: 1, backgroundColor: 'lightgrey'}} />
+                    <View>
+                    <Text style={{width: 50, color:'grey', textAlign: 'center', fontFamily: 'Helvetica Neue'}}>or</Text>
+                    </View>
 
-            <View style={{flexDirection: 'row', alignItems: 'center', marginLeft: 25, marginRight: 25}}>
-            <View style={{flex: 1, height: 1, backgroundColor: 'lightgrey'}} />
-            <View>
-            <Text style={{width: 50, color:'grey', textAlign: 'center', fontFamily: 'Helvetica Neue'}}>or</Text>
-            </View>
+                <View style={{flex: 1, height: 1, backgroundColor: 'lightgrey'}} />
+                </View>
 
-            <View style={{flex: 1, height: 1, backgroundColor: 'lightgrey'}} />
-            </View>
-
-            <CustomButton onPress={onCreateAccountPressed} buttonName="Create Account" type="PRIMARY"/>
-            <TouchableOpacity
+                <CustomButton onPress={onCreateAccountPressed} buttonName="Create Account" type="PRIMARY"/>
+                <TouchableOpacity
                     onPress={onForgotPasswordPressed}
                     style={{alignItems: 'center', marginTop: 5,}}>
                 <Text style = {{fontSize:13, color: '#039be5'}}>

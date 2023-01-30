@@ -9,7 +9,7 @@ import { useIsFocused } from '@react-navigation/native';
 
 //import {password} from '../screens/AccountCreationScreen';
 //import {email} from '../screens/AccountCreationScreen';
-
+ 
 import BottomSheet from '@gorhom/bottom-sheet';
 import Animated, { AnimatedLayout, SlideInRight, FadeInLeft, FadeInDown} from 'react-native-reanimated';
     
@@ -130,10 +130,10 @@ const LoginScreen = ({navigation, route}) => {
                 <TouchableOpacity
                     onPress={onForgotPasswordPressed}
                     style={{alignItems: 'center', marginTop: 5,}}>
-                    <Text style = {{fontSize:13, color: '#039be5'}}>
-                        Forgot password?
-                    </Text>
-                </TouchableOpacity>
+                <Text style = {{fontSize:13, color: '#039be5'}}>
+                    Forgot password?
+                </Text>
+            </TouchableOpacity>
                 </Animated.View>
             </BottomSheet>
             </View>
@@ -147,9 +147,8 @@ const styles = StyleSheet.create({
         fontSize: 45,
         fontFamily: 'Helvetica Neue',
         fontWeight: 'bold',
-        paddingTop: 50,
-        marginBottom: 600,
-        marginRight: 150
+        marginBottom: '135%',
+        marginRight: '37%',
     },
     error: {
         fontSize: 15,

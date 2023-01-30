@@ -177,10 +177,11 @@ const AccountCreationScreen2 = ({ navigation, route }) => {
                 handleIndicatorStyle={{ display: "none" }}
                 >
                     <View style={styles.sheet}>
-                    {/*}ext style={styles.error}> {inputError} </Text>*/}
+                    
                     <CustomInput placeholder="First Name" value={firstName} setValue={setFirstName} secureTextEntry={false} inputError={firstNameError} hasError={hasFirstNameError}/>
                     <CustomInput placeholder="Last Name" value={lastName} setValue={setLastName} secureTextEntry={false} inputError={lastNameError} hasError={hasLastNameError}/>
                     <States state={state} setState={setState} />
+                    <Text style={{color: "red"}}> {stateError} </Text>
 
                     <View style={{ flexDirection: "row" }}>
                         <AttendeeHostButtons onPress={onAttendeePressed} buttonClicked={attendeeClicked} buttonName="Attendee" inputError={AttendeeHostButtons} hasError={hasAttendeeHostError}/>

@@ -19,7 +19,7 @@ const AccountCreationScreen = ({ navigation }) => {
     const [cpassword, setcPassword] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
     const sheetRef = useRef(null);
-    const snapPoints = useMemo(() => [ '75%', '75%' ]);
+    const snapPoints = useMemo(() => [ '75%', '77%' ]);
     // Error Handling
     const [usernameError, setUsernameError] = useState('');
     const [emailError, setEmailError] = useState('');
@@ -103,13 +103,15 @@ const AccountCreationScreen = ({ navigation }) => {
 
     const validateInput = () => {
         // Error Handling
-        var noError = false;
+        var noError = true;
 
         if (username.length === 0) {
+            noError = false;
             setUsernameError('Username Field is Empty');
             setHasUsernameError(true);
         }
         else if (username.indexOf(' ') >= 0) {
+            noError = false;
             setUsernameError('Username Cannot Contain Spaces');
             setHasUsernameError(true);
         } else {
@@ -117,18 +119,22 @@ const AccountCreationScreen = ({ navigation }) => {
             setHasUsernameError(false);
         }
 
-        if (email && email.length === 0) {
+        if (email.length === 0) {
+            noError = false;
             setEmailError('Email Field is Empty');
             setHasEmailError(true);
         } 
-        if (email && !email.includes('@')) {
+        if (!email.includes('@')) {
+            noError = false;
             setEmailError('Invalid Email Address');
             setHasEmailError(true);
         }
-        else if (email && !email.includes('.')) {
+        else if (!email.includes('.')) {
+            noError = false;
             setEmailError('Invalid Email Address');
             setHasEmailError(true);
-        } else if (email && email.indexOf(' ') >= 0) {
+        } else if (email.indexOf(' ') >= 0) {
+            noError = false;
             setEmailError('Email Cannot Contain Spaces');
             setHasEmailError(true);
         } else {
@@ -137,18 +143,22 @@ const AccountCreationScreen = ({ navigation }) => {
         }
 
         if (password.length === 0) {
+            noError = false;
             setPasswordError('Password Field is Empty');
             setHasPasswordError(true);
         }
         else if (password.length < 6) {
+            noError = false;
             setPasswordError('Password must be at least 6 characters');
             setHasPasswordError(true);
         }
         else if (password.length > 40) {
+            noError = false;
             setPasswordError("Password can't be longer than 40 charaters");
             setHasPasswordError(true);
         }
         else if (password.indexOf(' ') >= 0) {
+            noError = false;
             setPasswordError('Password Cannot Contain Spaces');
             setHasPasswordError(true);
         } else {
@@ -156,8 +166,8 @@ const AccountCreationScreen = ({ navigation }) => {
             setHasPasswordError(false);
         }
 
-
         if (password != cpassword) {
+            noError = false;
             setConfirmError('Passwords do not match');
             setHasConfirmError(true);
         }  else {
@@ -166,18 +176,18 @@ const AccountCreationScreen = ({ navigation }) => {
         }
 
         if (phoneNumber.length === 0) {
+            noError = false;
             setPhoneError('Phone Number Field is Empty');
             setHasPhoneError(true);
         }
         else if (phoneNumber.length != 10) {
-
+            noError = false;
             setPhoneError('Phone Number is not valid');
             setHasPhoneError(true);
         }
         else {
             setPhoneError('');
             setHasPhoneError(false);
-            noError = true;
         }
 
         return noError;
@@ -186,7 +196,7 @@ const AccountCreationScreen = ({ navigation }) => {
     const onContinuePressed = () => {
         if (!validateInput()) {
             // If validateInput returns false, then user had error creating account
-            console.warn("Error creating account");
+            console.warn("Account could not be created");
         } else {
             validateUser();
         }
@@ -197,28 +207,28 @@ const AccountCreationScreen = ({ navigation }) => {
     }
 
     return (
-
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+        
+        <ScrollView showsVerticalScrollIndicator={false}>
+        <TouchableWithoutFeedback onPress={()=>Keyboard.dismiss} accessible={false}>
+       
         <View style={{flex:1,justifyContent:'center',alignItems:'center',backgroundColor: '#d796fa'}}>
                 <Text style={[styles.header]}> Create Account </Text>
+
+                
                 <BottomSheet
                 ref={sheetRef}
                 index={1}
                 snapPoints={snapPoints}
                 handleIndicatorStyle={{ display: "none" }}
-                >      
-                    
-                    <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding": "height"} >
-                    <ScrollView pagingEnabled showsHorizontalScrollIndicator={false}>
-                    <View style={styles.sheet}>
+                >   
 
+                  
+
+                    <View style={styles.sheet}>
                     <CustomInput placeholder="Username" value={username} setValue={setUsername} secureTextEntry={false} iconName="account-outline" inputError={usernameError} hasError={hasUsernameError}/>
-                   
                     <CustomInput placeholder="Email Address" value={email} setValue={setEmail} secureTextEntry={false} keyboardType = 'email-address' iconName="email-outline" inputError={emailError} hasError={hasEmailError}/>
-                   
                     <CustomInput placeholder="Password" value={password} setValue={setPassword} secureTextEntry={true} iconName="lock-outline" inputError={passwordError} hasError={hasPasswordError}/>
                     <CustomInput placeholder="Confirm Password" value={cpassword} setValue={setcPassword} secureTextEntry={true} iconName="lock-outline" inputError={confirmError} hasError={hasConfirmError}/>
-                    
                     <CustomInput placeholder="Phone Number" value={phoneNumber} setValue={setPhoneNumber} secureTextEntry={false} keyboardType = 'phone-pad' iconName="phone-outline" inputError={phoneError} hasError={hasPhoneError}/>
                    
                     <View style={{flexDirection:"row", marginBottom: 0, marginTop: 0 }}>
@@ -230,13 +240,17 @@ const AccountCreationScreen = ({ navigation }) => {
                             Back To Login
                         </Text>
                     </TouchableOpacity>
-                    </View>
-                    </ScrollView>
-                    </KeyboardAvoidingView>
+                    </View>  
+                   
+                    
                 </BottomSheet>
-                </View>
                 
+        </View>
+        
         </TouchableWithoutFeedback>
+        </ScrollView>
+                
+      
 
         
     )
@@ -260,8 +274,8 @@ const styles = StyleSheet.create({
         fontSize: 45,
         fontFamily: 'Helvetica Neue',
         fontWeight: 'bold',
-        paddingTop: 50,
-        marginBottom: 600,
+        paddingTop: "30%",
+        marginBottom: "175%",
         textAlign: 'left',
     },
     error: {
@@ -274,7 +288,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     bottomSheetStyle: {
-        borderRadius: 50
+        borderRadius: 50,
     }
 })
 export default AccountCreationScreen;

@@ -102,12 +102,14 @@ const AccountCreationScreen2 = ({ navigation, route }) => {
     }
 
     const validateInputs = () => {
-        var noError = false;
+        var noError = true;
 
-        if (firstName.length === 0) {
+        if (!firstName) {
+            noError = false;
             setFirstNameError('First Name is Empty');
             setHasFirstNameError(true);
         } else if (firstName.indexOf(' ') >= 0) {
+            noError = false;
             setFirstNameError('Name Cannot Contain Spaces');
             setHasFirstNameError(true);
         } else {
@@ -115,10 +117,12 @@ const AccountCreationScreen2 = ({ navigation, route }) => {
             setHasFirstNameError(false);
         }
 
-        if (lastName.length === 0) {
+        if (!lastName) {
+            noError = false;
             setLastNameError('Last Name is Empty');
             setHasLastNameError(true);
         } else if (lastName.indexOf(' ') >= 0) {
+            noError = false;
             setLastNameError('Name Cannot Contain Spaces');
             setHasLastNameError(true);
         } else {
@@ -126,7 +130,8 @@ const AccountCreationScreen2 = ({ navigation, route }) => {
             setHasLastNameError(false);
         }
 
-        if (state.length === 0) {
+        if (!state) {
+            noError = false;
             setStateError('Please Select a State')
             setHasStateError(true);
         } else {
@@ -135,6 +140,7 @@ const AccountCreationScreen2 = ({ navigation, route }) => {
         }
 
         if (attendeeClicked === false && hostClicked === false) {
+            noError = false;
             setAttendeeHostError('Please select an account type');
             setHasAttendeeHostError(true);
         }
@@ -142,13 +148,12 @@ const AccountCreationScreen2 = ({ navigation, route }) => {
             setAttendeeHostError('');
             setHasAttendeeHostError(false);
         }
-        
         return noError;
     }
 
 
-    const onCreateAccountPressed = () => {       
-        if (validateInputs()) {
+    const onCreateAccountPressed = () => {    
+        if (!validateInputs()) {
             console.warn("Error creating account")
         } else {
             createUser();

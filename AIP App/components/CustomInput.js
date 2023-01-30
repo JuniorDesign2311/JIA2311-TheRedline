@@ -8,7 +8,7 @@ const CustomInput = ({value, setValue, placeholder, secureTextEntry, iconName, k
         
         <View style={styles.container}>
         <Text> {placeholder} </Text>
-            <View style={[styles.textField, {borderColor: isValid ? 'black': 'red'}]}>
+            <View style={[styles.textField, {borderColor: isValid ? '#e8e8e8': 'red'}]}>
             
                 <Icon name = { iconName } style={{fontSize: 22, marginRight: 5}}/>
             <TextInput 
@@ -39,17 +39,17 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderRadius: 15,
         flexDirection: 'row',
-        borderColor: 'black',
+        borderColor: '#e8e8e8',
 
         alignItems: "center",
         paddingHorizontal: "2%",
         paddingVertical: "2%",
-        marginVertical: "0.75%"
+        marginVertical: "0.15%"
         
     },
     container:{
         width: '90%',
-        marginVertical: "1.5%"
+        marginVertical: "0.5%"
     },
     error:{
         color: "red",

@@ -135,7 +135,7 @@ const LoginScreen = ({navigation, route}) => {
             style={styles.bottomSheetStyle}
             handleIndicatorStyle={{ display: "none" }}
             >
-                <Animated.View style={styles.sheet}>
+                <View style={styles.sheet}>
                 <Text style={styles.error}> {loginError} </Text>
                 <CustomInput placeholder="Email Address" value={email} setValue={setEmail} secureTextEntry={false} iconName="email-outline" defaultValue={route?.params?.username} isValid = {hasValidEmail} inputError = {emailError}/>
                 <CustomInput placeholder="Password" value={password} setValue={setPassword} secureTextEntry={true} iconName="lock-outline" defaultValue={route?.params?.password} isValid = {hasValidPassword} inputError = {passwordError}/>
@@ -157,7 +157,7 @@ const LoginScreen = ({navigation, route}) => {
                     Forgot password?
                 </Text>
             </TouchableOpacity>
-                </Animated.View>
+                </View>
             </BottomSheet>
             </View>
         </TouchableWithoutFeedback>

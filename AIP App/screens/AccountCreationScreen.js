@@ -228,7 +228,7 @@ const AccountCreationScreen = ({ navigation }) => {
                     <CustomInput placeholder="Username" value={username} setValue={setUsername} secureTextEntry={false} iconName="account-outline" inputError={usernameError} hasError={hasUsernameError}/>
                     <CustomInput placeholder="Email Address" value={email} setValue={setEmail} secureTextEntry={false} keyboardType = 'email-address' iconName="email-outline" inputError={emailError} hasError={hasEmailError}/>
                     <CustomInput placeholder="Password" value={password} setValue={setPassword} secureTextEntry={true} iconName="lock-outline" inputError={passwordError} hasError={hasPasswordError}/>
-                    <CustomInput placeholder="Confirm Password" value={cpassword} setValue={setcPassword} secureTextEntry={true} iconName="lock-outline" inputError={confirmError} hasError={hasConfirmError}/>
+                    <CustomInput placeholder="Confirm Password" value={cpassword} setValue={setcPassword} secureTextEntry={true} iconName="lock-outline" inputError={confirmError} hasError={hasConfirmError} suggestPassword = 'oneTimeCode'/>
                     <CustomInput placeholder="Phone Number" value={phoneNumber} setValue={setPhoneNumber} secureTextEntry={false} keyboardType = 'phone-pad' iconName="phone-outline" inputError={phoneError} hasError={hasPhoneError}/>
                    
                     <View style={{flexDirection:"row", marginBottom: 0, marginTop: 0 }}>

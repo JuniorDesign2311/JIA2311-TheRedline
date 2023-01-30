@@ -64,8 +64,8 @@ const States = ({ state, setState }) => {
 return (
     <View style={styles.container}>
     <Text> State </Text> 
-    <View style={{ flexDirection: "row", alignItems: "center", paddingTop: 8 }}>
-      <SelectDropdown
+    
+    <SelectDropdown
         data={states}
         buttonStyle={styles.dropdown1BtnStyle}
         onSelect={(state) => {
@@ -98,7 +98,7 @@ return (
           return item;
         }}
       />
-    </View>
+    
     </View>
   );
 };

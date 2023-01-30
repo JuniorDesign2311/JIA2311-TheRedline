@@ -27,16 +27,15 @@ const AccountCreationScreen = ({ navigation }) => {
     const [confirmError, setConfirmError] = useState('');
     const [phoneError, setPhoneError] = useState('');
 
-    const [hasUsernameError, setHasUsernameError] = useState('false');
-    const [hasEmailError, setHasEmailError] = useState('false');
-    const [hasPasswordError, setHasPasswordError] = useState('false');
-    const [hasConfirmError, setHasConfirmError] = useState('false');
-    const [hasPhoneError, setHasPhoneError] = useState('false');
+    const [isValidUsername, setIsValidUsername] = useState(true);
+    const [isValidEmail, setIsValidEmail] = useState(true);
+    const [isValidPassword, setIsValidPassword] = useState(true);
+    const [isValidConfirm, setIsValidConfirm] = useState(true);
+    const [isValidPhone, setIsValidPhone] = useState(true);
 
 
     // Document id to distinguish each user within our database
     const documentId = username+phoneNumber;
-
 
     const validateUser = () => {
         var db = firebase.firestore();
@@ -61,6 +60,7 @@ const AccountCreationScreen = ({ navigation }) => {
                                             });
                                         } else {
                                             setEmailError('Email already linked to an account')
+                                            setIsValidEmail(false);
                                             console.warn("Email already linked to an account.")
                                         }
             
@@ -73,8 +73,9 @@ const AccountCreationScreen = ({ navigation }) => {
                                         console.log("Error: ", err);
                                     })
                             } else {
-                                setPhoneError('Phone number already linked to an account')
-                                console.warn("Phone number already linked to an account.")
+                                setPhoneError('Phone number already linked to an account');
+                                setIsValidPhone(false);
+                                console.warn("Phone number already linked to an account.");
                             }
 
                         })
@@ -88,7 +89,7 @@ const AccountCreationScreen = ({ navigation }) => {
 
                 } else {
                     setUsernameError('Username already taken');
-                    setHasUsernameError(true);
+                    setIsValidUsername(false);
                     console.warn("Username already taken.")
                 }
             })
@@ -104,91 +105,97 @@ const AccountCreationScreen = ({ navigation }) => {
 
     const validateInput = () => {
         // Error Handling
+        
         var noError = true;
 
         if (username.length === 0) {
+            console.log("hello");
             noError = false;
             setUsernameError('Username Field is Empty');
-            setHasUsernameError(false);
+            setIsValidUsername(false);
         }
         else if (username.indexOf(' ') >= 0) {
             noError = false;
             setUsernameError('Username Cannot Contain Spaces');
-            setHasUsernameError(false);
+            setIsValidUsername(false);
         } else {
             setUsernameError('');
-            setHasUsernameError(true);
+            setIsValidUsername(true);
         }
 
         if (email.length === 0) {
             noError = false;
             setEmailError('Email Field is Empty');
-            setHasEmailError(false);
+            setIsValidEmail(false);
         } 
         if (!email.includes('@')) {
             noError = false;
             setEmailError('Invalid Email Address');
-            setHasEmailError(false);
+            setIsValidEmail(false);
         }
         else if (!email.includes('.')) {
             noError = false;
             setEmailError('Invalid Email Address');
-            setHasEmailError(false);
+            setIsValidEmail(false);
         } else if (email.indexOf(' ') >= 0) {
             noError = false;
             setEmailError('Email Cannot Contain Spaces');
-            setHasEmailError(false);
+            setIsValidEmail(false);
         } else {
             setEmailError('');
-            setHasEmailError(true);
+            setIsValidEmail(true);
         }
 
         if (password.length === 0) {
             noError = false;
             setPasswordError('Password Field is Empty');
-            setHasPasswordError(false);
+            setIsValidPassword(false);
         }
         else if (password.length < 6) {
             noError = false;
             setPasswordError('Password must be at least 6 characters');
-            setHasPasswordError(false);
+            setIsValidPassword(false);
         }
         else if (password.length > 40) {
             noError = false;
             setPasswordError("Password can't be longer than 40 charaters");
-            setHasPasswordError(false);
+            setIsValidPassword(false);
         }
         else if (password.indexOf(' ') >= 0) {
             noError = false;
             setPasswordError('Password Cannot Contain Spaces');
-            setHasPasswordError(false);
+            setIsValidPassword(false);
         } else {
             setPasswordError('');
-            setHasPasswordError(true);
+            setIsValidPassword(true);
         }
 
-        if (password != cpassword) {
+        if (!cpassword) {
+            setConfirmError('Please confirm password');
+            setIsValidConfirm(false);
+        }
+        else if (password != cpassword) {
             noError = false;
             setConfirmError('Passwords do not match');
-            setHasConfirmError(false);
+            setIsValidConfirm(false);
         }  else {
             setConfirmError('');
-            setHasConfirmError(true);
+            setIsValidConfirm(true);
         }
 
         if (phoneNumber.length === 0) {
             noError = false;
             setPhoneError('Phone Number Field is Empty');
-            setHasPhoneError(false);
+            setIsValidPhone(false);
         }
         else if (phoneNumber.length != 10) {
             noError = false;
             setPhoneError('Phone Number is not valid');
-            setHasPhoneError(false);
+            setIsValidPhone(false);
         }
         else {
             setPhoneError('');
-            setHasPhoneError(true);
+            setIsValidPhone(true);
         }
 
         return noError;
@@ -226,11 +233,11 @@ const AccountCreationScreen = ({ navigation }) => {
                   
 
                     <View style={styles.sheet}>
-                    <CustomInput placeholder="Username" value={username} setValue={setUsername} secureTextEntry={false} iconName="account-outline" inputError={usernameError} hasError={hasUsernameError}/>
-                    <CustomInput placeholder="Email Address" value={email} setValue={setEmail} secureTextEntry={false} keyboardType = 'email-address' iconName="email-outline" inputError={emailError} hasError={hasEmailError}/>
-                    <CustomInput placeholder="Password" value={password} setValue={setPassword} secureTextEntry={true} iconName="lock-outline" inputError={passwordError} hasError={hasPasswordError}/>
-                    <CustomInput placeholder="Confirm Password" value={cpassword} setValue={setcPassword} secureTextEntry={true} iconName="lock-outline" inputError={confirmError} hasError={hasConfirmError} suggestPassword = 'oneTimeCode'/>
-                    <CustomInput placeholder="Phone Number" value={phoneNumber} setValue={setPhoneNumber} secureTextEntry={false} keyboardType = 'phone-pad' iconName="phone-outline" inputError={phoneError} hasError={hasPhoneError}/>
+                    <CustomInput placeholder="Username" value={username} setValue={setUsername} secureTextEntry={false} iconName="account-outline" inputError={usernameError} isValid={isValidUsername}/>
+                    <CustomInput placeholder="Email Address" value={email} setValue={setEmail} secureTextEntry={false} keyboardType = 'email-address' iconName="email-outline" inputError={emailError} isValid={isValidEmail}/>
+                    <CustomInput placeholder="Password" value={password} setValue={setPassword} secureTextEntry={true} iconName="lock-outline" inputError={passwordError} isValid={isValidPassword}/>
+                    <CustomInput placeholder="Confirm Password" value={cpassword} setValue={setcPassword} secureTextEntry={true} iconName="lock-outline" inputError={confirmError} isValid={isValidConfirm} textContentType = 'oneTimeCode'/>
+                    <CustomInput placeholder="Phone Number" value={phoneNumber} setValue={setPhoneNumber} secureTextEntry={false} keyboardType = 'phone-pad' iconName="phone-outline" inputError={phoneError} isValid={isValidPhone}/>
                    
                     <View style={{flexDirection:"row", marginBottom: 0, marginTop: 0 }}>
                         <CustomButton onPress={onContinuePressed} buttonName="Continue" type="PRIMARY"/>

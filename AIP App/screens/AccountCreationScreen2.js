@@ -142,10 +142,13 @@ const AccountCreationScreen2 = ({ navigation, route }) => {
             setAttendeeHostError('');
             setHasAttendeeHostError(false);
         }
+        
+        return noError;
+    }
 
 
     const onCreateAccountPressed = () => {       
-        if (!validateInputs()) {
+        if (validateInputs()) {
             console.warn("Error creating account")
         } else {
             createUser();

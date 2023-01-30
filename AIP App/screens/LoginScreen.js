@@ -54,16 +54,22 @@ const LoginScreen = ({navigation}) => {
     }
 
     const handleLogin = () => {
+        var loginSuccessful = false;
+
         auth.signInWithEmailAndPassword(email, password)
             .then(userCredential => {
                 var user = userCredential.user;
+                loginSuccessful = true;
                 setLoginError('');
                 navigation.navigate("Map");
             })
-            .catch(error =>
-                console.warn(error.message),
-                setLoginError("Invalid credentials.")
-            )
+            .catch(error => {
+                console.warn(error.message);
+                if (!loginSuccessful) {
+                    setLoginError("Invalid credentials.")
+                }
+            }
+        )
     }
 
     const onForgotPasswordPressed = () => {

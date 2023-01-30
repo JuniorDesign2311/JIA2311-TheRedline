@@ -1,5 +1,5 @@
 import React, {useState, useRef, useMemo} from 'react'
-import { View, Text, StyleSheet, ScrollView, TouchableWithoutFeedback, Keyboard, TouchableOpacity } from 'react-native'
+import { View, Text, TextInput, StyleSheet, ScrollView, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, TouchableOpacity, Platform } from 'react-native'
 import CustomInput from '../components/CustomInput';
 import CustomButton from '../components/CustomButton';
 import States from '../components/States';
@@ -9,6 +9,7 @@ import firebase from "firebase/app";
 import { useNavigation } from '@react-navigation/native';
 import "firebase/firestore";
 import BottomSheet from '@gorhom/bottom-sheet';
+import { set } from 'react-native-reanimated';
 
 const AccountCreationScreen = ({ navigation }) => {
     /* useState returns the original value argument that's passed in and a function that returns the changed value */
@@ -17,14 +18,24 @@ const AccountCreationScreen = ({ navigation }) => {
     const [password, setPassword] = useState('');
     const [cpassword, setcPassword] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
-    const [attendeeClicked, setAttendeeClicked] = useState(false);
-    const [hostClicked, setHostClicked] = useState(false);
     const sheetRef = useRef(null);
     const snapPoints = useMemo(() => [ '75%', '75%' ]);
     // Error Handling
-    const [inputError, setInputError] = useState('');
+    const [usernameError, setUsernameError] = useState('');
+    const [emailError, setEmailError] = useState('');
+    const [passwordError, setPasswordError] = useState('');
+    const [confirmError, setConfirmError] = useState('');
+    const [phoneError, setPhoneError] = useState('');
+
+    const [hasUsernameError, setHasUsernameError] = useState('false');
+    const [hasEmailError, setHasEmailError] = useState('false');
+    const [hasPasswordError, setHasPasswordError] = useState('false');
+    const [hasConfirmError, setHasConfirmError] = useState('false');
+    const [hasPhoneError, setHasPhoneError] = useState('false');
+
     // Document id to distinguish each user within our database
     const documentId = username+phoneNumber;
+
 
     const validateUser = () => {
         var db = firebase.firestore();
@@ -48,7 +59,7 @@ const AccountCreationScreen = ({ navigation }) => {
                                                 password: password
                                             });
                                         } else {
-                                            setInputError('Email already linked to an account')
+                                            setEmailError('Email already linked to an account')
                                             console.warn("Email already linked to an account.")
                                         }
             
@@ -61,7 +72,7 @@ const AccountCreationScreen = ({ navigation }) => {
                                         console.log("Error: ", err);
                                     })
                             } else {
-                                setInputError('Phone number already linked to an account')
+                                setPhoneError('Phone number already linked to an account')
                                 console.warn("Phone number already linked to an account.")
                             }
 
@@ -75,7 +86,8 @@ const AccountCreationScreen = ({ navigation }) => {
                         })
 
                 } else {
-                    setInputError('Username already taken')
+                    setUsernameError('Username already taken');
+                    setHasUsernameError(true);
                     console.warn("Username already taken.")
                 }
             })
@@ -94,48 +106,78 @@ const AccountCreationScreen = ({ navigation }) => {
         var noError = false;
 
         if (username.length === 0) {
-            setInputError('Username Field is Empty')
+            setUsernameError('Username Field is Empty');
+            setHasUsernameError(true);
         }
         else if (username.indexOf(' ') >= 0) {
-            setInputError('Username Cannot Contain Spaces')
+            setUsernameError('Username Cannot Contain Spaces');
+            setHasUsernameError(true);
+        } else {
+            setUsernameError('');
+            setHasUsernameError(false);
         }
-        else if (email.length === 0) {
-            setInputError('Email Field is Empty')
-        }
-        else if (!email.includes('@')) {
-            setInputError('Invalid Email Address');
+
+        if (email.length === 0) {
+            setEmailError('Email Field is Empty');
+            setHasEmailError(true);
+        } 
+        if (!email.includes('@')) {
+            setEmailError('Invalid Email Address');
+            setHasEmailError(true);
         }
         else if (!email.includes('.')) {
-            setInputError('Invalid Email Address');
+            setEmailError('Invalid Email Address');
+            setHasEmailError(true);
+        } else if (email.indexOf(' ') >= 0) {
+            setEmailError('Email Cannot Contain Spaces');
+            setHasEmailError(true);
+        } else {
+            setEmailError('');
+            setHasEmailError(false);
         }
-        else if (email.indexOf(' ') >= 0) {
-            setInputError('Email Cannot Contain Spaces')
-        }
-        else if (password.length === 0) {
-            setInputError('Password Field is Empty')
+
+        if (password.length === 0) {
+            setPasswordError('Password Field is Empty');
+            setHasPasswordError(true);
         }
         else if (password.length < 6) {
-            setInputError('Password must be at least 6 characters');
+            setPasswordError('Password must be at least 6 characters');
+            setHasPasswordError(true);
         }
         else if (password.length > 40) {
-            setInputError("Password can't be longer than 40 charaters");
+            setPasswordError("Password can't be longer than 40 charaters");
+            setHasPasswordError(true);
         }
         else if (password.indexOf(' ') >= 0) {
-            setInputError('Password Cannot Contain Spaces')
+            setPasswordError('Password Cannot Contain Spaces');
+            setHasPasswordError(true);
+        } else {
+            setPasswordError('');
+            setHasPasswordError(false);
         }
-        else if (password != cpassword) {
-            setInputError('Passwords do not match')
+
+        if (password != cpassword) {
+            setConfirmError('Passwords do not match');
+            setHasConfirmError(true);
+        }  else {
+            setConfirmError('');
+            setConfirmError(false);
         }
-        else if (phoneNumber.length === 0) {
-            setInputError('Phone Number Field is Empty')
+
+        if (phoneNumber.length === 0) {
+            setPhoneError('Phone Number Field is Empty');
+            setHasPhoneError(true);
         }
         else if (phoneNumber.length != 10) {
-            setInputError('Phone Number is incorrect');
+            setPhoneError('Phone Number is not valid');
+            setHasPhoneError(true);
         }
         else {
-            setInputError('');
+            setPhoneError('');
+            setHasPhoneError(false);
             noError = true;
         }
+
         return noError;
     }
 
@@ -162,30 +204,36 @@ const AccountCreationScreen = ({ navigation }) => {
                 index={1}
                 snapPoints={snapPoints}
                 handleIndicatorStyle={{ display: "none" }}
-                >
+                >      
+                    
+                    <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding": "height"} >
+                    <ScrollView pagingEnabled showsHorizontalScrollIndicator={false}>
                     <View style={styles.sheet}>
-                    <Text style={styles.error}> {inputError} </Text>
-                    <CustomInput placeholder="Username" value={username} setValue={setUsername} secureTextEntry={false} iconName="account-outline"/>
-                    {/* <Text style={styles.error}> {usernameError} </Text> */}
-                    <CustomInput placeholder="Email Address" value={email} setValue={setEmail} secureTextEntry={false} keyboardType = 'email-address' iconName="email-outline"/>
-                    {/* <Text style={styles.error}> {emailError} </Text> */}
-                    <CustomInput placeholder="Password" value={password} setValue={setPassword} secureTextEntry={true} iconName="lock-outline"/>
-                    <CustomInput placeholder="Confirm Password" value={cpassword} setValue={setcPassword} secureTextEntry={true} iconName="lock-outline"/>
-                    {/* <Text style={styles.error}> {passwordError} </Text> */}
-                    <CustomInput placeholder="Phone Number" value={phoneNumber} setValue={setPhoneNumber} secureTextEntry={false} keyboardType = 'phone-pad' iconName="phone-outline"/>
-                    {/* <Text style={styles.error}> {phoneNumberError} </Text> */}
+
+                    <CustomInput placeholder="Username" value={username} setValue={setUsername} secureTextEntry={false} iconName="account-outline" inputError={usernameError} hasError={hasUsernameError}/>
+                   
+                    <CustomInput placeholder="Email Address" value={email} setValue={setEmail} secureTextEntry={false} keyboardType = 'email-address' iconName="email-outline" inputError={emailError} hasError={hasEmailError}/>
+                   
+                    <CustomInput placeholder="Password" value={password} setValue={setPassword} secureTextEntry={true} iconName="lock-outline" inputError={passwordError} hasError={hasPasswordError}/>
+                    <CustomInput placeholder="Confirm Password" value={cpassword} setValue={setcPassword} secureTextEntry={true} iconName="lock-outline" inputError={confirmError} hasError={hasConfirmError}/>
+                    
+                    <CustomInput placeholder="Phone Number" value={phoneNumber} setValue={setPhoneNumber} secureTextEntry={false} keyboardType = 'phone-pad' iconName="phone-outline" inputError={phoneError} hasError={hasPhoneError}/>
+                   
                     <View style={{flexDirection:"row", marginBottom: 0, marginTop: 0 }}>
                         <CustomButton onPress={onContinuePressed} buttonName="Continue" type="PRIMARY"/>
                     </View>
-                   
+
                     <TouchableOpacity onPress={onCancelPressed}>
                         <Text style = {{fontSize:13, marginTop: 0,  color: '#039be5'}}>
                             Back To Login
                         </Text>
                     </TouchableOpacity>
                     </View>
+                    </ScrollView>
+                    </KeyboardAvoidingView>
                 </BottomSheet>
                 </View>
+                
         </TouchableWithoutFeedback>
 
         

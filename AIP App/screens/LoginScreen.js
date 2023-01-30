@@ -8,7 +8,7 @@ import { db } from '../firebaseConfig';
 
 //import {password} from '../screens/AccountCreationScreen';
 //import {email} from '../screens/AccountCreationScreen';
-
+ 
 import BottomSheet from '@gorhom/bottom-sheet';
 import Animated, { AnimatedLayout, SlideInRight, FadeInLeft, FadeInDown} from 'react-native-reanimated';
     
@@ -55,11 +55,11 @@ const LoginScreen = ({navigation}) => {
 
     const handleLogin = () => {
         auth.signInWithEmailAndPassword(email, password)
-            .then(userCredential => {
-                var user = userCredential.user;
+        .then(userCredential => {
+            var user = userCredential.user;
                 setLoginError('');
-                navigation.navigate("Map");
-            })
+            navigation.navigate("Map");
+        })
             .catch(error =>
                 console.warn(error.message),
                 setLoginError("Invalid credentials.")
@@ -101,24 +101,26 @@ const LoginScreen = ({navigation}) => {
                 <Text style={styles.error}> {loginError} </Text>
                 <CustomInput placeholder="Email Address" value={email} setValue={setEmail} secureTextEntry={false} iconName="email-outline"/>
                 <CustomInput placeholder="Password" value={password} setValue={setPassword} secureTextEntry={true} iconName="lock-outline"/>
-                <CustomButton onPress={onLoginPressed} buttonName="Log in" type="PRIMARY"/>
-                <View style={{flexDirection: 'row', alignItems: 'center', marginLeft: 25, marginRight: 25}}>
-                <View style={{flex: 1, height: 1, backgroundColor: 'lightgrey'}} />
-                    <View>
-                    <Text style={{width: 50, color:'grey', textAlign: 'center', fontFamily: 'Helvetica Neue'}}>or</Text>
-                    </View>
+            <CustomButton onPress={onLoginPressed} buttonName="Log in" type="PRIMARY"/>
+            {/* <Text>Don't have an account?</Text> */}
 
-                <View style={{flex: 1, height: 1, backgroundColor: 'lightgrey'}} />
-                </View>
+            <View style={{flexDirection: 'row', alignItems: 'center', marginLeft: 25, marginRight: 25}}>
+            <View style={{flex: 1, height: 1, backgroundColor: 'lightgrey'}} />
+            <View>
+            <Text style={{width: 50, color:'grey', textAlign: 'center', fontFamily: 'Helvetica Neue'}}>or</Text>
+            </View>
 
-                <CustomButton onPress={onCreateAccountPressed} buttonName="Create Account" type="PRIMARY"/>
-                <TouchableOpacity
+            <View style={{flex: 1, height: 1, backgroundColor: 'lightgrey'}} />
+            </View>
+
+            <CustomButton onPress={onCreateAccountPressed} buttonName="Create Account" type="PRIMARY"/>
+            <TouchableOpacity
                     onPress={onForgotPasswordPressed}
                     style={{alignItems: 'center', marginTop: 5,}}>
-                    <Text style = {{fontSize:13, color: '#039be5'}}>
-                        Forgot password?
-                    </Text>
-                </TouchableOpacity>
+                <Text style = {{fontSize:13, color: '#039be5'}}>
+                    Forgot password?
+                </Text>
+            </TouchableOpacity>
                 </Animated.View>
             </BottomSheet>
             </View>
@@ -132,9 +134,8 @@ const styles = StyleSheet.create({
         fontSize: 45,
         fontFamily: 'Helvetica Neue',
         fontWeight: 'bold',
-        paddingTop: 50,
-        marginBottom: 600,
-        marginRight: 150
+        marginBottom: '135%',
+        marginRight: '37%',
     },
     error: {
         fontSize: 15,

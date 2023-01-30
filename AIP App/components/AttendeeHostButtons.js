@@ -1,16 +1,17 @@
 import React, {useState} from 'react'
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native'
 
-const AttendeeHostButtons = ({onPress, buttonClicked, buttonName}) => {
+const AttendeeHostButtons = ({onPress, buttonClicked, buttonName, hasError}) => {
     
     return (
         <TouchableOpacity 
-        style={[styles.container, {backgroundColor: buttonClicked ? "black": "white"}]}
+        style={[styles.container, {borderColor: hasError ? "red": "black"}, {backgroundColor: buttonClicked ? "black": "white"}]}
         onPress={() => { 
             {onPress()};
         }}>
             <Text style= {[styles.text, {color: buttonClicked ? "white": "black"}]} >{buttonName}</Text>
         </TouchableOpacity>
+        
     )
 }
 
@@ -19,7 +20,6 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         width: "45%",
 
-        borderColor: '#e8e8e8',
         borderWidth: 1,
         borderBottomLeftRadius: 15,
         borderTopLeftRadius: 15,

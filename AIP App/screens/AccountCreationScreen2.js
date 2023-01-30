@@ -38,7 +38,17 @@ const AccountCreationScreen2 = ({ navigation, route }) => {
     var password = route.params.password
 
     // Error Handling
-    const [inputError, setInputError] = useState('');
+    const [firstNameError, setFirstNameError] = useState('');
+    const [lastNameError, setLastNameError] = useState('');
+    const [stateError, setStateError] = useState('');
+    const [attendeeHostError, setAttendeeHostError] = useState('');
+    
+    const [hasFirstNameError, setHasFirstNameError] = useState('false');
+    const [hasLastNameError, setHasLastNameError] = useState('false');
+    const [hasStateError, setHasStateError] = useState('false');
+    const [hasAttendeeHostError, setHasAttendeeHostError] = useState('false');
+   
+
 
     const createUser = async () => {
         auth.createUserWithEmailAndPassword(email, password)
@@ -71,7 +81,7 @@ const AccountCreationScreen2 = ({ navigation, route }) => {
 
     const onAttendeePressed = () => {
         if (hostClicked)  {
-            console.warn("Please only choose one account type.");
+            alert("Please only choose one account type.");
         } else {
             setAttendeeClicked(!attendeeClicked);
         }  
@@ -81,7 +91,7 @@ const AccountCreationScreen2 = ({ navigation, route }) => {
 
     const onHostPressed = () => {
         if (attendeeClicked)  {
-            console.warn("Please only choose one account type.");
+            alert("Please only choose one account type.");
         } else {
             setHostClicked(!hostClicked);
         }  
@@ -90,19 +100,36 @@ const AccountCreationScreen2 = ({ navigation, route }) => {
 
     const validateInputs = () => {
         if (firstName.length === 0) {
-            setInputError('First Name is Empty')
+            setFirstNameError('First Name is Empty');
+            setHasFirstNameError(true);
+        } else {
+            setFirstNameError('');
+            setHasFirstNameError(false);
         }
-        else if (lastName.length === 0) {
-            setInputError('Last Name is Empty')
+
+        if (lastName.length === 0) {
+            setLastNameError('Last Name is Empty');
+            setHasLastNameError(true);
+        } else {
+            setLastNameError('')
+            setHasLastNameError(false);
         }
-        else if (state.length === 0) {
-            setInputError('Please Select a State')
+
+        if (state.length === 0) {
+            setStateError('Please Select a State')
+            setHasStateError(true);
+        } else {
+            setStateError('');
+            setHasStateError(false);
         }
-        else if (attendeeClicked === false && hostClicked === false) {
-            setInputError('Please select an account type')
+
+        if (attendeeClicked === false && hostClicked === false) {
+            setAttendeeHostError('Please select an account type');
+            setHasAttendeeHostError(true);
         }
         else {
-            setInputError('');
+            setAttendeeHostError('');
+            setHasAttendeeHostError(false);
         }
     }
 
@@ -121,6 +148,7 @@ const AccountCreationScreen2 = ({ navigation, route }) => {
 
             if (!attendeeClicked && !hostClicked) {
                 if (errorMessage != "") errorMessage = errorMessage + "\n";
+                setAttendeeHostError("Please choose an account type.")
                 errorMessage = errorMessage + "Please choose an account type."
             }
 
@@ -148,15 +176,17 @@ const AccountCreationScreen2 = ({ navigation, route }) => {
                 handleIndicatorStyle={{ display: "none" }}
                 >
                     <View style={styles.sheet}>
-                    <Text style={styles.error}> {inputError} </Text>
-                    <CustomInput placeholder="First Name" value={firstName} setValue={setFirstName} secureTextEntry={false}/>
-                    <CustomInput placeholder="Last Name" value={lastName} setValue={setLastName} secureTextEntry={false}/>
+                    {/*}ext style={styles.error}> {inputError} </Text>*/}
+                    <CustomInput placeholder="First Name" value={firstName} setValue={setFirstName} secureTextEntry={false} inputError={firstNameError} hasError={hasFirstNameError}/>
+                    <CustomInput placeholder="Last Name" value={lastName} setValue={setLastName} secureTextEntry={false} inputError={lastNameError} hasError={hasLastNameError}/>
                     <States state={state} setState={setState} />
 
                     <View style={{ flexDirection: "row" }}>
-                        <AttendeeHostButtons onPress={onAttendeePressed} buttonClicked={attendeeClicked} buttonName="Attendee" />
-                        <HostButton onPress={onHostPressed} buttonClicked={hostClicked} buttonName="Host" />
+                        <AttendeeHostButtons onPress={onAttendeePressed} buttonClicked={attendeeClicked} buttonName="Attendee" inputError={AttendeeHostButtons} hasError={hasAttendeeHostError}/>
+                        <HostButton onPress={onHostPressed} buttonClicked={hostClicked} buttonName="Host" hasError={hasAttendeeHostError}/>
                     </View>
+
+                    <Text style={{color: "red"}}> {attendeeHostError} </Text>
                     
                     <View style={{ flexDirection: "row"}}>
                         

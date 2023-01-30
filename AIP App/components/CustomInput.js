@@ -3,22 +3,30 @@ import {View, Text, TextInput, StyleSheet } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 
 /* CustomInput is the stlye of each input field */
-const CustomInput = ({value, setValue, placeholder, secureTextEntry, iconName, keyboardType = "default"}) => {
+const CustomInput = ({value, setValue, placeholder, secureTextEntry, iconName, keyboardType = "default", inputError, hasError}) => {
+    console.log(hasError);
     return (
+        
         <View style={styles.container}>
         <Text> {placeholder} </Text>
-            <View style={styles.textField}>
+            <View style={[styles.textField, {borderColor: hasError ? 'red': 'black'}]}>
+            
                 <Icon name = { iconName } style={{fontSize: 22, marginRight: 5}}/>
             <TextInput 
                 value={value}
-                autoCorrect={false}
                 onChangeText={setValue}
                 style={{flex: 1}}
                 placeholder={placeholder}
                 placeholderTextColor= "#D3D3D3"
                 secureTextEntry = {secureTextEntry}
-                keyboardType = {keyboardType} />
+                keyboardType = {keyboardType}
+                autoCorrect={false}
+                />
+                
             </View>
+            <Text style={styles.error}>
+                {inputError} 
+            </Text>
         </View>
     )
 }
@@ -28,19 +36,25 @@ const styles = StyleSheet.create({
     textField:{
         backgroundColor: 'white',
         width: '100%',
-
-        borderColor: '#e8e8e8',
         borderWidth: 1,
         borderRadius: 15,
         flexDirection: 'row',
+        borderColor: 'black',
 
-        paddingHorizontal: 10,
-        paddingVertical: 10,
-        marginVertical: 10,
+        alignItems: "center",
+        paddingHorizontal: "2%",
+        paddingVertical: "2%",
+        marginVertical: "0.75%"
         
     },
     container:{
-        width: '90%'
+        width: '90%',
+        marginVertical: "1.5%"
+    },
+    error:{
+        color: "red",
+        marginVertical: "1%"
     }
+
 })
 export default CustomInput

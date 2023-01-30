@@ -103,13 +103,15 @@ const AccountCreationScreen = ({ navigation }) => {
 
     const validateInput = () => {
         // Error Handling
-        var noError = false;
+        var noError = true;
 
         if (username.length === 0) {
+            noError = false;
             setUsernameError('Username Field is Empty');
             setHasUsernameError(true);
         }
         else if (username.indexOf(' ') >= 0) {
+            noError = false;
             setUsernameError('Username Cannot Contain Spaces');
             setHasUsernameError(true);
         } else {
@@ -117,18 +119,22 @@ const AccountCreationScreen = ({ navigation }) => {
             setHasUsernameError(false);
         }
 
-        if (email && email.length === 0) {
+        if (email.length === 0) {
+            noError = false;
             setEmailError('Email Field is Empty');
             setHasEmailError(true);
         } 
-        if (email && !email.includes('@')) {
+        if (!email.includes('@')) {
+            noError = false;
             setEmailError('Invalid Email Address');
             setHasEmailError(true);
         }
-        else if (email && !email.includes('.')) {
+        else if (!email.includes('.')) {
+            noError = false;
             setEmailError('Invalid Email Address');
             setHasEmailError(true);
-        } else if (email && email.indexOf(' ') >= 0) {
+        } else if (email.indexOf(' ') >= 0) {
+            noError = false;
             setEmailError('Email Cannot Contain Spaces');
             setHasEmailError(true);
         } else {
@@ -137,18 +143,22 @@ const AccountCreationScreen = ({ navigation }) => {
         }
 
         if (password.length === 0) {
+            noError = false;
             setPasswordError('Password Field is Empty');
             setHasPasswordError(true);
         }
         else if (password.length < 6) {
+            noError = false;
             setPasswordError('Password must be at least 6 characters');
             setHasPasswordError(true);
         }
         else if (password.length > 40) {
+            noError = false;
             setPasswordError("Password can't be longer than 40 charaters");
             setHasPasswordError(true);
         }
         else if (password.indexOf(' ') >= 0) {
+            noError = false;
             setPasswordError('Password Cannot Contain Spaces');
             setHasPasswordError(true);
         } else {
@@ -156,8 +166,8 @@ const AccountCreationScreen = ({ navigation }) => {
             setHasPasswordError(false);
         }
 
-
         if (password != cpassword) {
+            noError = false;
             setConfirmError('Passwords do not match');
             setHasConfirmError(true);
         }  else {
@@ -166,18 +176,18 @@ const AccountCreationScreen = ({ navigation }) => {
         }
 
         if (phoneNumber.length === 0) {
+            noError = false;
             setPhoneError('Phone Number Field is Empty');
             setHasPhoneError(true);
         }
         else if (phoneNumber.length != 10) {
-
+            noError = false;
             setPhoneError('Phone Number is not valid');
             setHasPhoneError(true);
         }
         else {
             setPhoneError('');
             setHasPhoneError(false);
-            noError = true;
         }
 
         return noError;
@@ -186,7 +196,7 @@ const AccountCreationScreen = ({ navigation }) => {
     const onContinuePressed = () => {
         if (!validateInput()) {
             // If validateInput returns false, then user had error creating account
-            console.warn("Error creating account");
+            console.warn("Account could not be created");
         } else {
             validateUser();
         }

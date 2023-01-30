@@ -48,6 +48,7 @@ const LoginScreen = ({navigation, route}) => {
             setLoginError('Email Cannot Contain Spaces')
         }
         else if (password.length === 0) {
+            console.log(password);
             setLoginError('Password Field is Empty')
         }
         else if (password.length < 6) {

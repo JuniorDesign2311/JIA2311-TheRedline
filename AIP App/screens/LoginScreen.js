@@ -49,6 +49,7 @@ const LoginScreen = ({navigation}) => {
         }
         else {
             setLoginError('');
+            handleLogin();
         }
     }
 
@@ -73,11 +74,10 @@ const LoginScreen = ({navigation}) => {
 
     const onLoginPressed = () => {
         validateLogin();
-        handleLogin();
     }
 
     const onCreateAccountPressed = () => {
-        navigation.navigate("AccountCreation");
+        navigation.navigate("TermsOfService");
         setLoginError('');
     }
     

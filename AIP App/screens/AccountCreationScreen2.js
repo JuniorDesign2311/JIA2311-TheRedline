@@ -46,7 +46,10 @@ const AccountCreationScreen2 = ({ navigation, route }) => {
             // Signed in 
             writeUserData();
             //Navigates to second creation screen and passes data through
-            navigation.navigate('AccountCreated')
+            navigation.navigate('AccountCreated', {
+                email1: route.params.email,
+                password1: route.params.password,
+            })
         })
         .catch(error => console.warn(error.message))
     }

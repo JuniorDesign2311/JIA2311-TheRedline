@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, useCallback } from 'react';
+import React, { useMemo, useRef } from 'react';
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 import { StyleSheet, Text, View } from 'react-native';
 import BottomSheet from '@gorhom/bottom-sheet';
@@ -11,23 +11,23 @@ const MapScreen = () => {
 
 
   return (
-    <View style={styles.container}>
-      <MapView provider={PROVIDER_GOOGLE} style={styles.map} />
-    
-      <BottomSheet
-        ref={sheetRef}
-        index={0}
-        snapPoints={snapPoints}
-      >
-
-        <View style={styles.container}>
-          <Text style={styles.headline}>Events</Text>
-        </View>
+      <View style={styles.container}>
         
-      </BottomSheet>
+        <MapView provider={PROVIDER_GOOGLE} style={styles.map} />
 
+        <BottomSheet
+          ref={sheetRef}
+          index={0}
+          snapPoints={snapPoints}
+        >
 
-    </View>
+          <View style={styles.container}>
+            <Text style={styles.headline}>Events</Text>
+          </View>
+          
+        </BottomSheet>
+
+      </View>
   );
 };
 

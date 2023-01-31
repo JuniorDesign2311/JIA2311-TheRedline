@@ -1,19 +1,12 @@
 import React, {useState, useRef, useMemo, useEffect} from 'react';
+import {Alert} from 'react-native';
 import { View, Text, TouchableOpacity, Keyboard, ScrollView, StyleSheet, TouchableWithoutFeedback } from 'react-native';
 import CustomInput from '../components/CustomInput';
 import CustomButton from '../components/CustomButton';
-import CustomText from '../components/CustomButton';
 import { auth } from '../firebaseConfig';
-import { db } from '../firebaseConfig';
 import { useIsFocused } from '@react-navigation/native';
-
-//import {password} from '../screens/AccountCreationScreen';
-//import {email} from '../screens/AccountCreationScreen';
- 
 import BottomSheet from '@gorhom/bottom-sheet';
-import Animated, { AnimatedLayout, SlideInRight, FadeInLeft, FadeInDown} from 'react-native-reanimated';
-    
-    
+
 
 const LoginScreen = ({navigation, route}) => {
     const [email, setEmail] = useState(route?.params?.email);
@@ -39,13 +32,10 @@ const LoginScreen = ({navigation, route}) => {
         
         }
     }, [focus]);
-    
-    // const [apassword, setPassword] = useState({password});
-    // const [aemail, setEmail] = useState({email});
 
     const sheetRef = useRef(null);
     const snapPoints = useMemo(() => [ '75%', '75%' ]);
-    
+
     const validateLogin = () => {
         var noErrors = true;
 
@@ -84,15 +74,16 @@ const LoginScreen = ({navigation, route}) => {
         if (noErrors) {
             handleLogin();
         }
-    }
+    };
 
     const handleLogin = () => {
-        var loginSuccessful = false;
+        loginSuccessful = false;
 
         auth.signInWithEmailAndPassword(email, password)
             .then(userCredential => {
                 var user = userCredential.user;
                 loginSuccessful = true;
+                locationTrackingQuestion();
                 navigation.navigate("Map");
             })
             .catch(error => {
@@ -102,22 +93,39 @@ const LoginScreen = ({navigation, route}) => {
                 }
             }
         )
-    }
+    };
 
     const onForgotPasswordPressed = () => {
         navigation.navigate("ResetPassword");   
         setLoginError('');
     }
 
-
+    const locationTrackingQuestion = () => {
+        Alert.alert(
+          //title
+          'Allow "AIP" to access your location while you are using the app?',
+          //body
+          'Your current location will be displayed on the map and used for directions and nearby search results.',
+          [
+            { text: 'Allow While Using App', onPress: () => console.log('Location being tracked') },
+            {
+              text: "Don't Allow",
+              onPress: () => console.log('Location NOT being tracked'),
+              style: 'cancel',
+            },
+          ],
+          { cancelable: false }
+        );
+    };
+    
     const onLoginPressed = () => {
         validateLogin();
-    }
+    };
 
     const onCreateAccountPressed = () => {
         navigation.navigate("TermsOfService");
         setLoginError('');
-    }
+    };
     
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
@@ -163,7 +171,7 @@ const LoginScreen = ({navigation, route}) => {
         </TouchableWithoutFeedback>
 
     )
-}
+};
 
 const styles = StyleSheet.create({
     header: {

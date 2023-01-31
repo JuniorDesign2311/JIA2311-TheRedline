@@ -4,7 +4,6 @@ import ResetPasswordInput from '../components/ResetPasswordInput';
 import RequestLinkButton from '../components/RequestLinkButton';
 import CustomButton from '../components/CustomButton';
 import { auth } from '../firebaseConfig';
-import { db } from '../firebaseConfig';
 import BottomSheet from '@gorhom/bottom-sheet';
 import CustomInput from '../components/CustomInput';
 

@@ -2,6 +2,7 @@ import React, {useState, useRef, useMemo} from 'react'
 import { View, Text, TextInput, StyleSheet, ScrollView, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, TouchableOpacity, Platform } from 'react-native'
 import CustomInput from '../components/CustomInput';
 import CustomButton from '../components/CustomButton';
+import EventDescriptionInput from '../components/EventDescriptionInput';
 import States from '../components/States';
 import { auth } from '../firebaseConfig';
 import { db } from '../firebaseConfig';
@@ -13,197 +14,108 @@ import { set } from 'react-native-reanimated';
 
 const EventCreationScreen = ({ navigation }) => {
     /* useState returns the original value argument that's passed in and a function that returns the changed value */
-    const [username, setUsername] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [cpassword, setcPassword] = useState('');
-    const [phoneNumber, setPhoneNumber] = useState('');
+    const [title, setTitle] = useState('');
+    const [location, setLocation] = useState('');
+    const [date, setDate] = useState('');
+    const [time, setTime] = useState('');
+    const [description, setDescription] = useState('');
     const sheetRef = useRef(null);
     const snapPoints = useMemo(() => [ '75%', '77%' ]);
     // Error Handling
-    const [usernameError, setUsernameError] = useState('');
-    const [emailError, setEmailError] = useState('');
-    const [passwordError, setPasswordError] = useState('');
-    const [confirmError, setConfirmError] = useState('');
-    const [phoneError, setPhoneError] = useState('');
+    const [titleError, setTitleError] = useState('');
+    const [locationError, setLocationError] = useState('');
+    const [dateError, setDateError] = useState('');
+    const [timeError, setTimeError] = useState('');
+    const [descriptionError, setDescriptionError] = useState('');
 
-    const [isValidUsername, setIsValidUsername] = useState(true);
-    const [isValidEmail, setIsValidEmail] = useState(true);
-    const [isValidPassword, setIsValidPassword] = useState(true);
-    const [isValidConfirm, setIsValidConfirm] = useState(true);
-    const [isValidPhone, setIsValidPhone] = useState(true);
-
-
-    // Document id to distinguish each user within our database
-    const documentId = username+phoneNumber;
-
-    const validateUser = () => {
-        var db = firebase.firestore();
-        var usersRef = db.collection("users");
-        // query for inputted username
-        usersRef.where("usernameToLowerCase", '==', username.toLowerCase()).get()
-            .then(snapshot => {
-                if (snapshot.empty) {
-                    // query for inputted phone number
-                    usersRef.where("phoneNumber", "==", phoneNumber).get()
-                        .then(snapshot => {
-                            if (snapshot.empty) {
-                                usersRef.where("emailToLowerCase", "==", email.toLowerCase()).get()
-                                    .then(snapshot => {
-                                        if (snapshot.empty) {
-                                            navigation.navigate('AccountCreation2', {
-                                                docID: (username+phoneNumber),
-                                                username: username,
-                                                email: email,
-                                                phoneNumber: phoneNumber,
-                                                password: password
-                                            });
-                                        } else {
-                                            setEmailError('Email already linked to an account')
-                                            setIsValidEmail(false);
-                                            console.warn("Email already linked to an account.")
-                                        }
-            
-                                    })
-                                    .then(createdUser => {
-                                        console.log(createdUser);
-                                        db.collection("users").doc(createdUser.user.uid).set({ email: email });
-                                    })
-                                    .catch(err => {
-                                        console.log("Error: ", err);
-                                    })
-                            } else {
-                                setPhoneError('Phone number already linked to an account');
-                                setIsValidPhone(false);
-                                console.warn("Phone number already linked to an account.");
-                            }
-
-                        })
-                        .then(createdUser => {
-                            console.log(createdUser);
-                            db.collection("users").doc(createdUser.user.uid).set({ phoneNumber: phoneNumber });
-                        })
-                        .catch(err => {
-                            console.log("Error: ", err);
-                        })
-
-                } else {
-                    setUsernameError('Username already taken');
-                    setIsValidUsername(false);
-                    console.warn("Username already taken.")
-                }
-            })
-            .then(createdUser => {
-                console.log(createdUser);
-                //Create the user doc in the users collection
-                db.collection("users").doc(createdUser.user.uid).set({ username: username });
-            })
-            .catch(err => {
-                console.log("Error: ", err);
-            });
-    }
+    const [isValidTitle, setIsValidTitle] = useState(true);
+    const [isValidLocation, setIsValidLocation] = useState(true);
+    const [isValidDate, setIsValidDate] = useState(true);
+    const [isValidTime, setIsValidTime] = useState(true);
+    const [isValidDescription, setIsValidDescription] = useState(true);
 
     const validateInput = () => {
         // Error Handling
         
         var noError = true;
 
-        if (username.length === 0) {
+        if (title.length === 0) {
             console.log("hello");
             noError = false;
-            setUsernameError('Username Field is Empty');
-            setIsValidUsername(false);
+            setTitleError('Title Field is Empty');
+            setIsValidTitle(false);
         }
-        else if (username.indexOf(' ') >= 0) {
+        else if (Title.indexOf(' ') >= 0) {
             noError = false;
-            setUsernameError('Username Cannot Contain Spaces');
-            setIsValidUsername(false);
+            setTitleError('Title Cannot Contain Spaces');
+            setIsValidTitle(false);
         }
-        else if (username.indexOf('&') >= 0 || username.indexOf('=') >= 0 || username.indexOf('_') >= 0 || username.indexOf("'") >= 0 || username.indexOf('-') >= 0 || username.indexOf('%') >= 0 || username.indexOf('$') >= 0
-                    || username.indexOf('+') >= 0 || username.indexOf(',') >= 0 || username.indexOf('<') >= 0 || username.indexOf('>') >= 0 || username.indexOf('~') >= 0 || username.indexOf('"') >= 0 || username.indexOf('.') >= 0) {
+        else if (Title.indexOf('&') >= 0 || Title.indexOf('=') >= 0 || Title.indexOf('_') >= 0 || Title.indexOf("'") >= 0 || Title.indexOf('-') >= 0 || Title.indexOf('%') >= 0 || Title.indexOf('$') >= 0
+                    || Title.indexOf('+') >= 0 || Title.indexOf(',') >= 0 || Title.indexOf('<') >= 0 || Title.indexOf('>') >= 0 || Title.indexOf('~') >= 0 || Title.indexOf('"') >= 0 || Title.indexOf('.') >= 0) {
             noError = false;
-            setUsernameError('Username Cannot Contain Special Characters');
-            setIsValidUsername(false);
+            setTitleError('Title Cannot Contain Special Characters');
+            setIsValidTitle(false);
         }
         else {
-            setUsernameError('');
-            setIsValidUsername(true);
+            setTitleError('');
+            setIsValidTitle(true);
         }
 
-        if (email.length === 0) {
+        if (location.length === 0) {
             noError = false;
-            setEmailError('Email Field is Empty');
-            setIsValidEmail(false);
-        } 
-        if (!email.includes('@')) {
-            noError = false;
-            setEmailError('Invalid Email Address');
-            setIsValidEmail(false);
+            setLocationError('Location Field is Empty');
+            setIsValidLocation(false);
         }
-        else if (!email.includes('.')) {
+        else if (!location.includes('.')) {
             noError = false;
-            setEmailError('Invalid Email Address');
-            setIsValidEmail(false);
-        } else if (email.indexOf(' ') >= 0 || email.indexOf('&') >= 0 || email.indexOf('=') >= 0 || email.indexOf("'") >= 0 || email.indexOf('*') >= 0 || email.indexOf('%') >= 0
-        || email.indexOf('+') >= 0 || email.indexOf(',') >= 0 || email.indexOf('<') >= 0 || email.indexOf('>') >= 0 || email.indexOf('$') >= 0 || email.indexOf('"') >= 0) {
+            setLocationError('Invalid Location');
+            setIsValidLocation(false);
+        } else if (location.indexOf(' ') >= 0 || location.indexOf('&') >= 0 || location.indexOf('=') >= 0 || location.indexOf("'") >= 0 || location.indexOf('*') >= 0 || location.indexOf('%') >= 0
+        || location.indexOf('+') >= 0 || location.indexOf(',') >= 0 || location.indexOf('<') >= 0 || location.indexOf('>') >= 0 || location.indexOf('$') >= 0 || location.indexOf('"') >= 0) {
             noError = false;
-            setEmailError('Email Cannot Contain Special Characters');
-            setIsValidEmail(false);
+            setLocationError('Location Cannot Contain Special Characters');
+            setIsValidLocation(false);
         } else {
-            setEmailError('');
-            setIsValidEmail(true);
+            setLocationError('');
+            setIsValidLocation(true);
         }
 
-        if (password.length === 0) {
+        if (date.length === 0) {
             noError = false;
-            setPasswordError('Password Field is Empty');
-            setIsValidPassword(false);
+            setDateError('Date Field is Empty');
+            setIsValidDate(false);
         }
-        else if (password.length < 6) {
+        else if (date.indexOf(' ') >= 0) {
             noError = false;
-            setPasswordError('Password must be at least 6 characters');
-            setIsValidPassword(false);
-        }
-        else if (password.length > 40) {
-            noError = false;
-            setPasswordError("Password can't be longer than 40 charaters");
-            setIsValidPassword(false);
-        }
-        else if (password.indexOf(' ') >= 0) {
-            noError = false;
-            setPasswordError('Password Cannot Contain Spaces');
-            setIsValidPassword(false);
+            setDateError('Date Cannot Contain Spaces');
+            setIsValidDate(false);
         } else {
-            setPasswordError('');
-            setIsValidPassword(true);
+            setDateError('');
+            setIsValidDate(true);
         }
 
-        if (!cpassword) {
-            setConfirmError('Please confirm password');
-            setIsValidConfirm(false);
-        }
-        else if (password != cpassword) {
+        if (time.length === 0) {
             noError = false;
-            setConfirmError('Passwords do not match');
-            setIsValidConfirm(false);
-        }  else {
-            setConfirmError('');
-            setIsValidConfirm(true);
+            setTimeError('Time Field is Empty');
+            setIsValidTime(false);
+        }
+        else if (time.indexOf(' ') >= 0) {
+            noError = false;
+            setTimeError('Time Cannot Contain Spaces');
+            setIsValidTime(false);
+        } else {
+            setTimeError('');
+            setIsValidTime(true);
         }
 
-        if (phoneNumber.length === 0) {
+        if (description.length === 0) {
             noError = false;
-            setPhoneError('Phone Number Field is Empty');
-            setIsValidPhone(false);
-        }
-        else if (phoneNumber.length != 10) {
-            noError = false;
-            setPhoneError('Phone Number is not valid');
-            setIsValidPhone(false);
+            setDescriptionError('Description Field is Empty');
+            setIsValidDescription(false);
         }
         else {
-            setPhoneError('');
-            setIsValidPhone(true);
+            setTimeError('');
+            setIsValidDescription(true);
         }
 
         return noError;
@@ -223,20 +135,15 @@ const EventCreationScreen = ({ navigation }) => {
        
         <View style={{flex:1,justifyContent:'center',alignItems:'center',backgroundColor: 'white'}}>
                 <Text style={[styles.header]}> Create Event </Text>
-
-                
-
-                  
-
                     <View style={styles.sheet}>
-                    <CustomInput placeholder="Event Title" value={username} setValue={setUsername} secureTextEntry={false} inputError={usernameError} isValid={isValidUsername}/>
-                    <CustomInput placeholder="Location" value={email} setValue={setEmail} secureTextEntry={false} keyboardType = 'email-address' inputError={emailError} isValid={isValidEmail}/>
-                    <CustomInput placeholder="Date" value={password} setValue={setPassword} secureTextEntry={true} inputError={passwordError} isValid={isValidPassword}/>
-                    <CustomInput placeholder="Time" value={cpassword} setValue={setcPassword} secureTextEntry={true} inputError={confirmError} isValid={isValidConfirm} textContentType = 'oneTimeCode'/>
-                    <CustomInput placeholder="Event Description" value={phoneNumber} setValue={setPhoneNumber} secureTextEntry={false} inputError={phoneError} isValid={isValidPhone}/>
+                    <CustomInput placeholder="Event Title" value={title} setValue={setTitle} secureTextEntry={false} inputError={titleError} isValid={isValidTitle}/>
+                    <CustomInput placeholder="Location" value={location} setValue={setLocation} secureTextEntry={false} keyboardType = 'email-address' inputError={locationError} isValid={isValidLocation}/>
+                    <CustomInput placeholder="Date" value={date} setValue={setDate} secureTextEntry={true} inputError={dateError} isValid={isValidDate}/>
+                    <CustomInput placeholder="Time" value={time} setValue={setTime} secureTextEntry={true} inputError={timeError} isValid={isValidTime} textContentType = 'oneTimeCode'/>
+                    <EventDescriptionInput placeholder="Event Description" value={description} setValue={setDescription} secureTextEntry={false} inputError={descriptionError} isValid={isValidDescription}/>
                    
                     <View style={{flexDirection:"row", marginBottom: 0, marginTop: 0 }}>
-                        <CustomButton onPress={onSubmitPressed} buttonName="Submit" type="PRIMARY"/>
+                        <CustomButton onPress={validateInput} buttonName="Submit" type="PRIMARY"/>
                     </View>
                     <TouchableOpacity onPress={onCancelPressed}>
                         <Text style = {{fontSize:13, marginTop: 0,  color: '#039be5'}}>
@@ -244,16 +151,8 @@ const EventCreationScreen = ({ navigation }) => {
                         </Text>
                     </TouchableOpacity>
                     </View>  
-                   
-                    
-                
-        </View>
-        
+            </View>
         </TouchableWithoutFeedback>
-                
-      
-
-        
     )
 }
 

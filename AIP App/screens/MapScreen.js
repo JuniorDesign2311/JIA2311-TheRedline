@@ -7,15 +7,16 @@ const MapScreen = () => {
 
   const sheetRef = useRef(null);
 
-  const snapPoints = useMemo(() => [ '20%', '80%' ]);
+  const snapPoints = useMemo(() => [ '10%', '80%']);
+
 
   return (
     <View style={styles.container}>
       <MapView provider={PROVIDER_GOOGLE} style={styles.map} />
-
+    
       <BottomSheet
         ref={sheetRef}
-        index={1}
+        index={0}
         snapPoints={snapPoints}
       >
 
@@ -24,6 +25,7 @@ const MapScreen = () => {
         </View>
         
       </BottomSheet>
+
 
     </View>
   );

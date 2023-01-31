@@ -15,6 +15,7 @@ const EventDescriptionInput = ({value, setValue, placeholder, secureTextEntry, i
                 value={value}
                 onChangeText={setValue}
                 style={{flex: 1}}
+                multiline={true}
                 placeholder={placeholder}
                 placeholderTextColor= "#D3D3D3"
                 secureTextEntry = {secureTextEntry}
@@ -49,7 +50,7 @@ const styles = StyleSheet.create({
     },
     container:{
         width: '90%',
-        height: '35%',
+        height: '30%',
         marginVertical: "0.5%"
     },
     error:{

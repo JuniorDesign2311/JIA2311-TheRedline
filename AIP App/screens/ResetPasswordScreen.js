@@ -1,7 +1,6 @@
 import React, {useState, useRef, useMemo} from 'react'
 import { View, Text, TouchableOpacity, Keyboard, ScrollView, StyleSheet, TouchableWithoutFeedback } from 'react-native'
 import ResetPasswordInput from '../components/ResetPasswordInput';
-import RequestLinkButton from '../components/RequestLinkButton';
 import CustomButton from '../components/CustomButton';
 import { auth } from '../firebaseConfig';
 import { db } from '../firebaseConfig';
@@ -13,22 +12,29 @@ const LoginScreen = ({navigation}) => {
     const [emailError, setEmailError] = useState('');
     const sheetRef = useRef(null);
     const snapPoints = useMemo(() => [ '75%', '75%' ]);
+    const [hasValidEmail, setHasValidEmail] = useState(true);
 
     const validateEmail = () => {
-        if (email.length === 0) {
-            setEmailError('Email Field is Empty')
+        var noErrors = true;
+        if (!email) {
+            noErrors = false;
+            setEmailError('Email Field is Empty');
+            setHasValidEmail(false);
+
         }
         else if (!email.includes('@')) {
+            noErrors = false;
             setEmailError('Invalid Email Address');
-        }
-        else if (!email.includes('.')) {
-            setEmailError('Invalid Email Address');
+            setHasValidEmail(false);
         }
         else if (email.indexOf(' ') >= 0) {
-            setEmailError('Email Cannot Contain Spaces')
+            noErrors = false;
+            setEmailError('Email Cannot Contain Spaces');
+            setHasValidEmail(false);
         }
         else {
             setEmailError('');
+            setHasValidEmail(true);
         }
     }
 
@@ -74,8 +80,7 @@ const LoginScreen = ({navigation}) => {
                 <Text style = {{fontSize:14, textAlign: 'center', color: 'grey', marginRight:15, marginLeft:15, marginBottom:5, textAlign: 'center'}}>
                     Please enter the email address you'd like your password reset information to be sent to.
                 </Text>
-                <Text style={styles.error}> {emailError} </Text>
-                    <CustomInput placeholder="Enter Email Address" value={email} setValue={setEmail} secureTextEntry={false} iconName="email-outline"/>
+                    <CustomInput placeholder="Enter Email Address" value={email} setValue={setEmail} secureTextEntry={false} iconName="email-outline" isValid = {hasValidEmail} inputError = {emailError}/>
                     <CustomButton onPress={SendLinkPressed} buttonName="Request Reset Link" type="PRIMARY"/>
                     <TouchableOpacity
                         onPress={onCancelPressed}

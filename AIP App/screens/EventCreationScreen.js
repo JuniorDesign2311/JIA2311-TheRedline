@@ -40,7 +40,6 @@ const EventCreationScreen = ({ navigation }) => {
         var noError = true;
 
         if (title.length === 0) {
-            console.log("hello");
             noError = false;
             setTitleError('Title Field is Empty');
             setIsValidTitle(false);
@@ -131,7 +130,7 @@ const EventCreationScreen = ({ navigation }) => {
 
     return (
         
-        <TouchableWithoutFeedback onPress={()=>Keyboard.dismiss} accessible={false}>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
        
         <View style={{flex:1,justifyContent:'center',alignItems:'center',backgroundColor: 'white'}}>
                 <Text style={[styles.header]}> Create Event </Text>
@@ -142,7 +141,7 @@ const EventCreationScreen = ({ navigation }) => {
                     <CustomInput placeholder="Time" value={time} setValue={setTime} secureTextEntry={true} inputError={timeError} isValid={isValidTime} textContentType = 'oneTimeCode'/>
                     <EventDescriptionInput placeholder="Event Description" value={description} setValue={setDescription} secureTextEntry={false} inputError={descriptionError} isValid={isValidDescription}/>
                    
-                    <View style={{flexDirection:"row", marginBottom: 0, marginTop: 0 }}>
+                    <View style={{flexDirection:"row", marginBottom: 0, marginTop: 15 }}>
                         <CustomButton onPress={validateInput} buttonName="Submit" type="PRIMARY"/>
                     </View>
                     <TouchableOpacity onPress={onCancelPressed}>
@@ -157,16 +156,6 @@ const EventCreationScreen = ({ navigation }) => {
 }
 
 const styles = StyleSheet.create({
-    root: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        paddingTop: 50,
-    },
-    setTitleFont: {
-        fontSize: 20,
-        marginTop: 150,
-        marginBottom: 30,
-    },
     text: {
         textAlign: "left"
     },
@@ -185,9 +174,6 @@ const styles = StyleSheet.create({
     },
     sheet: {
         alignItems: 'center',
-    },
-    bottomSheetStyle: {
-        borderRadius: 50,
     }
 })
 export default EventCreationScreen;

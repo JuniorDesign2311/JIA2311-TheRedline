@@ -19,7 +19,7 @@ const AccountCreationScreen = ({ navigation }) => {
     const [cpassword, setcPassword] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
     const sheetRef = useRef(null);
-    const snapPoints = useMemo(() => [ '75%', '77%' ]);
+    const snapPoints = useMemo(() => [ '75%', '75%' ]);
     // Error Handling
     const [usernameError, setUsernameError] = useState('');
     const [emailError, setEmailError] = useState('');
@@ -227,7 +227,7 @@ const AccountCreationScreen = ({ navigation }) => {
         <ScrollView showsVerticalScrollIndicator={false}>
         <TouchableWithoutFeedback onPress={()=>Keyboard.dismiss} accessible={false}>
        
-        <View style={{flex:1,justifyContent:'center',alignItems:'center',backgroundColor: '#d796fa'}}>
+        <View style={{flex:1,justifyContent:'center',alignItems:'center',backgroundColor: 'white'}}>
                 <Text style={[styles.header]}> Create Account </Text>
 
                 

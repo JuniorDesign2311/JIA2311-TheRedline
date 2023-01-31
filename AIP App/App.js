@@ -33,56 +33,56 @@ export default function App() {
           name="Login"
           component={LoginScreen}
           options={{title: "Login",
-          headerShown: false}}
+          headerShown: false, gestureEnabled: false}}
         />
         
         <Stack.Screen
           name="AccountCreation"
           component={AccountCreationScreen}
           options={{title: "Account Creation",
-          headerShown: false}}
+          headerShown: false, gestureEnabled: false}}
         />
 
         <Stack.Screen
           name="TermsOfService"
           component={TermsOfServiceScreen}
           options={{title: "Terms Of Service",
-          headerShown: false}}
+          headerShown: false, gestureEnabled: false}}
         />
 
         <Stack.Screen
           name="AccountCreation2"
           component={AccountCreationScreen2}
           options={{title: "Account Creation Screen 2",
-          headerShown: false}}
+          headerShown: false, gestureEnabled: false}}
         />
 
         <Stack.Screen
           name="ResetPassword"
           component={ResetPasswordScreen}
           options={{title: "Reset Password",
-          headerShown: false}}
+          headerShown: false, gestureEnabled: false}}
         />
         
         <Stack.Screen
           name="Map"
           component={MapScreen}
           options={{title: "Map",
-          headerShown: false}}
+          headerShown: false, gestureEnabled: false}}
         />
 
         <Stack.Screen
           name="EventCreation"
           component={EventCreationScreen}
           options={{title: "Event Creation",
-          headerShown: false}}
+          headerShown: false, gestureEnabled: false}}
         />
 
         <Stack.Screen
           name="AccountCreated"
           component={AccountCreatedScreen}
           options={{title: "AccountCreated",
-          headerShown: false}}
+          headerShown: false, gestureEnabled: false}}
         />
         
       </Stack.Navigator>

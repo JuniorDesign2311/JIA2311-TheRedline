@@ -118,7 +118,14 @@ const AccountCreationScreen = ({ navigation }) => {
             noError = false;
             setUsernameError('Username Cannot Contain Spaces');
             setIsValidUsername(false);
-        } else {
+        }
+        else if (username.indexOf('&') >= 0 || username.indexOf('=') >= 0 || username.indexOf('_') >= 0 || username.indexOf("'") >= 0 || username.indexOf('-') >= 0 || username.indexOf('%') >= 0 || username.indexOf('$') >= 0
+                    || username.indexOf('+') >= 0 || username.indexOf(',') >= 0 || username.indexOf('<') >= 0 || username.indexOf('>') >= 0 || username.indexOf('~') >= 0 || username.indexOf('"') >= 0 || username.indexOf('.') >= 0) {
+            noError = false;
+            setUsernameError('Username Cannot Contain Special Characters');
+            setIsValidUsername(false);
+        }
+        else {
             setUsernameError('');
             setIsValidUsername(true);
         }
@@ -137,9 +144,10 @@ const AccountCreationScreen = ({ navigation }) => {
             noError = false;
             setEmailError('Invalid Email Address');
             setIsValidEmail(false);
-        } else if (email.indexOf(' ') >= 0) {
+        } else if (email.indexOf(' ') >= 0 || email.indexOf('&') >= 0 || email.indexOf('=') >= 0 || email.indexOf("'") >= 0 || email.indexOf('*') >= 0 || email.indexOf('%') >= 0
+        || email.indexOf('+') >= 0 || email.indexOf(',') >= 0 || email.indexOf('<') >= 0 || email.indexOf('>') >= 0 || email.indexOf('$') >= 0 || email.indexOf('"') >= 0) {
             noError = false;
-            setEmailError('Email Cannot Contain Spaces');
+            setEmailError('Email Cannot Contain Special Characters');
             setIsValidEmail(false);
         } else {
             setEmailError('');

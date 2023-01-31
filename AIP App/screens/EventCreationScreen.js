@@ -9,7 +9,6 @@ import { db } from '../firebaseConfig';
 import firebase from "firebase/app";
 import { useNavigation } from '@react-navigation/native';
 import "firebase/firestore";
-import BottomSheet from '@gorhom/bottom-sheet';
 import { set } from 'react-native-reanimated';
 
 const EventCreationScreen = ({ navigation }) => {
@@ -19,8 +18,6 @@ const EventCreationScreen = ({ navigation }) => {
     const [date, setDate] = useState('');
     const [time, setTime] = useState('');
     const [description, setDescription] = useState('');
-    const sheetRef = useRef(null);
-    const snapPoints = useMemo(() => [ '75%', '77%' ]);
     // Error Handling
     const [titleError, setTitleError] = useState('');
     const [locationError, setLocationError] = useState('');
@@ -145,7 +142,7 @@ const EventCreationScreen = ({ navigation }) => {
                         <CustomButton onPress={validateInput} buttonName="Submit" type="PRIMARY"/>
                     </View>
                     <TouchableOpacity onPress={onCancelPressed}>
-                        <Text style = {{fontSize:13, marginTop: 0,  color: '#039be5'}}>
+                        <Text style = {{fontSize:13, marginTop: 0,  color: '#039be5'}} iconName="account-outline">
                             Cancel
                         </Text>
                     </TouchableOpacity>

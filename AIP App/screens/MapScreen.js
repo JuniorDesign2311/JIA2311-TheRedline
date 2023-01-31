@@ -9,7 +9,8 @@ const MapScreen = ({navigation}) => {
 
   const sheetRef = useRef(null);
 
-  const snapPoints = useMemo(() => [ '20%', '80%' ]);
+  const snapPoints = useMemo(() => [ '10%', '80%']);
+
 
   const addEvent = () => {
     navigation.navigate("EventCreation");
@@ -18,10 +19,10 @@ const MapScreen = ({navigation}) => {
   return (
     <View style={styles.container}>
       <MapView provider={PROVIDER_GOOGLE} style={styles.map} />
-
+    
       <BottomSheet
         ref={sheetRef}
-        index={1}
+        index={0}
         snapPoints={snapPoints}
       >
 
@@ -30,6 +31,7 @@ const MapScreen = ({navigation}) => {
         </View>
         
       </BottomSheet>
+
 
     </View>
   );

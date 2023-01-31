@@ -2,30 +2,34 @@ import React, { useMemo, useRef, useCallback } from 'react';
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 import { StyleSheet, Text, View } from 'react-native';
 import BottomSheet from '@gorhom/bottom-sheet';
+import PlusButton from '../components/PlusButton';
+import { useNavigation } from '@react-navigation/native';
 
-const MapScreen = () => {
+const MapScreen = ({navigation}) => {
 
   const sheetRef = useRef(null);
 
-  const snapPoints = useMemo(() => [ '10%', '80%']);
+  const snapPoints = useMemo(() => [ '20%', '80%' ]);
 
+  const addEvent = () => {
+    navigation.navigate("EventCreation");
+  }
 
   return (
     <View style={styles.container}>
       <MapView provider={PROVIDER_GOOGLE} style={styles.map} />
-    
+
       <BottomSheet
         ref={sheetRef}
-        index={0}
+        index={1}
         snapPoints={snapPoints}
       >
 
         <View style={styles.container}>
-          <Text style={styles.headline}>Events</Text>
+          <PlusButton onPress={addEvent} buttonName="+" type="PRIMARY"/>
         </View>
         
       </BottomSheet>
-
 
     </View>
   );
@@ -34,6 +38,7 @@ const MapScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    alignItems: 'center'
   },
   map: {
     width: '100%',

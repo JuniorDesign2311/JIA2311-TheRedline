@@ -10,6 +10,7 @@ import LoginScreen from './screens/LoginScreen'
 import ResetPasswordScreen from './screens/ResetPasswordScreen';
 import AccountCreatedScreen from "./screens/AccountCreatedScreen";
 import TermsOfServiceScreen from './screens/TermsOfServiceScreen';
+import EventCreationScreen from './screens/EventCreationScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -67,7 +68,14 @@ export default function App() {
           name="Map"
           component={MapScreen}
           options={{title: "Map",
-          headerShown: true}}
+          headerShown: false}}
+        />
+
+        <Stack.Screen
+          name="EventCreation"
+          component={EventCreationScreen}
+          options={{title: "Event Creation",
+          headerShown: false}}
         />
 
         <Stack.Screen

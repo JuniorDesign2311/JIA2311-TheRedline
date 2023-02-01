@@ -3,7 +3,6 @@ import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 import { StyleSheet, Text, View } from 'react-native';
 import BottomSheet from '@gorhom/bottom-sheet';
 import PlusButton from '../components/PlusButton';
-import { useNavigation } from '@react-navigation/native';
 
 const MapScreen = ({navigation}) => {
 

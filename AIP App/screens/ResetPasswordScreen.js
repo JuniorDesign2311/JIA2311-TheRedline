@@ -3,7 +3,6 @@ import { View, Text, TouchableOpacity, Keyboard, ScrollView, StyleSheet, Touchab
 import ResetPasswordInput from '../components/ResetPasswordInput';
 import CustomButton from '../components/CustomButton';
 import { auth } from '../firebaseConfig';
-import { db } from '../firebaseConfig';
 import BottomSheet from '@gorhom/bottom-sheet';
 import CustomInput from '../components/CustomInput';
 

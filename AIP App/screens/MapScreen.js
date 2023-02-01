@@ -47,7 +47,16 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontWeight: 'bold',
     fontSize: 18,
-  }
+  },
+  roundButton1: {
+      width: 100,
+      height: 100,
+      justifyContent: 'center',
+      alignItems: 'center',
+      padding: 10,
+      borderRadius: 100,
+      backgroundColor: 'orange',
+    }
 });
 
 export default MapScreen;

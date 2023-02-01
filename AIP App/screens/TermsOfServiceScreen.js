@@ -23,7 +23,7 @@ const TermsOfServiceScreen = ({navigation, route}) => {
         //     </Text>
         
 
-        <View style={{flex:1,justifyContent:'center',alignItems:'center',backgroundColor: '#d796fa'}}>
+        <View style={{flex:1,justifyContent:'center',alignItems:'center',backgroundColor: 'white'}}>
         <Text style={[styles.header]}> Terms of Service </Text>
         <BottomSheet
         ref={sheetRef}

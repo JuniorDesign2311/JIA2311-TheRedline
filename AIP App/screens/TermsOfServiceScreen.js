@@ -1,11 +1,6 @@
-import React, {useState, useRef, useMemo} from 'react'
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView} from 'react-native'
-import CustomInput from '../components/CustomInput';
-import CustomButton from '../components/CustomButton';
+import React, {useRef, useMemo} from 'react'
+import { View, Text, StyleSheet, ScrollView} from 'react-native'
 import TOSButton from '../components/TOSButton';
-import CustomText from '../components/CustomButton';
-import { auth } from '../firebaseConfig';
-import { db } from '../firebaseConfig';
 import BottomSheet from '@gorhom/bottom-sheet';
 
 

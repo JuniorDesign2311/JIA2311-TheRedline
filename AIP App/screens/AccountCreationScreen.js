@@ -1,15 +1,10 @@
 import React, {useState, useRef, useMemo} from 'react'
-import { View, Text, TextInput, StyleSheet, ScrollView, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, TouchableOpacity, Platform } from 'react-native'
+import { View, Text,  StyleSheet, ScrollView, TouchableWithoutFeedback, Keyboard, TouchableOpacity} from 'react-native'
 import CustomInput from '../components/CustomInput';
 import CustomButton from '../components/CustomButton';
-import States from '../components/States';
-import { auth } from '../firebaseConfig';
-import { db } from '../firebaseConfig';
 import firebase from "firebase/app";
-import { useNavigation } from '@react-navigation/native';
 import "firebase/firestore";
 import BottomSheet from '@gorhom/bottom-sheet';
-import { set } from 'react-native-reanimated';
 
 const AccountCreationScreen = ({ navigation }) => {
     /* useState returns the original value argument that's passed in and a function that returns the changed value */

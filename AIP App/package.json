@@ -22,6 +22,7 @@
     "react": "17.0.2",
     "react-native": "0.68.2",
     "react-native-calendars": "^1.1293.0",
+    "react-native-date-picker": "^4.2.6",
     "react-native-gesture-handler": "~2.2.1",
     "react-native-google-places-autocomplete": "^2.5.1",
     "react-native-google-signin": "^2.1.1",

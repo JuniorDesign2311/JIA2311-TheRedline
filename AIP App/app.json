@@ -21,7 +21,7 @@
       "bundleIdentifier": "com.autoindustryportal.test",
       "supportsTablet": true,
       "config": {
-        "googleMapsApiKey": "AIzaSyC8HK1wR2HlPYIKZvzq78fwLx5jPav0BxM"
+        "googleMapsApiKey": "AIzaSyDTKNiZ9cnqslVZD9GS_1F_Z6K_6DJ9kfw"
       }
     },
     "android": {

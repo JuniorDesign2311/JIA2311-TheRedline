@@ -1,5 +1,5 @@
 import React, {useState, useRef, useMemo} from 'react'
-import { View, Text, TextInput, StyleSheet, ScrollView, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, TouchableOpacity, Platform } from 'react-native'
+import { View, Text, TextInput, Button, StyleSheet, ScrollView, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, TouchableOpacity, Platform } from 'react-native'
 import CustomInput from '../components/CustomInput';
 import CustomButton from '../components/CustomButton';
 import EventDescriptionInput from '../components/EventDescriptionInput';
@@ -10,14 +10,18 @@ import firebase from "firebase/app";
 import { useNavigation } from '@react-navigation/native';
 import "firebase/firestore";
 import { set } from 'react-native-reanimated';
+import { GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
+import DatePicker from 'react-native-date-picker'
 
 const EventCreationScreen = ({ navigation }) => {
     /* useState returns the original value argument that's passed in and a function that returns the changed value */
     const [title, setTitle] = useState('');
     const [location, setLocation] = useState('');
-    const [date, setDate] = useState('');
+    const [oldDate, setOldDate] = useState('');
     const [time, setTime] = useState('');
     const [description, setDescription] = useState('');
+    const [date, setDate] = useState(new Date())
+    const [open, setOpen] = useState(false)
     // Error Handling
     const [titleError, setTitleError] = useState('');
     const [locationError, setLocationError] = useState('');
@@ -41,13 +45,8 @@ const EventCreationScreen = ({ navigation }) => {
             setTitleError('Title Field is Empty');
             setIsValidTitle(false);
         }
-        else if (Title.indexOf(' ') >= 0) {
-            noError = false;
-            setTitleError('Title Cannot Contain Spaces');
-            setIsValidTitle(false);
-        }
-        else if (Title.indexOf('&') >= 0 || Title.indexOf('=') >= 0 || Title.indexOf('_') >= 0 || Title.indexOf("'") >= 0 || Title.indexOf('-') >= 0 || Title.indexOf('%') >= 0 || Title.indexOf('$') >= 0
-                    || Title.indexOf('+') >= 0 || Title.indexOf(',') >= 0 || Title.indexOf('<') >= 0 || Title.indexOf('>') >= 0 || Title.indexOf('~') >= 0 || Title.indexOf('"') >= 0 || Title.indexOf('.') >= 0) {
+        else if (title.indexOf('&') >= 0 || title.indexOf('=') >= 0 || title.indexOf('_') >= 0 || title.indexOf("'") >= 0 || title.indexOf('-') >= 0 || title.indexOf('%') >= 0 || title.indexOf('$') >= 0
+                    || title.indexOf('+') >= 0 || title.indexOf(',') >= 0 || title.indexOf('<') >= 0 || title.indexOf('>') >= 0 || title.indexOf('~') >= 0 || title.indexOf('"') >= 0 || title.indexOf('.') >= 0) {
             noError = false;
             setTitleError('Title Cannot Contain Special Characters');
             setIsValidTitle(false);
@@ -62,7 +61,7 @@ const EventCreationScreen = ({ navigation }) => {
             setLocationError('Location Field is Empty');
             setIsValidLocation(false);
         }
-        else if (!location.includes('.')) {
+        else if (location.includes('.')) {
             noError = false;
             setLocationError('Invalid Location');
             setIsValidLocation(false);
@@ -76,12 +75,12 @@ const EventCreationScreen = ({ navigation }) => {
             setIsValidLocation(true);
         }
 
-        if (date.length === 0) {
+        if (oldDate.length === 0) {
             noError = false;
             setDateError('Date Field is Empty');
             setIsValidDate(false);
         }
-        else if (date.indexOf(' ') >= 0) {
+        else if (oldDate.indexOf(' ') >= 0) {
             noError = false;
             setDateError('Date Cannot Contain Spaces');
             setIsValidDate(false);
@@ -110,15 +109,20 @@ const EventCreationScreen = ({ navigation }) => {
             setIsValidDescription(false);
         }
         else {
-            setTimeError('');
+            setDescriptionError('');
             setIsValidDescription(true);
         }
-
+        
         return noError;
     }
 
     const onSubmitPressed = () => {
-        navigation.navigate("Map")
+        if (!validateInput()) {
+            // If validateInput returns false, then user had error creating account
+            console.warn("Account could not be created");
+        } else {
+            navigation.navigate("EventCreation2")
+        }
     }
 
     const onCancelPressed = () => {
@@ -134,12 +138,25 @@ const EventCreationScreen = ({ navigation }) => {
                     <View style={styles.sheet}>
                     <CustomInput placeholder="Event Title" value={title} setValue={setTitle} secureTextEntry={false} inputError={titleError} isValid={isValidTitle}/>
                     <CustomInput placeholder="Location" value={location} setValue={setLocation} secureTextEntry={false} keyboardType = 'email-address' inputError={locationError} isValid={isValidLocation}/>
-                    <CustomInput placeholder="Date" value={date} setValue={setDate} secureTextEntry={true} inputError={dateError} isValid={isValidDate}/>
+                    <Button title="Open" onPress={() => setOpen(true)} />
+      <DatePicker
+        modal
+        open={open}
+        date={date}
+        onConfirm={(date) => {
+          setOpen(false)
+          setDate(date)
+        }}
+        onCancel={() => {
+          setOpen(false)
+        }}
+      />
+                    <CustomInput placeholder="Date" value={oldDate} setValue={setOldDate} secureTextEntry={true} inputError={dateError} isValid={isValidDate}/>
                     <CustomInput placeholder="Time" value={time} setValue={setTime} secureTextEntry={true} inputError={timeError} isValid={isValidTime} textContentType = 'oneTimeCode'/>
                     <EventDescriptionInput placeholder="Event Description" value={description} setValue={setDescription} secureTextEntry={false} inputError={descriptionError} isValid={isValidDescription}/>
                    
                     <View style={{flexDirection:"row", marginBottom: 0, marginTop: 15 }}>
-                        <CustomButton onPress={validateInput} buttonName="Submit" type="PRIMARY"/>
+                        <CustomButton onPress={onSubmitPressed} buttonName="Submit" type="PRIMARY"/>
                     </View>
                     <TouchableOpacity onPress={onCancelPressed}>
                         <Text style = {{fontSize:13, marginTop: 0,  color: '#039be5'}} iconName="account-outline">

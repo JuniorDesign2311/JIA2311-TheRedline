@@ -121,7 +121,7 @@ const EventCreationScreen = ({ navigation }) => {
             // If validateInput returns false, then user had error creating account
             console.warn("Account could not be created");
         } else {
-            navigation.navigate("EventCreation2")
+            navigation.navigate("Map")
         }
     }
 
@@ -138,21 +138,9 @@ const EventCreationScreen = ({ navigation }) => {
                     <View style={styles.sheet}>
                     <CustomInput placeholder="Event Title" value={title} setValue={setTitle} secureTextEntry={false} inputError={titleError} isValid={isValidTitle}/>
                     <CustomInput placeholder="Location" value={location} setValue={setLocation} secureTextEntry={false} keyboardType = 'email-address' inputError={locationError} isValid={isValidLocation}/>
-                    <Button title="Open" onPress={() => setOpen(true)} />
-      <DatePicker
-        modal
-        open={open}
-        date={date}
-        onConfirm={(date) => {
-          setOpen(false)
-          setDate(date)
-        }}
-        onCancel={() => {
-          setOpen(false)
-        }}
-      />
-                    <CustomInput placeholder="Date" value={oldDate} setValue={setOldDate} secureTextEntry={true} inputError={dateError} isValid={isValidDate}/>
-                    <CustomInput placeholder="Time" value={time} setValue={setTime} secureTextEntry={true} inputError={timeError} isValid={isValidTime} textContentType = 'oneTimeCode'/>
+                    
+                    <CustomInput placeholder="Date" value={oldDate} setValue={setOldDate} secureTextEntry={false} inputError={dateError} isValid={isValidDate}/>
+                    <CustomInput placeholder="Time" value={time} setValue={setTime} secureTextEntry={false} inputError={timeError} isValid={isValidTime} textContentType = 'oneTimeCode'/>
                     <EventDescriptionInput placeholder="Event Description" value={description} setValue={setDescription} secureTextEntry={false} inputError={descriptionError} isValid={isValidDescription}/>
                    
                     <View style={{flexDirection:"row", marginBottom: 0, marginTop: 15 }}>

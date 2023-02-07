@@ -121,7 +121,7 @@ const LoginScreen = ({navigation, route}) => {
                 },            
                 {
                     text: "Don't Allow",
-                    onPress: () => { setQuestionAnswer(false); console.log('Location NOT being tracked'); setQuestionAnswer(false) },
+                    onPress: () => { setQuestionAnswer(false); console.log('Location NOT being tracked') },
                     style: 'cancel',
                 },
             ],

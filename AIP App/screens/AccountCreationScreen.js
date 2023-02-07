@@ -61,7 +61,7 @@ const AccountCreationScreen = ({ navigation }) => {
             
                                     })
                                     .then(createdUser => {
-                                        console.log(createdUser);
+                                        // console.log(createdUser);
                                         db.collection("users").doc(createdUser.user.uid).set({ email: email });
                                     })
                                     .catch(err => {
@@ -75,7 +75,7 @@ const AccountCreationScreen = ({ navigation }) => {
 
                         })
                         .then(createdUser => {
-                            console.log(createdUser);
+                            // console.log(createdUser);
                             db.collection("users").doc(createdUser.user.uid).set({ phoneNumber: phoneNumber });
                         })
                         .catch(err => {
@@ -89,7 +89,7 @@ const AccountCreationScreen = ({ navigation }) => {
                 }
             })
             .then(createdUser => {
-                console.log(createdUser);
+                // console.log(createdUser);
                 //Create the user doc in the users collection
                 db.collection("users").doc(createdUser.user.uid).set({ username: username });
             })
@@ -104,7 +104,6 @@ const AccountCreationScreen = ({ navigation }) => {
         var noError = true;
 
         if (username.length === 0) {
-            console.log("hello");
             noError = false;
             setUsernameError('Username Field is Empty');
             setIsValidUsername(false);

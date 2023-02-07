@@ -5,7 +5,7 @@ const AttendeeHostButtons = ({onPress, buttonClicked, buttonName, hasError}) => 
     
     return (
         <TouchableOpacity 
-        style={[styles.container, {borderColor: hasError ? "red": "black"}, {backgroundColor: buttonClicked ? "black": "white"}]}
+        style={[styles.container, {borderColor: hasError ? "red": "#e8e8e8"}, {backgroundColor: buttonClicked ? "black": "white"}]}
         onPress={() => { 
             {onPress()};
         }}>

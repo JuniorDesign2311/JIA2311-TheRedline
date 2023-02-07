@@ -38,4 +38,4 @@ not allowing them to reuse their information previously chosen.
 * Fixed an issue in which certain buttons pressed would result in Render Errors due to invalid objects.
 * Corrected error handling from the login page that ultimately restricted user login where our database was incorrectly reading.
 * Our Firebase Database wouldn't read the correct user which didn't allow for accurate data updates.
-* 
+* We fixed an error where our account system would create an account but not continue due to an error with our error handling.

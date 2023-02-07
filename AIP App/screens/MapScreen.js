@@ -1,17 +1,43 @@
-import React, { useMemo, useRef, useCallback } from 'react';
+import React, { useMemo, useRef, useState, useEffect } from 'react';
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, ScrollView } from 'react-native';
 import BottomSheet from '@gorhom/bottom-sheet';
 import PlusButton from '../components/PlusButton';
+import { db } from '../firebaseConfig';
+import firebase from "firebase/app";
 
-const MapScreen = ({navigation}) => {
 
+const MapScreen = ({navigation, route}) => {
+  
   const sheetRef = useRef(null);
 
   const snapPoints = useMemo(() => [ '20%', '80%' ]);
+  const email = route.params.email1;
 
+
+  const [events, setEvents] = useState([]);
+
+ 
+  //useEffect makes the function within it only be called only on the first render (the page re-renders if something on the screen changes
+  //in other words, the state changes.)
+  useEffect(() => {
+
+    //.get() only takes from the database once (whenever useEffect() is called) and the data won't ever be taken again until
+    // useEffect() is called again. 
+    //.onSnapshot() makes it so whenever the database changes, the function will be called and the data will be taken again
+    db.collection('events').onSnapshot((querySnapshot) => {
+      setEvents(querySnapshot.docs.map(snapshot => { //querySnapshot.docs gives us an array of a reference to all the documents in the snapshot (not the data)
+          const data = snapshot.data();  //data object   
+          return data;
+      }))
+    })
+  }, []);
+  
+  
   const addEvent = () => {
-    navigation.navigate("EventCreation");
+    navigation.navigate("EventCreation", {
+      email: email,
+    });
   }
 
   return (
@@ -24,9 +50,29 @@ const MapScreen = ({navigation}) => {
         snapPoints={snapPoints}
       >
 
+      <ScrollView>
         <View style={styles.container}>
           <PlusButton onPress={addEvent} buttonName="+" type="PRIMARY"/>
+          <View style={styles.allEvents}>
+
+          {events.map((data) => (
+            <>
+            <Text></Text>
+            <View style={styles.eachEvent}>
+              <Text style={styles.eventTitle}>{data["title"]}</Text>
+              <Text style={styles.events}>Host: {data["username"]}</Text>
+              <Text style={styles.events}>Date: {data["date"]}</Text>
+              <Text style={styles.events}>Time: {data["time"]}</Text>
+              <Text style={styles.events}>Location: {data["location"]}</Text>
+              <Text style={styles.events}>Description: {data["description"]}</Text>  
+            </View> 
+            </>
+                    
+          ))}
+          </View>
+
         </View>
+        </ScrollView>
         
       </BottomSheet>
 
@@ -56,7 +102,30 @@ const styles = StyleSheet.create({
       padding: 10,
       borderRadius: 100,
       backgroundColor: 'orange',
-    }
+    },
+  events: {
+    
+  },
+  eventTitle: {
+    fontWeight: 'bold',
+    fontSize: 25,
+    textAlign: 'right'
+  },
+  allEvents: {
+    alignItems: 'left',
+    width: '90%',
+
+  }, 
+  eachEvent: {
+    alignItems: 'left',
+    borderWidth: 1,
+    width: '100%',
+    paddingBottom: '2%',
+    borderRadius: '20%',
+    paddingLeft: '3%',
+    paddingTop: '2%',
+    backgroundColor: '#E5E4E2'
+  }
 });
 
 export default MapScreen;

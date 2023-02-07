@@ -97,7 +97,11 @@ const LoginScreen = ({navigation, route}) => {
                 })
                 // usersRef.doc(username+phoneNumber).update({"locationTracking": locationTrackingQuestion()});
                 loginSuccessful = true;
-                navigation.navigate("Map");
+
+                locationTrackingQuestion();
+                navigation.navigate("Map", {
+                    email1: email,
+                });
             })
             .catch(error => {
                 console.warn(error.message);

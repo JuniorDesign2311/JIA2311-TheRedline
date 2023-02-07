@@ -63,6 +63,7 @@ const AccountCreationScreen2 = ({ navigation, route }) => {
             navigation.navigate('AccountCreated', {
                 email1: route.params.email,
                 password1: route.params.password,
+                username1: username
             })
         })
         .catch(error => console.warn(error.message))

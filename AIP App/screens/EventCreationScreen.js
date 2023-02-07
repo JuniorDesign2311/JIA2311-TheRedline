@@ -1,19 +1,13 @@
-import React, {useState, useRef, useMemo} from 'react'
-import { View, Text, TextInput, Button, StyleSheet, ScrollView, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, TouchableOpacity, Platform } from 'react-native'
+import React, {useState} from 'react'
+import { View, Text, StyleSheet, TouchableWithoutFeedback, Keyboard, TouchableOpacity } from 'react-native'
 import CustomInput from '../components/CustomInput';
 import CustomButton from '../components/CustomButton';
 import EventDescriptionInput from '../components/EventDescriptionInput';
-import States from '../components/States';
-import { auth } from '../firebaseConfig';
 import { db } from '../firebaseConfig';
-import firebase from "firebase/app";
-import { useNavigation } from '@react-navigation/native';
 import "firebase/firestore";
-import { set } from 'react-native-reanimated';
-import { GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
-import DatePicker from 'react-native-date-picker'
+import uuid from 'react-native-uuid';
 
-const EventCreationScreen = ({ navigation }) => {
+const EventCreationScreen = ({ navigation, route }) => {
     /* useState returns the original value argument that's passed in and a function that returns the changed value */
     const [title, setTitle] = useState('');
     const [location, setLocation] = useState('');
@@ -34,6 +28,21 @@ const EventCreationScreen = ({ navigation }) => {
     const [isValidDate, setIsValidDate] = useState(true);
     const [isValidTime, setIsValidTime] = useState(true);
     const [isValidDescription, setIsValidDescription] = useState(true);
+
+    const eventID = uuid.v4() + "$" + route.params.email;
+
+    const writeUserData = async () => {
+        db.collection("events").doc(eventID).set({
+            title: title,
+            location: location,
+            date: oldDate,
+            time: time,
+            description: description
+        })
+            .catch((error) => {
+                console.error("Error adding document: ", error);
+            });
+    }
 
     const validateInput = () => {
         // Error Handling
@@ -121,7 +130,11 @@ const EventCreationScreen = ({ navigation }) => {
             // If validateInput returns false, then user had error creating account
             console.warn("Account could not be created");
         } else {
-            navigation.navigate("Map")
+            console.log(eventID);
+            writeUserData();
+            navigation.navigate("Map", {
+                email1: route.params.email
+            })
         }
     }
 

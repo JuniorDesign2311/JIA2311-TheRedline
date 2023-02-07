@@ -3,6 +3,7 @@ import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 import { StyleSheet, Text, View, ScrollView, TouchableOpacity} from 'react-native';
 import BottomSheet from '@gorhom/bottom-sheet';
 import PlusButton from '../components/PlusButton';
+import { auth } from '../firebaseConfig';
 import { db } from '../firebaseConfig';
 import firebase from "firebase/app";
 
@@ -13,7 +14,7 @@ const MapScreen = ({navigation, route}) => {
 
   const snapPoints = useMemo(() => [ '10%', '45%', '90%' ]);
   const email = route.params.email1;
-
+  const user = firebase.auth().currentUser;
 
   const [events, setEvents] = useState([]);
 
@@ -35,6 +36,16 @@ const MapScreen = ({navigation, route}) => {
   
   
   const addEvent = () => {
+    console.log(user.uid);
+    firebase.firestore()
+   .collection("users") 
+   .doc(user.uid)
+   .get() 
+   .then((snapshot) => { 
+     if (snapshot.exists) 
+       { console.log(snapshot.data()); 
+       }
+     })
     navigation.navigate("EventCreation", {
       email: email,
     });

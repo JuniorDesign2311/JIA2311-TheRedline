@@ -24,3 +24,18 @@ This was an issue because users are allowed to go back to change their email add
 not allowing them to reuse their information previously chosen.
 * Fixed an error where typing in the "Confirm Password" field would automatically fill in the "Phone Number" field.
 * Fixed an error where "Confirm Password" would require a strong password
+
+## Version 0.2.0
+
+### New Features
+* Event Creation Screen with Backend Logging
+* Populated Event Pull-up Sheet
+* Functioning Location Permission Services
+* Current Location Functionality
+* Event Map Markers
+
+### Bug Fixes
+* Fixed an issue in which certain buttons pressed would result in Render Errors due to invalid objects.
+* Corrected error handling from the login page that ultimately restricted user login where our database was incorrectly reading.
+* Our Firebase Database wouldn't read the correct user which didn't allow for accurate data updates.
+* 

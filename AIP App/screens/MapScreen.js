@@ -11,7 +11,7 @@ const MapScreen = ({navigation, route}) => {
   
   const sheetRef = useRef(null);
 
-  const snapPoints = useMemo(() => [ '20%', '80%' ]);
+  const snapPoints = useMemo(() => [ '10%', '80%' ]);
   const email = route.params.email1;
 
 
@@ -49,10 +49,11 @@ const MapScreen = ({navigation, route}) => {
         index={1}
         snapPoints={snapPoints}
       >
-
+        <View style={{paddingHorizontal: 310}}>
+      <PlusButton onPress={addEvent} buttonName="+" type="PRIMARY"/>
+      </View>
       <ScrollView>
         <View style={styles.container}>
-          <PlusButton onPress={addEvent} buttonName="+" type="PRIMARY"/>
           <View style={styles.allEvents}>
 
           {events.map((data) => (

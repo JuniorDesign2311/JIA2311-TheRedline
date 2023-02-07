@@ -55,19 +55,22 @@ const AccountCreationScreen2 = ({ navigation, route }) => {
     const createUser = async () => {
         auth.createUserWithEmailAndPassword(email, password)
         .then(userCredential => {
+            userID = userCredential.user.uid;
             // Signed in 
-            writeUserData();
+            writeUserData(userID);
             //Navigates to second creation screen and passes data through
+            console.log(userCredential.user.uid);
             navigation.navigate('AccountCreated', {
                 email1: route.params.email,
                 password1: route.params.password,
+                username1: username
             })
         })
         .catch(error => console.warn(error.message))
     }
 
-    const writeUserData = async () => {
-        db.collection("users").doc(documentId).set({
+    const writeUserData = async (userID) => {
+        db.collection("users").doc(userID).set({
             first: firstName,
             last: lastName,
             phoneNumber: phoneNumber,
@@ -77,9 +80,7 @@ const AccountCreationScreen2 = ({ navigation, route }) => {
             email: email,
             emailToLowerCase: email.toLowerCase(),
             host: hostClicked,
-            attendee: attendeeClicked,
-            locationTracking: false,
-            locationAsked: false
+            attendee: attendeeClicked
         })
             .catch((error) => {
                 console.error("Error adding document: ", error);

@@ -84,7 +84,9 @@ const LoginScreen = ({navigation, route}) => {
                 var user = userCredential.user;
                 loginSuccessful = true;
                 locationTrackingQuestion();
-                navigation.navigate("Map");
+                navigation.navigate("Map", {
+                    email1: email,
+                });
             })
             .catch(error => {
                 console.warn(error.message);

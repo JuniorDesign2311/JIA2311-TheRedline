@@ -10,6 +10,7 @@ const AccountCreatedScreen = ({navigation, route}) => {
         navigation.navigate("Login", {
             email: route.params.email1,
             password: route.params.password1,
+            username: route.params.username1
         });
     }
 

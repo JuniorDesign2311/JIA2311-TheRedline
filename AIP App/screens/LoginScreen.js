@@ -19,10 +19,10 @@ const LoginScreen = ({navigation, route}) => {
     const [hasValidEmail, setHasValidEmail] = useState(true);
     const [hasValidPassword, setHasValidPassword] = useState(true);
 
+    const [questionAnswer, setQuestionAnswer] = useState(true);
     const [loginError, setLoginError] = useState(false);
 
     var db = firebase.firestore();
-    var usersRef = db.collection("users");
 
     var loginSuccessful;
 
@@ -87,15 +87,7 @@ const LoginScreen = ({navigation, route}) => {
         auth.signInWithEmailAndPassword(email, password)
             .then(userCredential => {
                 var user = userCredential.user;
-                usersRef.where("emailToLowerCase", "==", email.toLowerCase()).get()
-                .then(snapshot => { 
-                    if (snapshot.exists) {
-                        usersRef.doc(username+phoneNumber).update({"locationTracking": locationTrackingQuestion()});
-                    } else {
-                        console.log("snapshot does not exist");
-                    }
-                })
-                // usersRef.doc(username+phoneNumber).update({"locationTracking": locationTrackingQuestion()});
+                updateData();
                 loginSuccessful = true;
                 navigation.navigate("Map");
             })
@@ -108,7 +100,15 @@ const LoginScreen = ({navigation, route}) => {
         )
     };
 
-    const locationTrackingQuestion = () => {
+    const updateData = async () => {
+        locationTrackingQuestion();
+        console.log(questionAnswer);
+        db.collection("users").doc(firebase.auth().currentUser.uid).update({
+            locationTracking: questionAnswer
+        });
+    }
+
+    function locationTrackingQuestion() {
         Alert.alert(
             //title
             'Allow "AIP" to access your location while you are using the app?',
@@ -117,13 +117,12 @@ const LoginScreen = ({navigation, route}) => {
             [
                 { 
                     text: 'Allow While Using App', 
-                    onPress: () => console.log('Location being tracked'),
-                    return: true },            
+                    onPress: () => { setQuestionAnswer(true); console.log('Location being tracked') },
+                },            
                 {
                     text: "Don't Allow",
-                    onPress: () => console.log('Location NOT being tracked'),
+                    onPress: () => { setQuestionAnswer(false); console.log('Location NOT being tracked'); setQuestionAnswer(false) },
                     style: 'cancel',
-                    return: false
                 },
             ],
             { cancelable: false }

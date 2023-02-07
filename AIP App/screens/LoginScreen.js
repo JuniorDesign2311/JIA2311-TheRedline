@@ -92,7 +92,7 @@ const LoginScreen = ({navigation, route}) => {
                     if (snapshot.exists) {
                         usersRef.doc(username+phoneNumber).update({"locationTracking": locationTrackingQuestion()});
                     } else {
-                        console.log("hit")
+                        console.log("snapshot does not exist");
                     }
                 })
                 // usersRef.doc(username+phoneNumber).update({"locationTracking": locationTrackingQuestion()});

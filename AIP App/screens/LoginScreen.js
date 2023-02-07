@@ -3,6 +3,7 @@ import {Alert} from 'react-native';
 import { View, Text, TouchableOpacity, Keyboard, ScrollView, StyleSheet, TouchableWithoutFeedback } from 'react-native';
 import CustomInput from '../components/CustomInput';
 import CustomButton from '../components/CustomButton';
+import firebase from "firebase/app";
 import { auth } from '../firebaseConfig';
 import { useIsFocused } from '@react-navigation/native';
 import BottomSheet from '@gorhom/bottom-sheet';
@@ -20,6 +21,11 @@ const LoginScreen = ({navigation, route}) => {
 
     const [loginError, setLoginError] = useState(false);
 
+    var db = firebase.firestore();
+    var usersRef = db.collection("users");
+
+    var loginSuccessful;
+
     const focus = useIsFocused();
     useEffect(() => {
         if (focus) {
@@ -29,7 +35,6 @@ const LoginScreen = ({navigation, route}) => {
         setHasValidPassword(true);
         setEmailError("");
         setPasswordError("");
-        
         }
     }, [focus]);
 
@@ -82,8 +87,16 @@ const LoginScreen = ({navigation, route}) => {
         auth.signInWithEmailAndPassword(email, password)
             .then(userCredential => {
                 var user = userCredential.user;
+                usersRef.where("emailToLowerCase", "==", email.toLowerCase()).get()
+                .then(snapshot => { 
+                    if (snapshot.exists) {
+                        usersRef.doc(username+phoneNumber).update({"locationTracking": locationTrackingQuestion()});
+                    } else {
+                        console.log("hit")
+                    }
+                })
+                // usersRef.doc(username+phoneNumber).update({"locationTracking": locationTrackingQuestion()});
                 loginSuccessful = true;
-                locationTrackingQuestion();
                 navigation.navigate("Map");
             })
             .catch(error => {
@@ -95,28 +108,32 @@ const LoginScreen = ({navigation, route}) => {
         )
     };
 
+    const locationTrackingQuestion = () => {
+        Alert.alert(
+            //title
+            'Allow "AIP" to access your location while you are using the app?',
+            //body
+            'Your current location will be displayed on the map and used for directions and nearby search results.',
+            [
+                { 
+                    text: 'Allow While Using App', 
+                    onPress: () => console.log('Location being tracked'),
+                    return: true },            
+                {
+                    text: "Don't Allow",
+                    onPress: () => console.log('Location NOT being tracked'),
+                    style: 'cancel',
+                    return: false
+                },
+            ],
+            { cancelable: false }
+        );
+    };
+
     const onForgotPasswordPressed = () => {
         navigation.navigate("ResetPassword");   
         setLoginError('');
     }
-
-    const locationTrackingQuestion = () => {
-        Alert.alert(
-          //title
-          'Allow "AIP" to access your location while you are using the app?',
-          //body
-          'Your current location will be displayed on the map and used for directions and nearby search results.',
-          [
-            { text: 'Allow While Using App', onPress: () => console.log('Location being tracked') },
-            {
-              text: "Don't Allow",
-              onPress: () => console.log('Location NOT being tracked'),
-              style: 'cancel',
-            },
-          ],
-          { cancelable: false }
-        );
-    };
     
     const onLoginPressed = () => {
         validateLogin();

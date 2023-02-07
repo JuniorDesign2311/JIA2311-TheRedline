@@ -3,7 +3,7 @@ import React from "react";
 import { View, StyleSheet, Text } from "react-native";
 import SelectDropdown from "react-native-select-dropdown";
 
-const States = ({ state, setState }) => {
+const States = ({ state, setState, hasError }) => {
   const states = [
     "Alaska",
     "Alabama",
@@ -67,7 +67,12 @@ return (
     
     <SelectDropdown
         data={states}
-        buttonStyle={styles.dropdown1BtnStyle}
+        buttonStyle={
+          {borderColor: hasError ? "red": "#e8e8e8", backgroundColor: "white",
+          height: 40,
+          borderWidth: 1,
+          borderRadius: 15,
+          width: "90%"}}
         onSelect={(state) => {
           setState(state);
         }}
@@ -102,7 +107,6 @@ return (
     </View>
   );
 };
-
 const styles = StyleSheet.create({
   dropdown1BtnStyle: {
     backgroundColor: "white",

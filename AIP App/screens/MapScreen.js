@@ -1,6 +1,6 @@
 import React, { useMemo, useRef, useState, useEffect } from 'react';
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
-import { StyleSheet, Text, View, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, TouchableOpacity} from 'react-native';
 import BottomSheet from '@gorhom/bottom-sheet';
 import PlusButton from '../components/PlusButton';
 import { db } from '../firebaseConfig';
@@ -11,7 +11,7 @@ const MapScreen = ({navigation, route}) => {
   
   const sheetRef = useRef(null);
 
-  const snapPoints = useMemo(() => [ '10%', '80%' ]);
+  const snapPoints = useMemo(() => [ '10%', '45%', '90%' ]);
   const email = route.params.email1;
 
 
@@ -48,25 +48,26 @@ const MapScreen = ({navigation, route}) => {
         ref={sheetRef}
         index={1}
         snapPoints={snapPoints}
+        style={{paddingBottom: 20}}
       >
-        <View style={{paddingHorizontal: 310}}>
-      <PlusButton onPress={addEvent} buttonName="+" type="PRIMARY"/>
-      </View>
       <ScrollView>
         <View style={styles.container}>
           <View style={styles.allEvents}>
+        <View style={{paddingHorizontal: 310}}>
+      <PlusButton onPress={addEvent} buttonName="+" type="PRIMARY"/>
+      </View>
 
           {events.map((data) => (
             <>
             <Text></Text>
-            <View style={styles.eachEvent}>
+            <TouchableOpacity style={styles.eachEvent}>
               <Text style={styles.eventTitle}>{data["title"]}</Text>
               <Text style={styles.events}>Host: {data["username"]}</Text>
               <Text style={styles.events}>Date: {data["date"]}</Text>
               <Text style={styles.events}>Time: {data["time"]}</Text>
               <Text style={styles.events}>Location: {data["location"]}</Text>
               <Text style={styles.events}>Description: {data["description"]}</Text>  
-            </View> 
+            </TouchableOpacity> 
             </>
                     
           ))}
@@ -115,6 +116,7 @@ const styles = StyleSheet.create({
   allEvents: {
     alignItems: 'left',
     width: '90%',
+    marginBottom: 20
 
   }, 
   eachEvent: {

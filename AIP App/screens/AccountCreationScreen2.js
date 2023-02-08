@@ -80,7 +80,9 @@ const AccountCreationScreen2 = ({ navigation, route }) => {
             email: email,
             emailToLowerCase: email.toLowerCase(),
             host: hostClicked,
-            attendee: attendeeClicked
+            attendee: attendeeClicked,
+            locationTracking: false,
+            locationAsked: false
         })
             .catch((error) => {
                 console.error("Error adding document: ", error);

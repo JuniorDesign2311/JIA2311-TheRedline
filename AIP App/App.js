@@ -69,7 +69,7 @@ export default function App() {
           name="Map"
           component={MapScreen}
           options={{title: "Map",
-          headerShown: false, gestureEnabled: false}}
+          headerShown: true, gestureEnabled: false}}
         />
 
         <Stack.Screen

@@ -5,6 +5,7 @@ import CustomInput from '../components/CustomInput';
 import CustomButton from '../components/CustomButton';
 import firebase from "firebase/app";
 import { auth } from '../firebaseConfig';
+import { db } from '../firebaseConfig';
 import { useIsFocused } from '@react-navigation/native';
 import BottomSheet from '@gorhom/bottom-sheet';
 
@@ -20,6 +21,7 @@ const LoginScreen = ({navigation, route}) => {
     const [hasValidPassword, setHasValidPassword] = useState(true);
 
     const [loginError, setLoginError] = useState(false);
+    const user = firebase.auth().currentUser;
 
     var db = firebase.firestore();
     var usersRef = db.collection("users");
@@ -87,14 +89,7 @@ const LoginScreen = ({navigation, route}) => {
         auth.signInWithEmailAndPassword(email, password)
             .then(userCredential => {
                 var user = userCredential.user;
-                usersRef.where("emailToLowerCase", "==", email.toLowerCase()).get()
-                .then(snapshot => { 
-                    if (snapshot.exists) {
-                        usersRef.doc(username+phoneNumber).update({"locationTracking": locationTrackingQuestion()});
-                    } else {
-                        console.log("snapshot does not exist");
-                    }
-                })
+                
                 // usersRef.doc(username+phoneNumber).update({"locationTracking": locationTrackingQuestion()});
                 loginSuccessful = true;
 
@@ -112,26 +107,56 @@ const LoginScreen = ({navigation, route}) => {
         )
     };
 
+    const updateLocationTrackingQuestion = () => {
+        firebase.firestore().collection("users").doc(user.uid).update({
+            locationTracking: true
+        })
+    }
+
+    const checkLocationAsked = () => {
+        var locationAsked;
+        firebase.firestore().collection("users").doc(user.uid).get().then((snapshot) => { 
+            if (snapshot.exists) {
+            const userData = snapshot.data();
+            locationAsked = userData["locationAsked"].toString();
+            console.log(locationAsked)
+            if (locationAsked === "true") {
+                console.log("Checked");
+                return true;
+            }
+            } else {
+            console.log("Not Tracked");
+            }
+        })
+    }
+
     const locationTrackingQuestion = () => {
-        Alert.alert(
-            //title
-            'Allow "AIP" to access your location while you are using the app?',
-            //body
-            'Your current location will be displayed on the map and used for directions and nearby search results.',
-            [
-                { 
-                    text: 'Allow While Using App', 
-                    onPress: () => console.log('Location being tracked'),
-                    return: true },            
-                {
-                    text: "Don't Allow",
-                    onPress: () => console.log('Location NOT being tracked'),
-                    style: 'cancel',
-                    return: false
-                },
-            ],
-            { cancelable: false }
-        );
+        firebase.firestore().collection("users").doc(user.uid).update({
+            locationAsked: true
+        })
+        if (checkLocationAsked()) {
+            console.log("Question Asked");
+        } else {
+            Alert.alert(
+                //title
+                'Allow "AIP" to access your location while you are using the app?',
+                //body
+                'Your current location will be displayed on the map and used for directions and nearby search results.',
+                [
+                    { 
+                        text: 'Allow While Using App', 
+                        onPress: () => updateLocationTrackingQuestion(),
+                        return: true },            
+                    {
+                        text: "Don't Allow",
+                        onPress: () => console.log('Location NOT being tracked'),
+                        style: 'cancel',
+                        return: false
+                    },
+                ],
+                { cancelable: false }
+            );
+        }
     };
 
     const onForgotPasswordPressed = () => {

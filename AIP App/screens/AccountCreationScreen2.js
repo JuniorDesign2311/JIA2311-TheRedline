@@ -36,8 +36,6 @@ const AccountCreationScreen2 = ({ navigation, route }) => {
     var email = route.params.email
     var phoneNumber = route.params.phoneNumber
     var password = route.params.password
-    var locationAsked = route.params.locationAsked
-    var locationTracking = route.params.locationTracking
 
     // Error Handling
     const [firstNameError, setFirstNameError] = useState('');

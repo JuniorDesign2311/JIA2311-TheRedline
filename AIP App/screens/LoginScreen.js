@@ -19,10 +19,10 @@ const LoginScreen = ({navigation, route}) => {
     const [hasValidEmail, setHasValidEmail] = useState(true);
     const [hasValidPassword, setHasValidPassword] = useState(true);
 
+    const [questionAnswer, setQuestionAnswer] = useState(true);
     const [loginError, setLoginError] = useState(false);
 
     var db = firebase.firestore();
-    var usersRef = db.collection("users");
 
     var loginSuccessful;
 
@@ -87,18 +87,10 @@ const LoginScreen = ({navigation, route}) => {
         auth.signInWithEmailAndPassword(email, password)
             .then(userCredential => {
                 var user = userCredential.user;
-                usersRef.where("emailToLowerCase", "==", email.toLowerCase()).get()
-                .then(snapshot => { 
-                    if (snapshot.exists) {
-                        usersRef.doc(username+phoneNumber).update({"locationTracking": locationTrackingQuestion()});
-                    } else {
-                        console.log("snapshot does not exist");
-                    }
-                })
-                // usersRef.doc(username+phoneNumber).update({"locationTracking": locationTrackingQuestion()});
+                useEffect( () => {
+                    updateData();
+                }, [questionAnswer] );
                 loginSuccessful = true;
-
-                locationTrackingQuestion();
                 navigation.navigate("Map", {
                     email1: email,
                 });
@@ -112,7 +104,17 @@ const LoginScreen = ({navigation, route}) => {
         )
     };
 
-    const locationTrackingQuestion = () => {
+    async function updateData() {
+        locationTrackingQuestion();
+        db.collection("users").doc(firebase.auth().currentUser.uid).update({
+            locationTracking: questionAnswer,
+            locationAsked: true
+        });
+        console.log('Location being tracked: ' + questionAnswer)
+        console.log("hit");
+    }
+
+    function locationTrackingQuestion() {
         Alert.alert(
             //title
             'Allow "AIP" to access your location while you are using the app?',
@@ -121,13 +123,12 @@ const LoginScreen = ({navigation, route}) => {
             [
                 { 
                     text: 'Allow While Using App', 
-                    onPress: () => console.log('Location being tracked'),
-                    return: true },            
+                    onPress: () => { setQuestionAnswer(true) },
+                },            
                 {
                     text: "Don't Allow",
-                    onPress: () => console.log('Location NOT being tracked'),
+                    onPress: () => { setQuestionAnswer(false) },
                     style: 'cancel',
-                    return: false
                 },
             ],
             { cancelable: false }

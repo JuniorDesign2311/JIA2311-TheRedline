@@ -87,10 +87,10 @@ const LoginScreen = ({navigation, route}) => {
         auth.signInWithEmailAndPassword(email, password)
             .then(userCredential => {
                 var user = userCredential.user;
-                updateData();
+                useEffect( () => {
+                    updateData();
+                }, [questionAnswer] );
                 loginSuccessful = true;
-
-                locationTrackingQuestion();
                 navigation.navigate("Map", {
                     email1: email,
                 });
@@ -104,12 +104,14 @@ const LoginScreen = ({navigation, route}) => {
         )
     };
 
-    const updateData = async () => {
+    async function updateData() {
         locationTrackingQuestion();
-        console.log(questionAnswer);
         db.collection("users").doc(firebase.auth().currentUser.uid).update({
-            locationTracking: questionAnswer
+            locationTracking: questionAnswer,
+            locationAsked: true
         });
+        console.log('Location being tracked: ' + questionAnswer)
+        console.log("hit");
     }
 
     function locationTrackingQuestion() {
@@ -121,11 +123,11 @@ const LoginScreen = ({navigation, route}) => {
             [
                 { 
                     text: 'Allow While Using App', 
-                    onPress: () => { setQuestionAnswer(true); console.log('Location being tracked') },
+                    onPress: () => { setQuestionAnswer(true) },
                 },            
                 {
                     text: "Don't Allow",
-                    onPress: () => { setQuestionAnswer(false); console.log('Location NOT being tracked') },
+                    onPress: () => { setQuestionAnswer(false) },
                     style: 'cancel',
                 },
             ],

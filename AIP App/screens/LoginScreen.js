@@ -85,18 +85,12 @@ const LoginScreen = ({navigation, route}) => {
 
     const handleLogin = () => {
         loginSuccessful = false;
-
         auth.signInWithEmailAndPassword(email, password)
             .then(userCredential => {
                 var user = userCredential.user;
-                
                 // usersRef.doc(username+phoneNumber).update({"locationTracking": locationTrackingQuestion()});
                 loginSuccessful = true;
-
-                locationTrackingQuestion();
-                navigation.navigate("Map", {
-                    email1: email,
-                });
+                checkLocationAsked();
             })
             .catch(error => {
                 console.warn(error.message);
@@ -111,53 +105,68 @@ const LoginScreen = ({navigation, route}) => {
         firebase.firestore().collection("users").doc(user.uid).update({
             locationTracking: true
         })
+        navigation.navigate("Map");
     }
 
     const checkLocationAsked = () => {
         var locationAsked;
+        var locationTracking;
         firebase.firestore().collection("users").doc(user.uid).get().then((snapshot) => { 
             if (snapshot.exists) {
             const userData = snapshot.data();
             locationAsked = userData["locationAsked"].toString();
-            console.log(locationAsked)
-            if (locationAsked === "true") {
-                console.log("Checked");
-                return true;
-            }
+            locationTracking = userData["locationTracking"].toString();
+                if (locationAsked === "true" && locationTracking === "true") {
+                    navigation.navigate("Map");
+                } else if (locationAsked === "true" && locationTracking === "false") {
+                    Alert.alert(
+                        //title
+                        'Allow "AIP" to access your location while you are using the app?',
+                        //body
+                        'Your current location will be displayed on the map and used for directions and nearby search results.',
+                        [
+                            { 
+                                text: 'Allow While Using App', 
+                                onPress: () => updateLocationTrackingQuestion(),
+                                return: true },            
+                            {
+                                text: "Don't Allow",
+                                onPress: () => console.log('Location NOT being tracked'),
+                                style: 'cancel',
+                                return: false
+                            },
+                        ],
+                        { cancelable: false }
+                    );
+                } else {
+                    firebase.firestore().collection("users").doc(user.uid).update({
+                        locationAsked: true
+                    })
+                    Alert.alert(
+                        //title
+                        'Allow "AIP" to access your location while you are using the app?',
+                        //body
+                        'Your current location will be displayed on the map and used for directions and nearby search results.',
+                        [
+                            { 
+                                text: 'Allow While Using App', 
+                                onPress: () => updateLocationTrackingQuestion(),
+                                return: true },            
+                            {
+                                text: "Don't Allow",
+                                onPress: () => console.log('Location NOT being tracked'),
+                                style: 'cancel',
+                                return: false
+                            },
+                        ],
+                        { cancelable: false }
+                    );
+                }
             } else {
-            console.log("Not Tracked");
+            console.log("Snapshot does not exist");
             }
         })
     }
-
-    const locationTrackingQuestion = () => {
-        firebase.firestore().collection("users").doc(user.uid).update({
-            locationAsked: true
-        })
-        if (checkLocationAsked()) {
-            console.log("Question Asked");
-        } else {
-            Alert.alert(
-                //title
-                'Allow "AIP" to access your location while you are using the app?',
-                //body
-                'Your current location will be displayed on the map and used for directions and nearby search results.',
-                [
-                    { 
-                        text: 'Allow While Using App', 
-                        onPress: () => updateLocationTrackingQuestion(),
-                        return: true },            
-                    {
-                        text: "Don't Allow",
-                        onPress: () => console.log('Location NOT being tracked'),
-                        style: 'cancel',
-                        return: false
-                    },
-                ],
-                { cancelable: false }
-            );
-        }
-    };
 
     const onForgotPasswordPressed = () => {
         navigation.navigate("ResetPassword");   

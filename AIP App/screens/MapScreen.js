@@ -13,7 +13,7 @@ const MapScreen = ({navigation, route}) => {
   const sheetRef = useRef(null);
 
   const snapPoints = useMemo(() => [ '10%', '45%', '90%' ]);
-  const email = route.params.email1;
+  // const email = route.params.email1;
   const user = firebase.auth().currentUser;
 
   const [events, setEvents] = useState([]);
@@ -36,19 +36,7 @@ const MapScreen = ({navigation, route}) => {
   
   
   const addEvent = () => {
-    console.log(user.uid);
-    firebase.firestore()
-   .collection("users") 
-   .doc(user.uid)
-   .get() 
-   .then((snapshot) => { 
-     if (snapshot.exists) 
-       { console.log(snapshot.data()); 
-       }
-     })
-    navigation.navigate("EventCreation", {
-      email: email,
-    });
+    navigation.navigate("EventCreation");
   }
 
   return (
@@ -73,7 +61,7 @@ const MapScreen = ({navigation, route}) => {
             <Text></Text>
             <TouchableOpacity style={styles.eachEvent}>
               <Text style={styles.eventTitle}>{data["title"]}</Text>
-              <Text style={styles.events}>Host: {data["username"]}</Text>
+              <Text style={styles.events}>Host: {data["host"]}</Text>
               <Text style={styles.events}>Date: {data["date"]}</Text>
               <Text style={styles.events}>Time: {data["time"]}</Text>
               <Text style={styles.events}>Location: {data["location"]}</Text>

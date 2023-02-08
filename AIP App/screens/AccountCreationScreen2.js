@@ -53,7 +53,7 @@ const AccountCreationScreen2 = ({ navigation, route }) => {
     const createUser = async () => {
         auth.createUserWithEmailAndPassword(email, password)
         .then(userCredential => {
-            userID = userCredential.user.uid;
+            var userID = userCredential.user.uid;
             // Signed in 
             writeUserData(userID);
             //Navigates to second creation screen and passes data through
@@ -185,7 +185,7 @@ const AccountCreationScreen2 = ({ navigation, route }) => {
                     
                     <CustomInput placeholder="First Name" value={firstName} setValue={setFirstName} secureTextEntry={false} inputError={firstNameError} isValid={isValidFirstName}/>
                     <CustomInput placeholder="Last Name" value={lastName} setValue={setLastName} secureTextEntry={false} inputError={lastNameError} isValid={isValidLastName}/>
-                    <States state={state} setState={setState} />
+                    <States state={state} setState={setState} hasError={hasStateError}/>
                     <Text style={{color: "red"}}> {stateError} </Text>
 
                     <View style={{ flexDirection: "row" }}>

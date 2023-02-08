@@ -3,6 +3,7 @@ import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 import { StyleSheet, Text, View, ScrollView, TouchableOpacity} from 'react-native';
 import BottomSheet from '@gorhom/bottom-sheet';
 import PlusButton from '../components/PlusButton';
+import { auth } from '../firebaseConfig';
 import { db } from '../firebaseConfig';
 import firebase from "firebase/app";
 
@@ -12,8 +13,8 @@ const MapScreen = ({navigation, route}) => {
   const sheetRef = useRef(null);
 
   const snapPoints = useMemo(() => [ '10%', '45%', '90%' ]);
-  const email = route.params.email1;
-
+  // const email = route.params.email1;
+  const user = firebase.auth().currentUser;
 
   const [events, setEvents] = useState([]);
 
@@ -35,9 +36,7 @@ const MapScreen = ({navigation, route}) => {
   
   
   const addEvent = () => {
-    navigation.navigate("EventCreation", {
-      email: email,
-    });
+    navigation.navigate("EventCreation");
   }
 
   return (
@@ -62,7 +61,7 @@ const MapScreen = ({navigation, route}) => {
             <Text></Text>
             <TouchableOpacity style={styles.eachEvent}>
               <Text style={styles.eventTitle}>{data["title"]}</Text>
-              <Text style={styles.events}>Host: {data["username"]}</Text>
+              <Text style={styles.events}>Host: {data["host"]}</Text>
               <Text style={styles.events}>Date: {data["date"]}</Text>
               <Text style={styles.events}>Time: {data["time"]}</Text>
               <Text style={styles.events}>Location: {data["location"]}</Text>

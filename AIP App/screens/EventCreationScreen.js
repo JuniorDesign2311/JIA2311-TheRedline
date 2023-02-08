@@ -3,8 +3,9 @@ import { View, Text, StyleSheet, TouchableWithoutFeedback, Keyboard, TouchableOp
 import CustomInput from '../components/CustomInput';
 import CustomButton from '../components/CustomButton';
 import EventDescriptionInput from '../components/EventDescriptionInput';
+import { auth } from '../firebaseConfig';
 import { db } from '../firebaseConfig';
-import "firebase/firestore";
+import firebase from "firebase/app";
 import uuid from 'react-native-uuid';
 
 const EventCreationScreen = ({ navigation, route }) => {
@@ -29,19 +30,36 @@ const EventCreationScreen = ({ navigation, route }) => {
     const [isValidTime, setIsValidTime] = useState(true);
     const [isValidDescription, setIsValidDescription] = useState(true);
 
-    const eventID = uuid.v4() + "$" + route.params.email;
+    //User Data
+    const user = firebase.auth().currentUser;
+    const [username, setUsername] = useState('');
 
-    const writeUserData = async () => {
-        db.collection("events").doc(eventID).set({
-            title: title,
-            location: location,
-            date: oldDate,
-            time: time,
-            description: description
+    //Event ID
+    const eventID = uuid.v4();
+
+
+    const handleEventLogging = async () => {
+        //Code to log user data and make it an object and then log the object's username
+        firebase.firestore().collection("users").doc(user.uid).get().then((snapshot) => { 
+            if (snapshot.exists) {
+            const userData = snapshot.data();
+            userData["username"].toString();
+            console.log(userData["username"].toString());
+            db.collection("events").doc(eventID).set({
+                title: title,
+                location: location,
+                date: oldDate,
+                time: time,
+                description: description,
+                host: userData["username"].toString()
+            })
+                .catch((error) => {
+                    console.error("Error adding document: ", error);
+                });
+            } else {
+            console.log("User does not exist");
+            }
         })
-            .catch((error) => {
-                console.error("Error adding document: ", error);
-            });
     }
 
     const validateInput = () => {
@@ -74,7 +92,7 @@ const EventCreationScreen = ({ navigation, route }) => {
             noError = false;
             setLocationError('Invalid Location');
             setIsValidLocation(false);
-        } else if (location.indexOf(' ') >= 0 || location.indexOf('&') >= 0 || location.indexOf('=') >= 0 || location.indexOf("'") >= 0 || location.indexOf('*') >= 0 || location.indexOf('%') >= 0
+        } else if (location.indexOf('&') >= 0 || location.indexOf('=') >= 0 || location.indexOf("'") >= 0 || location.indexOf('*') >= 0 || location.indexOf('%') >= 0
         || location.indexOf('+') >= 0 || location.indexOf(',') >= 0 || location.indexOf('<') >= 0 || location.indexOf('>') >= 0 || location.indexOf('$') >= 0 || location.indexOf('"') >= 0) {
             noError = false;
             setLocationError('Location Cannot Contain Special Characters');
@@ -125,16 +143,15 @@ const EventCreationScreen = ({ navigation, route }) => {
         return noError;
     }
 
+
     const onSubmitPressed = () => {
         if (!validateInput()) {
             // If validateInput returns false, then user had error creating account
             console.warn("Account could not be created");
         } else {
             console.log(eventID);
-            writeUserData();
-            navigation.navigate("Map", {
-                email1: route.params.email
-            })
+            handleEventLogging();
+            navigation.navigate("Map");
         }
     }
 
@@ -150,7 +167,7 @@ const EventCreationScreen = ({ navigation, route }) => {
                 <Text style={[styles.header]}> Create Event </Text>
                     <View style={styles.sheet}>
                     <CustomInput placeholder="Event Title" value={title} setValue={setTitle} secureTextEntry={false} inputError={titleError} isValid={isValidTitle}/>
-                    <CustomInput placeholder="Location" value={location} setValue={setLocation} secureTextEntry={false} keyboardType = 'email-address' inputError={locationError} isValid={isValidLocation}/>
+                    <CustomInput placeholder="Location" value={location} setValue={setLocation} secureTextEntry={false} inputError={locationError} isValid={isValidLocation}/>
                     
                     <CustomInput placeholder="Date" value={oldDate} setValue={setOldDate} secureTextEntry={false} inputError={dateError} isValid={isValidDate}/>
                     <CustomInput placeholder="Time" value={time} setValue={setTime} secureTextEntry={false} inputError={timeError} isValid={isValidTime} textContentType = 'oneTimeCode'/>

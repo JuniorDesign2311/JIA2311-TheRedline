@@ -39,3 +39,7 @@ not allowing them to reuse their information previously chosen.
 * Corrected error handling from the login page that ultimately restricted user login where our database was incorrectly reading.
 * Our Firebase Database wouldn't read the correct user which didn't allow for accurate data updates.
 * We fixed an error where our account system would create an account but not continue due to an error with our error handling.
+* Another bug we encountered and fixed dealt with the map screen sizing. Whenever a user logs in with the keyboard not
+dismissed it would distort the screen size of the map screen after so we fixed this by dismissing the keyboard upon login.
+* We found a bug with the form validation changing only after we move backwards to the page. We fixed this error by
+redesigning our form validation logic.

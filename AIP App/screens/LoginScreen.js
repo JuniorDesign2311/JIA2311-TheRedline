@@ -62,19 +62,29 @@ const LoginScreen = ({navigation, route}) => {
             setEmailError('Email Cannot Contain Spaces');
             setHasValidEmail(false);
         }
+        else {
+            setEmailError('');
+            setHasValidEmail(true);
+        }
         
         if (!password) {
-            console.log(password);
+            noErrors = false;
             setPasswordError('Password Field is Empty');
             setHasValidPassword(false);
         }
         else if (password.length < 6) {
+            noErrors = false;
             setPasswordError('Password must be at least 6 characters');
             setHasValidPassword(false);
         }
         else if (password.indexOf(' ') >= 0) {
+            noErrors = false;
             setPasswordError('Password Cannot Contain Spaces')
             setHasValidPassword(false);
+        }
+        else {
+            setPasswordError('');
+            setHasValidPassword(true);
         }
        
 
@@ -90,6 +100,7 @@ const LoginScreen = ({navigation, route}) => {
                 var user = userCredential.user;
                 // usersRef.doc(username+phoneNumber).update({"locationTracking": locationTrackingQuestion()});
                 loginSuccessful = true;
+                setLoginError("")
                 checkLocationAsked();
             })
             .catch(error => {
@@ -100,6 +111,28 @@ const LoginScreen = ({navigation, route}) => {
             }
         )
     };
+
+    const callAlert = () => {
+        Alert.alert(
+            //title
+            'Allow "AIP" to access your location while you are using the app?',
+            //body
+            'Your current location will be displayed on the map and used for directions and nearby search results.',
+            [
+                { 
+                    text: 'Allow While Using App', 
+                    onPress: () => updateLocationTrackingQuestion(),
+                    return: true },            
+                {
+                    text: "Don't Allow",
+                    onPress: () => console.log('Location NOT being tracked'),
+                    style: 'cancel',
+                    return: false
+                },
+            ],
+            { cancelable: false }
+        );
+    }
 
     const updateLocationTrackingQuestion = () => {
         firebase.firestore().collection("users").doc(user.uid).update({
@@ -119,48 +152,12 @@ const LoginScreen = ({navigation, route}) => {
                 if (locationAsked === "true" && locationTracking === "true") {
                     navigation.navigate("Map");
                 } else if (locationAsked === "true" && locationTracking === "false") {
-                    Alert.alert(
-                        //title
-                        'Allow "AIP" to access your location while you are using the app?',
-                        //body
-                        'Your current location will be displayed on the map and used for directions and nearby search results.',
-                        [
-                            { 
-                                text: 'Allow While Using App', 
-                                onPress: () => updateLocationTrackingQuestion(),
-                                return: true },            
-                            {
-                                text: "Don't Allow",
-                                onPress: () => console.log('Location NOT being tracked'),
-                                style: 'cancel',
-                                return: false
-                            },
-                        ],
-                        { cancelable: false }
-                    );
+                    callAlert();
                 } else {
                     firebase.firestore().collection("users").doc(user.uid).update({
                         locationAsked: true
                     })
-                    Alert.alert(
-                        //title
-                        'Allow "AIP" to access your location while you are using the app?',
-                        //body
-                        'Your current location will be displayed on the map and used for directions and nearby search results.',
-                        [
-                            { 
-                                text: 'Allow While Using App', 
-                                onPress: () => updateLocationTrackingQuestion(),
-                                return: true },            
-                            {
-                                text: "Don't Allow",
-                                onPress: () => console.log('Location NOT being tracked'),
-                                style: 'cancel',
-                                return: false
-                            },
-                        ],
-                        { cancelable: false }
-                    );
+                    callAlert();
                 }
             } else {
             console.log("Snapshot does not exist");
@@ -174,6 +171,7 @@ const LoginScreen = ({navigation, route}) => {
     }
     
     const onLoginPressed = () => {
+        Keyboard.dismiss();
         validateLogin();
     };
 

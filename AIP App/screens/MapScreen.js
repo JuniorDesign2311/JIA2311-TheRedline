@@ -3,12 +3,10 @@ import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 import { StyleSheet, Text, View, ScrollView, TouchableOpacity} from 'react-native';
 import BottomSheet from '@gorhom/bottom-sheet';
 import PlusButton from '../components/PlusButton';
-import { auth } from '../firebaseConfig';
 import { db } from '../firebaseConfig';
 import firebase from "firebase/app";
 
-
-const MapScreen = ({navigation, route}) => {
+const MapScreen = ({navigation, route }) => {
   
   const sheetRef = useRef(null);
 
@@ -41,7 +39,16 @@ const MapScreen = ({navigation, route}) => {
 
   return (
     <View style={styles.container}>
-      <MapView provider={PROVIDER_GOOGLE} style={styles.map} />
+      <MapView 
+        provider={PROVIDER_GOOGLE} 
+        style={styles.map} 
+        initialRegion={{
+          longitude: route.params.long,
+          latitude: route.params.lat,
+          latitudeDelta: 0.09,
+          longitudeDelta: 0.04,
+        }}
+      />
 
       <BottomSheet
         ref={sheetRef}

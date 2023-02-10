@@ -8,9 +8,13 @@ import { auth } from '../firebaseConfig';
 import { db } from '../firebaseConfig';
 import { useIsFocused } from '@react-navigation/native';
 import BottomSheet from '@gorhom/bottom-sheet';
-
+import * as Location from 'expo-location';
 
 const LoginScreen = ({navigation, route}) => {
+
+    var long = 33;
+    var lat = -122; 
+
     const [email, setEmail] = useState(route?.params?.email);
     const [password, setPassword] = useState(route?.params?.password);
 
@@ -105,7 +109,17 @@ const LoginScreen = ({navigation, route}) => {
         firebase.firestore().collection("users").doc(user.uid).update({
             locationTracking: true
         })
-        navigation.navigate("Map");
+
+        const getPermissions = async () => {
+            let currentLocation = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.Low});
+            long = currentLocation.coords.longitude;
+            lat = currentLocation.coords.latitude;
+            navigation.navigate("Map", {
+                long: long,
+                lat: lat,
+            });
+        };
+        getPermissions();
     }
 
     const checkLocationAsked = () => {
@@ -117,7 +131,16 @@ const LoginScreen = ({navigation, route}) => {
             locationAsked = userData["locationAsked"].toString();
             locationTracking = userData["locationTracking"].toString();
                 if (locationAsked === "true" && locationTracking === "true") {
-                    navigation.navigate("Map");
+                    const getPermissions = async () => {                  
+                        let currentLocation = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.Low});
+                        long = currentLocation.coords.longitude;
+                        lat = currentLocation.coords.latitude;
+                        navigation.navigate("Map", {
+                          long: long,
+                          lat: lat,
+                        });
+                    };
+                    getPermissions();
                 } else if (locationAsked === "true" && locationTracking === "false") {
                     Alert.alert(
                         //title

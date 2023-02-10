@@ -5,9 +5,9 @@ import CustomInput from '../components/CustomInput';
 import CustomButton from '../components/CustomButton';
 import firebase from "firebase/app";
 import { auth } from '../firebaseConfig';
+import { db } from '../firebaseConfig';
 import { useIsFocused } from '@react-navigation/native';
 import BottomSheet from '@gorhom/bottom-sheet';
-import * as Location from 'expo-location';
 
 
 const LoginScreen = ({navigation, route}) => {
@@ -23,10 +23,10 @@ const LoginScreen = ({navigation, route}) => {
     const [loginError, setLoginError] = useState(false);
     const user = firebase.auth().currentUser;
 
-    var loginSuccessful;
+    var db = firebase.firestore();
+    var usersRef = db.collection("users");
 
-    var long = 33;
-    var lat = -122;
+    var loginSuccessful;
 
     const focus = useIsFocused();
     useEffect(() => {
@@ -110,51 +110,32 @@ const LoginScreen = ({navigation, route}) => {
         )
     };
 
-    const getPermissions = async () => {                  
-        let currentLocation = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.Low});
-        long = currentLocation.coords.longitude;
-        lat = currentLocation.coords.latitude;
-        navigation.navigate("Map", {
-            long: long,
-            lat: lat,
-        });
-    };
+    const updateLocationTrackingQuestion = () => {
+        firebase.firestore().collection("users").doc(user.uid).update({
+            locationTracking: true,
+            locationAsked: true
+        })
+        navigation.navigate("Map");
+    }
 
-    const updateLocationTrackingQuestion = (trackingBool) => {
-        if (trackingBool == true){
-            firebase.firestore().collection("users").doc(user.uid).update({
-                locationTracking: true,
-                locationAsked: true
-            });
-            getPermissions();
-        } else {
-            firebase.firestore().collection("users").doc(user.uid).update({
-                locationTracking: false,
-                locationAsked: true
-            });
-            navigation.navigate("Map", {
-                long: long,
-                lat: lat,
-            });
-        }
+    const updateLocationTrackingQuestionFalse = () => {
+        firebase.firestore().collection("users").doc(user.uid).update({
+            locationTracking: false,
+            locationAsked: true
+        })
+        navigation.navigate("Map");
     }
 
     const checkLocationAsked = () => {
         var locationAsked;
+        var locationTracking;
         firebase.firestore().collection("users").doc(user.uid).get().then((snapshot) => { 
             if (snapshot.exists) {
             const userData = snapshot.data();
             locationAsked = userData["locationAsked"].toString();
             locationTracking = userData["locationTracking"].toString();
                 if (locationAsked === "true") {
-                    if (locationTracking === "true"){
-                        getPermissions();
-                    } else {
-                        navigation.navigate("Map", {
-                            long: 33,
-                            lat: -122,
-                        });
-                    }
+                    navigation.navigate("Map");
                 } else {
                     Alert.alert(
                         //title
@@ -164,11 +145,11 @@ const LoginScreen = ({navigation, route}) => {
                         [
                             { 
                                 text: 'Allow While Using App', 
-                                onPress: () => { console.log('Location is being tracked'); updateLocationTrackingQuestion(true)},
+                                onPress: () => { console.log('Location is being tracked'); updateLocationTrackingQuestion()},
                                 return: true },            
                             {
                                 text: "Don't Allow",
-                                onPress: () => { console.log('Location NOT being tracked'); updateLocationTrackingQuestion(false) },
+                                onPress: () => { console.log('Location NOT being tracked'); updateLocationTrackingQuestionFalse() },
                                 style: 'cancel',
                                 return: false
                             },

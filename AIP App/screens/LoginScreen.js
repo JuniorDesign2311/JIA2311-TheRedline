@@ -8,13 +8,9 @@ import { auth } from '../firebaseConfig';
 import { db } from '../firebaseConfig';
 import { useIsFocused } from '@react-navigation/native';
 import BottomSheet from '@gorhom/bottom-sheet';
-import * as Location from 'expo-location';
+
 
 const LoginScreen = ({navigation, route}) => {
-
-    var long = 33;
-    var lat = -122; 
-
     const [email, setEmail] = useState(route?.params?.email);
     const [password, setPassword] = useState(route?.params?.password);
 
@@ -66,19 +62,29 @@ const LoginScreen = ({navigation, route}) => {
             setEmailError('Email Cannot Contain Spaces');
             setHasValidEmail(false);
         }
+        else {
+            setEmailError('');
+            setHasValidEmail(true);
+        }
         
         if (!password) {
-            console.log(password);
+            noErrors = false;
             setPasswordError('Password Field is Empty');
             setHasValidPassword(false);
         }
         else if (password.length < 6) {
+            noErrors = false;
             setPasswordError('Password must be at least 6 characters');
             setHasValidPassword(false);
         }
         else if (password.indexOf(' ') >= 0) {
+            noErrors = false;
             setPasswordError('Password Cannot Contain Spaces')
             setHasValidPassword(false);
+        }
+        else {
+            setPasswordError('');
+            setHasValidPassword(true);
         }
        
 
@@ -92,7 +98,6 @@ const LoginScreen = ({navigation, route}) => {
         auth.signInWithEmailAndPassword(email, password)
             .then(userCredential => {
                 var user = userCredential.user;
-                // usersRef.doc(username+phoneNumber).update({"locationTracking": locationTrackingQuestion()});
                 loginSuccessful = true;
                 checkLocationAsked();
             })
@@ -107,19 +112,18 @@ const LoginScreen = ({navigation, route}) => {
 
     const updateLocationTrackingQuestion = () => {
         firebase.firestore().collection("users").doc(user.uid).update({
-            locationTracking: true
+            locationTracking: true,
+            locationAsked: true
         })
+        navigation.navigate("Map");
+    }
 
-        const getPermissions = async () => {
-            let currentLocation = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.Low});
-            long = currentLocation.coords.longitude;
-            lat = currentLocation.coords.latitude;
-            navigation.navigate("Map", {
-                long: long,
-                lat: lat,
-            });
-        };
-        getPermissions();
+    const updateLocationTrackingQuestionFalse = () => {
+        firebase.firestore().collection("users").doc(user.uid).update({
+            locationTracking: false,
+            locationAsked: true
+        })
+        navigation.navigate("Map");
     }
 
     const checkLocationAsked = () => {
@@ -130,41 +134,9 @@ const LoginScreen = ({navigation, route}) => {
             const userData = snapshot.data();
             locationAsked = userData["locationAsked"].toString();
             locationTracking = userData["locationTracking"].toString();
-                if (locationAsked === "true" && locationTracking === "true") {
-                    const getPermissions = async () => {                  
-                        let currentLocation = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.Low});
-                        long = currentLocation.coords.longitude;
-                        lat = currentLocation.coords.latitude;
-                        navigation.navigate("Map", {
-                          long: long,
-                          lat: lat,
-                        });
-                    };
-                    getPermissions();
-                } else if (locationAsked === "true" && locationTracking === "false") {
-                    Alert.alert(
-                        //title
-                        'Allow "AIP" to access your location while you are using the app?',
-                        //body
-                        'Your current location will be displayed on the map and used for directions and nearby search results.',
-                        [
-                            { 
-                                text: 'Allow While Using App', 
-                                onPress: () => updateLocationTrackingQuestion(),
-                                return: true },            
-                            {
-                                text: "Don't Allow",
-                                onPress: () => console.log('Location NOT being tracked'),
-                                style: 'cancel',
-                                return: false
-                            },
-                        ],
-                        { cancelable: false }
-                    );
+                if (locationAsked === "true") {
+                    navigation.navigate("Map");
                 } else {
-                    firebase.firestore().collection("users").doc(user.uid).update({
-                        locationAsked: true
-                    })
                     Alert.alert(
                         //title
                         'Allow "AIP" to access your location while you are using the app?',
@@ -173,11 +145,11 @@ const LoginScreen = ({navigation, route}) => {
                         [
                             { 
                                 text: 'Allow While Using App', 
-                                onPress: () => updateLocationTrackingQuestion(),
+                                onPress: () => { console.log('Location is being tracked'); updateLocationTrackingQuestion()},
                                 return: true },            
                             {
                                 text: "Don't Allow",
-                                onPress: () => console.log('Location NOT being tracked'),
+                                onPress: () => { console.log('Location NOT being tracked'); updateLocationTrackingQuestionFalse() },
                                 style: 'cancel',
                                 return: false
                             },
@@ -186,7 +158,7 @@ const LoginScreen = ({navigation, route}) => {
                     );
                 }
             } else {
-            console.log("Snapshot does not exist");
+                console.log("Snapshot does not exist");
             }
         })
     }
@@ -197,6 +169,7 @@ const LoginScreen = ({navigation, route}) => {
     }
     
     const onLoginPressed = () => {
+        Keyboard.dismiss();
         validateLogin();
     };
 

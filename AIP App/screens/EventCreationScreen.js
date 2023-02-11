@@ -40,7 +40,7 @@ const EventCreationScreen = ({ navigation, route }) => {
 
     const handleEventLogging = async () => {
         //Code to log user data and make it an object and then log the object's username
-        firebase.firestore().collection("users").doc(user.uid).get().then((snapshot) => { 
+        firebase.firestore().collection("hosts").doc(user.uid).get().then((snapshot) => { 
             if (snapshot.exists) {
             const userData = snapshot.data();
             userData["username"].toString();

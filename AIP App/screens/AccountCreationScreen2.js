@@ -30,8 +30,8 @@ const AccountCreationScreen2 = ({ navigation, route }) => {
     const sheetRef = useRef(null);
     const snapPoints = useMemo(() => [ '75%', '75%' ]);
     var db = firebase.firestore();
-    var usersRef = db.collection("users");
-    var documentId = route.params.docID
+    //var usersRef = db.collection("users");
+    //var documentId = route.params.docID
     var username = route.params.username
     var email = route.params.email
     var phoneNumber = route.params.phoneNumber
@@ -58,6 +58,7 @@ const AccountCreationScreen2 = ({ navigation, route }) => {
             writeUserData(userID);
             //Navigates to second creation screen and passes data through
             console.log(userCredential.user.uid);
+            Keyboard.dismiss();
             navigation.navigate('AccountCreated', {
                 email1: route.params.email,
                 password1: route.params.password,
@@ -68,23 +69,41 @@ const AccountCreationScreen2 = ({ navigation, route }) => {
     }
 
     const writeUserData = async (userID) => {
-        db.collection("users").doc(userID).set({
-            first: firstName,
-            last: lastName,
-            phoneNumber: phoneNumber,
-            username: username,
-            usernameToLowerCase: username.toLowerCase(),
-            state: state,
-            email: email,
-            emailToLowerCase: email.toLowerCase(),
-            host: hostClicked,
-            attendee: attendeeClicked,
-            locationTracking: false,
-            locationAsked: false
-        })
-            .catch((error) => {
-                console.error("Error adding document: ", error);
-            });
+        if (hostClicked) {
+            db.collection("hosts").doc(userID).set({
+                first: firstName,
+                last: lastName,
+                phoneNumber: phoneNumber,
+                username: username,
+                usernameToLowerCase: username.toLowerCase(),
+                state: state,
+                email: email,
+                emailToLowerCase: email.toLowerCase(),
+                //attendee: attendeeClicked,
+                locationTracking: false,
+                locationAsked: false
+            })
+                .catch((error) => {
+                    console.error("Error adding document: ", error);
+                });
+        } else {
+            db.collection("attendees").doc(userID).set({
+                first: firstName,
+                last: lastName,
+                phoneNumber: phoneNumber,
+                username: username,
+                usernameToLowerCase: username.toLowerCase(),
+                state: state,
+                email: email,
+                emailToLowerCase: email.toLowerCase(),
+                //attendee: attendeeClicked,
+                locationTracking: false,
+                locationAsked: false
+            })
+                .catch((error) => {
+                    console.error("Error adding document: ", error);
+                });
+        }
     }
 
     const onAttendeePressed = () => {

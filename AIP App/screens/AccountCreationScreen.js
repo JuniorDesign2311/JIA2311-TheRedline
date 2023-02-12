@@ -34,16 +34,76 @@ const AccountCreationScreen = ({ navigation }) => {
 
     const validateUser = () => {
         var db = firebase.firestore();
-        var usersRef = db.collection("users");
+        var attendeeRef = db.collection("attendees");
         // query for inputted username
-        usersRef.where("usernameToLowerCase", '==', username.toLowerCase()).get()
+        attendeeRef.where("usernameToLowerCase", '==', username.toLowerCase()).get()
             .then(snapshot => {
                 if (snapshot.empty) {
                     // query for inputted phone number
-                    usersRef.where("phoneNumber", "==", phoneNumber).get()
+                    attendeeRef.where("phoneNumber", "==", phoneNumber).get()
                         .then(snapshot => {
                             if (snapshot.empty) {
-                                usersRef.where("emailToLowerCase", "==", email.toLowerCase()).get()
+                                attendeeRef.where("emailToLowerCase", "==", email.toLowerCase()).get()
+                                    .then(snapshot => {
+                                        if (snapshot.empty) {
+                                            checkHosts();
+                                        } else {
+                                            setEmailError('Email already linked to an account')
+                                            setIsValidEmail(false);
+                                            console.warn("Email already linked to an account.")
+                                        }
+            
+                                    })
+                                    .then(createdAttendee => {
+                                        // console.log(createdUser);
+                                        db.collection("attendees").doc(createdAttendee.user.uid).set({ email: email });
+                                    })
+                                    .catch(err => {
+                                        console.log("Error: ", err);
+                                    })
+                            } else {
+                                setPhoneError('Phone number already linked to an account');
+                                setIsValidPhone(false);
+                                console.warn("Phone number already linked to an account.");
+                            }
+
+                        })
+                        .then(createdAttendee => {
+                            // console.log(createdUser);
+                            db.collection("attendees").doc(createdAttendee.user.uid).set({ phoneNumber: phoneNumber });
+                        })
+                        .catch(err => {
+                            console.log("Error: ", err);
+                        })
+
+                } else {
+                    setUsernameError('Username already taken');
+                    setIsValidUsername(false);
+                    console.warn("Username already taken.")
+                }
+            })
+            .then(createdAttendee => {
+                // console.log(createdUser);
+                //Create the user doc in the users collection
+                db.collection("attendees").doc(createdAttendee.user.uid).set({ username: username });
+            })
+            .catch(err => {
+                console.log("Error: ", err);
+            });
+    }
+
+    const checkHosts = () => {
+        var db = firebase.firestore();
+        var hostRef = db.collection("hosts");
+        // query for inputted username
+        hostRef.where("usernameToLowerCase", '==', username.toLowerCase()).get()
+            .then(snapshot => {
+                if (snapshot.empty) {
+                    // query for inputted phone number
+                    hostRef.where("phoneNumber", "==", phoneNumber).get()
+                        .then(snapshot => {
+                            if (snapshot.empty) {
+                                hostRef.where("emailToLowerCase", "==", email.toLowerCase()).get()
                                     .then(snapshot => {
                                         if (snapshot.empty) {
                                             navigation.navigate('AccountCreation2', {
@@ -60,9 +120,9 @@ const AccountCreationScreen = ({ navigation }) => {
                                         }
             
                                     })
-                                    .then(createdUser => {
+                                    .then(createdHost => {
                                         // console.log(createdUser);
-                                        db.collection("users").doc(createdUser.user.uid).set({ email: email });
+                                        db.collection("hosts").doc(createdHost.user.uid).set({ email: email });
                                     })
                                     .catch(err => {
                                         console.log("Error: ", err);
@@ -74,9 +134,9 @@ const AccountCreationScreen = ({ navigation }) => {
                             }
 
                         })
-                        .then(createdUser => {
+                        .then(createdHost => {
                             // console.log(createdUser);
-                            db.collection("users").doc(createdUser.user.uid).set({ phoneNumber: phoneNumber });
+                            db.collection("hosts").doc(createdHost.user.uid).set({ phoneNumber: phoneNumber });
                         })
                         .catch(err => {
                             console.log("Error: ", err);
@@ -88,10 +148,10 @@ const AccountCreationScreen = ({ navigation }) => {
                     console.warn("Username already taken.")
                 }
             })
-            .then(createdUser => {
+            .then(createdHost => {
                 // console.log(createdUser);
                 //Create the user doc in the users collection
-                db.collection("users").doc(createdUser.user.uid).set({ username: username });
+                db.collection("hosts").doc(createdHost.user.uid).set({ username: username });
             })
             .catch(err => {
                 console.log("Error: ", err);

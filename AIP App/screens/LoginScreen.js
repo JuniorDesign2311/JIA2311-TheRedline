@@ -11,9 +11,6 @@ import * as Location from 'expo-location';
 
 
 const LoginScreen = ({navigation, route}) => {
-    const [location, setLocation] = useState(null);
-    const [errorMsg, setErrorMsg] = useState(null);
-
     const [email, setEmail] = useState(route?.params?.email);
     const [password, setPassword] = useState(route?.params?.password);
 
@@ -28,14 +25,8 @@ const LoginScreen = ({navigation, route}) => {
 
     var loginSuccessful;
 
-    // var long = 33;
-    // var lat = -122;
-
-    // const [longitude, setLongitude] = useState(2.16);
-    // const [latitude, setLatitude] = useState(41.38);
-
-    var longitude = 2.16;
-    var latitude = 41.38;
+    var longitude = -122.43;
+    var latitude = 37.77;
 
     const focus = useIsFocused();
     useEffect(() => {
@@ -96,7 +87,6 @@ const LoginScreen = ({navigation, route}) => {
             setHasValidPassword(true);
         }
        
-
         if (noErrors) {
             handleLogin();
         }
@@ -106,7 +96,6 @@ const LoginScreen = ({navigation, route}) => {
         loginSuccessful = false;
         auth.signInWithEmailAndPassword(email, password)
             .then(userCredential => {
-                var user = userCredential.user;
                 loginSuccessful = true;
                 checkLocationAsked();
             })
@@ -119,23 +108,22 @@ const LoginScreen = ({navigation, route}) => {
         )
     };
 
-
     const getPermissions = async () => {
-        console.log("before request");
         let { status } = await Location.requestForegroundPermissionsAsync();
-        console.log(status);
         
         if (status !== 'granted') {
-            setErrorMsg('Permission to access location was denied');
+            Alert.alert('Permission to access location was denied. Please update in Settings.');
             firebase.firestore().collection("users").doc(user.uid).update({
                 locationTracking: false,
-                locationAsked: true
+                locationAsked: true,
             });
 
             navigation.navigate("Map", {
                 long: longitude,
                 lat: latitude,
             });
+            
+            return;
         }
 
         firebase.firestore().collection("users").doc(user.uid).update({
@@ -151,23 +139,11 @@ const LoginScreen = ({navigation, route}) => {
         longitude = currentLocation.coords.longitude;
         latitude = currentLocation.coords.latitude;
 
-        console.log("working: " + longitude);
-
         navigation.navigate("Map", {
             long: longitude,
             lat: latitude,
         });
-      }
-
-    // const getPermissions = async () => {                  
-    //     let currentLocation = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.Low});
-    //     setLongitude(currentLocation.coords.longitude);
-    //     setLatitude(currentLocation.coords.latitude);
-    //     navigation.navigate("Map", {
-    //         long: longitude,
-    //         lat: latitude,
-    //     });
-    // };
+    }
 
     const checkLocationAsked = () => {
         var locationAsked;

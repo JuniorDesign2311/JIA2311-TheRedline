@@ -97,7 +97,7 @@ const LoginScreen = ({navigation, route}) => {
         auth.signInWithEmailAndPassword(email, password)
             .then(userCredential => {
                 loginSuccessful = true;
-                checkLocationAsked();
+                checkUserType();
             })
             .catch(error => {
                 console.warn(error.message);
@@ -108,12 +108,54 @@ const LoginScreen = ({navigation, route}) => {
         )
     };
 
-    const getPermissions = async () => {
+    const checkUserType = () => {
+        firebase.firestore().collection("attendees").doc(user.uid).get().then((snapshot) => { 
+            if (snapshot.exists) {
+                checkLocationAsked("attendees");
+            } else {
+                firebase.firestore().collection("hosts").doc(user.uid).get().then((snapshot) => { 
+                    if (snapshot.exists) {
+                        checkLocationAsked("hosts");
+                    } else {
+                        console.log("User does not exist");
+                    }
+                });
+            }
+        });
+    }
+
+    const checkLocationAsked = (userType) => {
+        var locationAsked;
+        var locationTracking;
+        firebase.firestore().collection(userType).doc(user.uid).get().then((snapshot) => { 
+            if (snapshot.exists) {
+                const userData = snapshot.data();
+                locationAsked = userData["locationAsked"].toString();
+                locationTracking = userData["locationTracking"].toString();
+                    if (locationAsked === "true") {
+                        if (locationTracking === "true"){
+                            getLocation();
+                        } else {
+                            navigation.navigate("Map", {
+                                long: longitude,
+                                lat: latitude,
+                            });
+                        }
+                    } else {
+                        getPermissions(userType);
+                    }
+            } else {
+                console.log("Snapshot does not exist");
+            }
+        })
+    }
+
+    const getPermissions = async (userType) => {
         let { status } = await Location.requestForegroundPermissionsAsync();
         
         if (status !== 'granted') {
             Alert.alert('Permission to access location was denied. Please update in Settings.');
-            firebase.firestore().collection("users").doc(user.uid).update({
+            firebase.firestore().collection(userType).doc(user.uid).update({
                 locationTracking: false,
                 locationAsked: true,
             });
@@ -126,7 +168,7 @@ const LoginScreen = ({navigation, route}) => {
             return;
         }
 
-        firebase.firestore().collection("users").doc(user.uid).update({
+        firebase.firestore().collection(userType).doc(user.uid).update({
             locationTracking: true,
             locationAsked: true
         });
@@ -143,31 +185,6 @@ const LoginScreen = ({navigation, route}) => {
             long: longitude,
             lat: latitude,
         });
-    }
-
-    const checkLocationAsked = () => {
-        var locationAsked;
-        firebase.firestore().collection("users").doc(user.uid).get().then((snapshot) => { 
-            if (snapshot.exists) {
-            const userData = snapshot.data();
-            locationAsked = userData["locationAsked"].toString();
-            locationTracking = userData["locationTracking"].toString();
-                if (locationAsked === "true") {
-                    if (locationTracking === "true"){
-                        getLocation();
-                    } else {
-                        navigation.navigate("Map", {
-                            long: longitude,
-                            lat: latitude,
-                        });
-                    }
-                } else {
-                    getPermissions();
-                }
-            } else {
-                console.log("Snapshot does not exist");
-            }
-        })
     }
 
     const onForgotPasswordPressed = () => {

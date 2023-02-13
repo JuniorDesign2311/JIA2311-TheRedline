@@ -5,7 +5,6 @@ import CustomInput from '../components/CustomInput';
 import CustomButton from '../components/CustomButton';
 import firebase from "firebase/app";
 import { auth } from '../firebaseConfig';
-import { db } from '../firebaseConfig';
 import { useIsFocused } from '@react-navigation/native';
 import BottomSheet from '@gorhom/bottom-sheet';
 
@@ -25,9 +24,6 @@ const LoginScreen = ({navigation, route}) => {
     const [attendeeClicked, setAttendeeClicked] = useState(false);
 
     const user = firebase.auth().currentUser;
-
-    var db = firebase.firestore();
-    var usersRef = db.collection("users");
 
     var loginSuccessful;
 
@@ -102,7 +98,7 @@ const LoginScreen = ({navigation, route}) => {
             .then(userCredential => {
                 var user = userCredential.user;
                 loginSuccessful = true;
-                checkLocationAsked();
+                checkUserType();
             })
             .catch(error => {
                 console.warn(error.message);
@@ -113,108 +109,64 @@ const LoginScreen = ({navigation, route}) => {
         )
     };
 
-    const updateLocationTrackingQuestion = () => {
-        if (attendeeClicked) {
-            firebase.firestore().collection("attendees").doc(user.uid).update({
-                locationTracking: true,
-                locationAsked: true
-            })
-        } else {
-            firebase.firestore().collection("hosts").doc(user.uid).update({
-                locationTracking: true,
-                locationAsked: true
-            })
-        }
-
-        navigation.navigate("Map");
+    const checkUserType = () => {
+        firebase.firestore().collection("attendees").doc(user.uid).get().then((snapshot) => { 
+            if (snapshot.exists) {
+                checkLocationAsked("attendees");
+            } else {
+                firebase.firestore().collection("hosts").doc(user.uid).get().then((snapshot) => { 
+                    if (snapshot.exists) {
+                        checkLocationAsked("hosts");
+                    } else {
+                        console.log("Snapshot does not exist");
+                    }
+                });
+            }
+        });
     }
 
-    const updateLocationTrackingQuestionFalse = () => {
-        if (attendeeClicked) {
-            firebase.firestore().collection("attendees").doc(user.uid).update({
-                locationTracking: false,
-                locationAsked: true
-            })
-        } else {
-            firebase.firestore().collection("hosts").doc(user.uid).update({
-                locationTracking: false,
-                locationAsked: true
-            })
-        }
-        navigation.navigate("Map");
-    }
-
-    const checkLocationAsked = () => {
+    const checkLocationAsked = (userType) => {
         var locationAsked;
         var locationTracking;
-        if (attendeeClicked) {
-            firebase.firestore().collection("attendees").doc(user.uid).get().then((snapshot) => { 
-                if (snapshot.exists) {
+        firebase.firestore().collection(userType).doc(user.uid).get().then((snapshot) => { 
+            if (snapshot.exists) {
                 const userData = snapshot.data();
                 locationAsked = userData["locationAsked"].toString();
                 locationTracking = userData["locationTracking"].toString();
-                    if (locationAsked === "true") {
-                        navigation.navigate("Map");
-                    } else {
-                        Alert.alert(
-                            //title
-                            'Allow "AIP" to access your location while you are using the app?',
-                            //body
-                            'Your current location will be displayed on the map and used for directions and nearby search results.',
-                            [
-                                { 
-                                    text: 'Allow While Using App', 
-                                    onPress: () => { console.log('Location is being tracked'); updateLocationTrackingQuestion()},
-                                    return: true },            
-                                {
-                                    text: "Don't Allow",
-                                    onPress: () => { console.log('Location NOT being tracked'); updateLocationTrackingQuestionFalse() },
-                                    style: 'cancel',
-                                    return: false
-                                },
-                            ],
-                            { cancelable: false }
-                        );
-                    }
+                if (locationAsked === "true") {
+                    navigation.navigate("Map");
                 } else {
-                    console.log("Snapshot does not exist");
+                    Alert.alert(
+                        //title
+                        'Allow "AIP" to access your location while you are using the app?',
+                        //body
+                        'Your current location will be displayed on the map and used for directions and nearby search results.',
+                        [
+                            { 
+                                text: 'Allow While Using App', 
+                                onPress: () => { console.log('Location is being tracked'); updateLocationTrackingQuestion(true, userType)},
+                                return: true },            
+                            {
+                                text: "Don't Allow",
+                                onPress: () => { console.log('Location NOT being tracked'); updateLocationTrackingQuestion(false, userType) },
+                                style: 'cancel',
+                                return: false
+                            },
+                        ],
+                        { cancelable: false }
+                    );
                 }
-            })
-        } else {
-            firebase.firestore().collection("hosts").doc(user.uid).get().then((snapshot) => { 
-                if (snapshot.exists) {
-                const userData = snapshot.data();
-                locationAsked = userData["locationAsked"].toString();
-                locationTracking = userData["locationTracking"].toString();
-                    if (locationAsked === "true") {
-                        navigation.navigate("Map");
-                    } else {
-                        Alert.alert(
-                            //title
-                            'Allow "AIP" to access your location while you are using the app?',
-                            //body
-                            'Your current location will be displayed on the map and used for directions and nearby search results.',
-                            [
-                                { 
-                                    text: 'Allow While Using App', 
-                                    onPress: () => { console.log('Location is being tracked'); updateLocationTrackingQuestion()},
-                                    return: true },            
-                                {
-                                    text: "Don't Allow",
-                                    onPress: () => { console.log('Location NOT being tracked'); updateLocationTrackingQuestionFalse() },
-                                    style: 'cancel',
-                                    return: false
-                                },
-                            ],
-                            { cancelable: false }
-                        );
-                    }
-                } else {
-                    console.log("Snapshot does not exist");
-                }
-            })
-        }
+            }
+        });
     }
+
+    const updateLocationTrackingQuestion = (locationBool, userType) => {
+        firebase.firestore().collection(userType).doc(user.uid).update({
+                locationTracking: locationBool,
+                locationAsked: true
+        });
+        navigation.navigate("Map");
+    };
 
     const onForgotPasswordPressed = () => {
         navigation.navigate("ResetPassword");   

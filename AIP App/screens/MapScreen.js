@@ -48,6 +48,27 @@ const MapScreen = ({navigation, route}) => {
     //     longitudeDelta: 0.01,
     // };
 
+    const atlantaMarker = {
+      latitude: 33.7495,
+      longitude: -84.3882,
+      latitudeDelta: 0.01,
+      longitudeDelta: 0.01,
+    };
+
+    const avalonMarker = {
+      latitude: 34.0696,
+      longitude: -84.2454,
+      latitudeDelta: 0.01,
+      longitudeDelta: 0.01,
+    };
+
+    const georgiaTechMarker = {
+        latitude: 33.7758,
+        longitude: -84.3962,
+        latitudeDelta: 0.01,
+        longitudeDelta: 0.01,
+    };
+
 
     return (
         <View style={styles.container}>
@@ -63,7 +84,9 @@ const MapScreen = ({navigation, route}) => {
 
                 // initialRegion={tokyoRegion} //your region data goes here.
             >
-                {/* <Marker coordinate={tokyoRegion} /> */}
+                <Marker coordinate={atlantaMarker} />
+                <Marker coordinate={avalonMarker} />
+                <Marker coordinate={georgiaTechMarker} />
             </MapView>
 
       <BottomSheet

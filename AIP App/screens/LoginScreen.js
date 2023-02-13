@@ -128,22 +128,11 @@ const LoginScreen = ({navigation, route}) => {
 
     const checkLocationAsked = (userType) => {
         var locationAsked;
-        var locationTracking;
         firebase.firestore().collection(userType).doc(user.uid).get().then((snapshot) => { 
             if (snapshot.exists) {
                 const userData = snapshot.data();
                 locationAsked = userData["locationAsked"].toString();
-                locationTracking = userData["locationTracking"].toString();
                     if (locationAsked === "true") {
-                        if (locationTracking === "true"){
-                            getLocation();
-                        } else {
-                            navigation.navigate("Map", {
-                                long: longitude,
-                                lat: latitude,
-                            });
-                        }
-                    } else {
                         getPermissions(userType);
                     }
             } else {
@@ -158,7 +147,6 @@ const LoginScreen = ({navigation, route}) => {
         if (status !== 'granted') {
             Alert.alert('Permission to access location was denied. Please update in Settings.');
             firebase.firestore().collection(userType).doc(user.uid).update({
-                locationTracking: false,
                 locationAsked: true,
             });
 
@@ -171,7 +159,6 @@ const LoginScreen = ({navigation, route}) => {
         }
 
         firebase.firestore().collection(userType).doc(user.uid).update({
-            locationTracking: true,
             locationAsked: true
         });
 

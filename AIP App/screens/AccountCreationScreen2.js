@@ -57,7 +57,6 @@ const AccountCreationScreen2 = ({ navigation, route }) => {
             // Signed in 
             writeUserData(userID);
             //Navigates to second creation screen and passes data through
-            console.log(userCredential.user.uid);
             Keyboard.dismiss();
             navigation.navigate('AccountCreated', {
                 email1: route.params.email,
@@ -111,9 +110,7 @@ const AccountCreationScreen2 = ({ navigation, route }) => {
             alert("Please only choose one account type.");
         } else {
             setAttendeeClicked(!attendeeClicked);
-        }  
-        
-        console.log("Attendee Clicked");
+        }
     }
 
     const onHostPressed = () => {
@@ -121,8 +118,7 @@ const AccountCreationScreen2 = ({ navigation, route }) => {
             alert("Please only choose one account type.");
         } else {
             setHostClicked(!hostClicked);
-        }  
-        console.log("Host Clicked");
+        }
     }
 
     const validateInputs = () => {
@@ -177,6 +173,7 @@ const AccountCreationScreen2 = ({ navigation, route }) => {
 
 
     const onCreateAccountPressed = () => {    
+        Keyboard.dismiss();
         if (!validateInputs()) {
             console.warn("Error creating account")
         } else {

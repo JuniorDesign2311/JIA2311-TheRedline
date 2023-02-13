@@ -7,6 +7,7 @@ import firebase from "firebase/app";
 import { auth } from '../firebaseConfig';
 import { useIsFocused } from '@react-navigation/native';
 import BottomSheet from '@gorhom/bottom-sheet';
+import * as Location from 'expo-location';
 
 
 const LoginScreen = ({navigation, route}) => {
@@ -21,9 +22,9 @@ const LoginScreen = ({navigation, route}) => {
 
     const [loginError, setLoginError] = useState(false);
 
-    const [attendeeClicked, setAttendeeClicked] = useState(false);
-
     const user = firebase.auth().currentUser;
+    var longitude = -122.43;
+    var latitude = 37.77;
 
     var loginSuccessful;
 
@@ -118,7 +119,7 @@ const LoginScreen = ({navigation, route}) => {
                     if (snapshot.exists) {
                         checkLocationAsked("hosts");
                     } else {
-                        console.log("Snapshot does not exist");
+                        console.log("User does not exist");
                     }
                 });
             }
@@ -133,40 +134,60 @@ const LoginScreen = ({navigation, route}) => {
                 const userData = snapshot.data();
                 locationAsked = userData["locationAsked"].toString();
                 locationTracking = userData["locationTracking"].toString();
-                if (locationAsked === "true") {
-                    navigation.navigate("Map");
-                } else {
-                    Alert.alert(
-                        //title
-                        'Allow "AIP" to access your location while you are using the app?',
-                        //body
-                        'Your current location will be displayed on the map and used for directions and nearby search results.',
-                        [
-                            { 
-                                text: 'Allow While Using App', 
-                                onPress: () => { console.log('Location is being tracked'); updateLocationTrackingQuestion(true, userType)},
-                                return: true },            
-                            {
-                                text: "Don't Allow",
-                                onPress: () => { console.log('Location NOT being tracked'); updateLocationTrackingQuestion(false, userType) },
-                                style: 'cancel',
-                                return: false
-                            },
-                        ],
-                        { cancelable: false }
-                    );
-                }
+                    if (locationAsked === "true") {
+                        if (locationTracking === "true"){
+                            getLocation();
+                        } else {
+                            navigation.navigate("Map", {
+                                long: longitude,
+                                lat: latitude,
+                            });
+                        }
+                    } else {
+                        getPermissions(userType);
+                    }
+            } else {
+                console.log("Snapshot does not exist");
             }
-        });
+        })
     }
 
-    const updateLocationTrackingQuestion = (locationBool, userType) => {
+    const getPermissions = async (userType) => {
+        let { status } = await Location.requestForegroundPermissionsAsync();
+        
+        if (status !== 'granted') {
+            Alert.alert('Permission to access location was denied. Please update in Settings.');
+            firebase.firestore().collection(userType).doc(user.uid).update({
+                locationTracking: false,
+                locationAsked: true,
+            });
+
+            navigation.navigate("Map", {
+                long: longitude,
+                lat: latitude,
+            });
+            
+            return;
+        }
+
         firebase.firestore().collection(userType).doc(user.uid).update({
-                locationTracking: locationBool,
-                locationAsked: true
+            locationTracking: true,
+            locationAsked: true
         });
-        navigation.navigate("Map");
+
+        getLocation();
     };
+
+    const getLocation = async() => {
+        let currentLocation = await Location.getCurrentPositionAsync({});
+        longitude = currentLocation.coords.longitude;
+        latitude = currentLocation.coords.latitude;
+
+        navigation.navigate("Map", {
+            long: longitude,
+            lat: latitude,
+        });
+    }
 
     const onForgotPasswordPressed = () => {
         navigation.navigate("ResetPassword");   

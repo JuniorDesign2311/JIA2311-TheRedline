@@ -40,12 +40,12 @@ const MapScreen = ({navigation, route}) => {
     navigation.navigate("EventCreation");
   }
 
-    const tokyoRegion = {
-        latitude: 35.6762,
-        longitude: 139.6503,
-        latitudeDelta: 0.01,
-        longitudeDelta: 0.01,
-    };
+    // const tokyoRegion = {
+    //     latitude: 35.6762,
+    //     longitude: 139.6503,
+    //     latitudeDelta: 0.01,
+    //     longitudeDelta: 0.01,
+    // };
 
 
     return (
@@ -53,9 +53,9 @@ const MapScreen = ({navigation, route}) => {
             <MapView
                 provider={PROVIDER_GOOGLE}
                 style={styles.map}
-                initialRegion={tokyoRegion} //your region data goes here.
+                // initialRegion={tokyoRegion} //your region data goes here.
             >
-                <Marker coordinate={tokyoRegion} />
+                {/* <Marker coordinate={tokyoRegion} /> */}
             </MapView>
 
       <BottomSheet

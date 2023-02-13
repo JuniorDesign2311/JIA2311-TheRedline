@@ -64,7 +64,7 @@ const LoginScreen = ({navigation}) => {
     
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-        <View style={{flex:1,justifyContent:'center',alignItems:'center',backgroundColor: '#d796fa'}}>
+        <View style={{flex:1,justifyContent:'center',alignItems:'center',backgroundColor: "white"}}>
             <Text style={styles.header}>
             Reset Password
             </Text>

@@ -10,11 +10,12 @@ import { Marker } from "react-native-maps";
 
 
 const MapScreen = ({navigation, route}) => {
+  const longitude = route?.params?.long ?? -122.43;
+  const latitude = route?.params?.lat ??  37.77;
   
   const sheetRef = useRef(null);
 
   const snapPoints = useMemo(() => [ '10%', '45%', '90%' ]);
-  // const email = route.params.email1;
   const user = firebase.auth().currentUser;
 
   const [events, setEvents] = useState([]);
@@ -40,12 +41,12 @@ const MapScreen = ({navigation, route}) => {
     navigation.navigate("EventCreation");
   }
 
-    const tokyoRegion = {
-        latitude: 35.6762,
-        longitude: 139.6503,
-        latitudeDelta: 0.01,
-        longitudeDelta: 0.01,
-    };
+    // const tokyoRegion = {
+    //     latitude: 35.6762,
+    //     longitude: 139.6503,
+    //     latitudeDelta: 0.01,
+    //     longitudeDelta: 0.01,
+    // };
 
 
     return (
@@ -53,9 +54,16 @@ const MapScreen = ({navigation, route}) => {
             <MapView
                 provider={PROVIDER_GOOGLE}
                 style={styles.map}
-                initialRegion={tokyoRegion} //your region data goes here.
+                initialRegion={{
+                  longitude: longitude,
+                  latitude: latitude,
+                  latitudeDelta: 0.09,
+                  longitudeDelta: 0.04,
+                }}
+
+                // initialRegion={tokyoRegion} //your region data goes here.
             >
-                <Marker coordinate={tokyoRegion} />
+                {/* <Marker coordinate={tokyoRegion} /> */}
             </MapView>
 
       <BottomSheet
@@ -85,14 +93,14 @@ const MapScreen = ({navigation, route}) => {
             </>
                     
           ))}
-          </View>
+      </View>
 
-        </View>
+      </View>
         </ScrollView>
         
       </BottomSheet>
 
-    </View>
+      </View>
   );
 };
 

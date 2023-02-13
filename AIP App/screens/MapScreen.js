@@ -6,6 +6,7 @@ import PlusButton from '../components/PlusButton';
 import { auth } from '../firebaseConfig';
 import { db } from '../firebaseConfig';
 import firebase from "firebase/app";
+import { Marker } from "react-native-maps";
 
 
 const MapScreen = ({navigation, route}) => {
@@ -39,9 +40,23 @@ const MapScreen = ({navigation, route}) => {
     navigation.navigate("EventCreation");
   }
 
-  return (
-    <View style={styles.container}>
-      <MapView provider={PROVIDER_GOOGLE} style={styles.map} />
+    const tokyoRegion = {
+        latitude: 35.6762,
+        longitude: 139.6503,
+        latitudeDelta: 0.01,
+        longitudeDelta: 0.01,
+    };
+
+
+    return (
+        <View style={styles.container}>
+            <MapView
+                provider={PROVIDER_GOOGLE}
+                style={styles.map}
+                initialRegion={tokyoRegion} //your region data goes here.
+            >
+                <Marker coordinate={tokyoRegion} />
+            </MapView>
 
       <BottomSheet
         ref={sheetRef}

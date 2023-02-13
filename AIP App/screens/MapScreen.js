@@ -14,7 +14,6 @@ const MapScreen = ({navigation, route}) => {
   const sheetRef = useRef(null);
 
   const snapPoints = useMemo(() => [ '10%', '45%', '90%' ]);
-  // const email = route.params.email1;
   const user = firebase.auth().currentUser;
 
   const [events, setEvents] = useState([]);
@@ -53,6 +52,13 @@ const MapScreen = ({navigation, route}) => {
             <MapView
                 provider={PROVIDER_GOOGLE}
                 style={styles.map}
+                initialRegion={{
+                  longitude: route.params.long,
+                  latitude: route.params.lat,
+                  latitudeDelta: 0.09,
+                  longitudeDelta: 0.04,
+                }}
+
                 // initialRegion={tokyoRegion} //your region data goes here.
             >
                 {/* <Marker coordinate={tokyoRegion} /> */}

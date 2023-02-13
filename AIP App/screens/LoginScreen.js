@@ -179,7 +179,9 @@ const LoginScreen = ({navigation, route}) => {
     };
 
     const getLocation = async() => {
-        let currentLocation = await Location.getCurrentPositionAsync({});
+        let currentLocation = await Location.getCurrentPositionAsync({
+            accuracy: Location.Accuracy.Low,
+        });
         longitude = currentLocation.coords.longitude;
         latitude = currentLocation.coords.latitude;
 

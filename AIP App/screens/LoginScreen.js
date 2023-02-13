@@ -99,7 +99,7 @@ const LoginScreen = ({navigation, route}) => {
             .then(userCredential => {
                 var user = userCredential.user;
                 loginSuccessful = true;
-                checkUserType();
+                getPermissions();
             })
             .catch(error => {
                 console.warn(error.message);
@@ -110,23 +110,7 @@ const LoginScreen = ({navigation, route}) => {
         )
     };
 
-    const checkUserType = () => {
-        firebase.firestore().collection("attendees").doc(user.uid).get().then((snapshot) => { 
-            if (snapshot.exists) {
-                getPermissions("attendees");
-            } else {
-                firebase.firestore().collection("hosts").doc(user.uid).get().then((snapshot) => { 
-                    if (snapshot.exists) {
-                        getPermissions("hosts");
-                    } else {
-                        console.log("User does not exist");
-                    }
-                });
-            }
-        });
-    }
-
-    const getPermissions = async (userType) => {
+    const getPermissions = async () => {
         let { status } = await Location.requestForegroundPermissionsAsync();
         
         if (status !== 'granted') {

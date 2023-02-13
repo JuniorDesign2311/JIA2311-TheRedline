@@ -10,6 +10,8 @@ import { Marker } from "react-native-maps";
 
 
 const MapScreen = ({navigation, route}) => {
+  const longitude = route?.params?.long ?? -122.43;
+  const latitude = route?.params?.lat ??  37.77;
   
   const sheetRef = useRef(null);
 
@@ -53,8 +55,8 @@ const MapScreen = ({navigation, route}) => {
                 provider={PROVIDER_GOOGLE}
                 style={styles.map}
                 initialRegion={{
-                  longitude: route.params.long,
-                  latitude: route.params.lat,
+                  longitude: longitude,
+                  latitude: latitude,
                   latitudeDelta: 0.09,
                   longitudeDelta: 0.04,
                 }}
@@ -91,14 +93,14 @@ const MapScreen = ({navigation, route}) => {
             </>
                     
           ))}
-          </View>
+      </View>
 
-        </View>
+      </View>
         </ScrollView>
         
       </BottomSheet>
 
-    </View>
+      </View>
   );
 };
 

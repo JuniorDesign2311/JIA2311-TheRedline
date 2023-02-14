@@ -103,7 +103,8 @@ const AccountCreationScreen2 = ({ navigation, route }) => {
 
     const onAttendeePressed = () => {
         if (hostClicked)  {
-            alert("Please only choose one account type.");
+            setAttendeeClicked(!attendeeClicked);
+            setHostClicked(!hostClicked);
         } else {
             setAttendeeClicked(!attendeeClicked);
         }
@@ -111,7 +112,8 @@ const AccountCreationScreen2 = ({ navigation, route }) => {
 
     const onHostPressed = () => {
         if (attendeeClicked)  {
-            alert("Please only choose one account type.");
+            setAttendeeClicked(!attendeeClicked);
+            setHostClicked(!hostClicked);
         } else {
             setHostClicked(!hostClicked);
         }

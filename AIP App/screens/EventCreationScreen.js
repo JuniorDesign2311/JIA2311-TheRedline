@@ -1,11 +1,12 @@
 import React, {useState} from 'react'
-import { View, Text, StyleSheet, TouchableWithoutFeedback, Keyboard, TouchableOpacity } from 'react-native'
+import { View, Text, StyleSheet, ScrollView, TouchableWithoutFeedback, Keyboard, TouchableOpacity } from 'react-native'
 import CustomInput from '../components/CustomInput';
 import CustomButton from '../components/CustomButton';
 import EventDescriptionInput from '../components/EventDescriptionInput';
 import { db } from '../firebaseConfig';
 import firebase from "firebase/app";
 import uuid from 'react-native-uuid';
+import KeyboardAvoidingWrapper from '../components/KeyboardAvoidingWrapper';
 
 const EventCreationScreen = ({ navigation }) => {
     /* useState returns the original value argument that's passed in and a function that returns the changed value */
@@ -156,30 +157,28 @@ const EventCreationScreen = ({ navigation }) => {
     }
 
     return (
-        
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-       
-        <View style={{flex:1,justifyContent:'center',alignItems:'center',backgroundColor: 'white'}}>
-                <Text style={[styles.header]}> Create Event </Text>
+        <KeyboardAvoidingWrapper>
+                <View style={{flex:1,justifyContent:'center',alignItems:'center',backgroundColor: 'white'}}>
+                    <Text style={[styles.header]}> Create Event </Text>
                     <View style={styles.sheet}>
-                    <CustomInput placeholder="Event Title" value={title} setValue={setTitle} secureTextEntry={false} inputError={titleError} isValid={isValidTitle}/>
-                    <CustomInput placeholder="Location" value={location} setValue={setLocation} secureTextEntry={false} inputError={locationError} isValid={isValidLocation}/>
+                        <CustomInput placeholder="Event Title" value={title} setValue={setTitle} secureTextEntry={false} inputError={titleError} isValid={isValidTitle}/>
+                        <CustomInput placeholder="Location" value={location} setValue={setLocation} secureTextEntry={false} inputError={locationError} isValid={isValidLocation}/>
                     
-                    <CustomInput placeholder="Date" value={oldDate} setValue={setOldDate} secureTextEntry={false} inputError={dateError} isValid={isValidDate}/>
-                    <CustomInput placeholder="Time" value={time} setValue={setTime} secureTextEntry={false} inputError={timeError} isValid={isValidTime} textContentType = 'oneTimeCode'/>
-                    <EventDescriptionInput placeholder="Event Description" value={description} setValue={setDescription} secureTextEntry={false} inputError={descriptionError} isValid={isValidDescription}/>
+                        <CustomInput placeholder="Date" value={oldDate} setValue={setOldDate} secureTextEntry={false} inputError={dateError} isValid={isValidDate}/>
+                        <CustomInput placeholder="Time" value={time} setValue={setTime} secureTextEntry={false} inputError={timeError} isValid={isValidTime} textContentType = 'oneTimeCode'/>
+                        <EventDescriptionInput placeholder="Event Description" value={description} setValue={setDescription} secureTextEntry={false} inputError={descriptionError} isValid={isValidDescription}/>
                    
-                    <View style={{flexDirection:"row", marginBottom: 0, marginTop: 15 }}>
-                        <CustomButton onPress={onSubmitPressed} buttonName="Submit" type="PRIMARY"/>
-                    </View>
-                    <TouchableOpacity onPress={onCancelPressed}>
-                        <Text style = {{fontSize:13, marginTop: 0,  color: '#039be5'}} iconName="account-outline">
-                            Cancel
-                        </Text>
-                    </TouchableOpacity>
+                        <View style={{flexDirection:"row", marginBottom: 0, marginTop: 15 }}>
+                            <CustomButton onPress={onSubmitPressed} buttonName="Submit" type="PRIMARY"/>
+                        </View>
+                        <TouchableOpacity onPress={onCancelPressed}>
+                            <Text style = {{fontSize:13, marginTop: 0,  color: '#039be5'}} iconName="account-outline">
+                                Cancel
+                            </Text>
+                        </TouchableOpacity>
                     </View>  
-            </View>
-        </TouchableWithoutFeedback>
+                </View>
+            </KeyboardAvoidingWrapper>
     )
 }
 
@@ -191,6 +190,7 @@ const styles = StyleSheet.create({
         fontSize: 45,
         fontFamily: 'Helvetica Neue',
         fontWeight: 'bold',
+        paddingTop: '40%',
         marginBottom: "10%",
         textAlign: 'left',
     },
@@ -202,6 +202,7 @@ const styles = StyleSheet.create({
     },
     sheet: {
         alignItems: 'center',
+        marginBottom: '40%',
     }
 })
 export default EventCreationScreen;

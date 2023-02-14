@@ -158,27 +158,27 @@ const EventCreationScreen = ({ navigation }) => {
 
     return (
         <KeyboardAvoidingWrapper>
-                <View style={{flex:1,justifyContent:'center',alignItems:'center',backgroundColor: 'white'}}>
-                    <Text style={[styles.header]}> Create Event </Text>
-                    <View style={styles.sheet}>
-                        <CustomInput placeholder="Event Title" value={title} setValue={setTitle} secureTextEntry={false} inputError={titleError} isValid={isValidTitle}/>
-                        <CustomInput placeholder="Location" value={location} setValue={setLocation} secureTextEntry={false} inputError={locationError} isValid={isValidLocation}/>
+            <View style={{flex:1,justifyContent:'center',alignItems:'center',backgroundColor: 'white'}}>
+                <Text style={[styles.header]}> Create Event </Text>
+                <View style={styles.sheet}>
+                    <CustomInput placeholder="Event Title" value={title} setValue={setTitle} secureTextEntry={false} inputError={titleError} isValid={isValidTitle}/>
+                    <CustomInput placeholder="Location" value={location} setValue={setLocation} secureTextEntry={false} inputError={locationError} isValid={isValidLocation}/>
                     
-                        <CustomInput placeholder="Date" value={oldDate} setValue={setOldDate} secureTextEntry={false} inputError={dateError} isValid={isValidDate}/>
-                        <CustomInput placeholder="Time" value={time} setValue={setTime} secureTextEntry={false} inputError={timeError} isValid={isValidTime} textContentType = 'oneTimeCode'/>
-                        <EventDescriptionInput placeholder="Event Description" value={description} setValue={setDescription} secureTextEntry={false} inputError={descriptionError} isValid={isValidDescription}/>
+                    <CustomInput placeholder="Date" value={oldDate} setValue={setOldDate} secureTextEntry={false} inputError={dateError} isValid={isValidDate}/>
+                    <CustomInput placeholder="Time" value={time} setValue={setTime} secureTextEntry={false} inputError={timeError} isValid={isValidTime} textContentType = 'oneTimeCode'/>
+                    <EventDescriptionInput placeholder="Event Description" value={description} setValue={setDescription} secureTextEntry={false} inputError={descriptionError} isValid={isValidDescription}/>
                    
-                        <View style={{flexDirection:"row", marginBottom: 0, marginTop: 15 }}>
-                            <CustomButton onPress={onSubmitPressed} buttonName="Submit" type="PRIMARY"/>
-                        </View>
-                        <TouchableOpacity onPress={onCancelPressed}>
-                            <Text style = {{fontSize:13, marginTop: 0,  color: '#039be5'}} iconName="account-outline">
-                                Cancel
-                            </Text>
-                        </TouchableOpacity>
-                    </View>  
-                </View>
-            </KeyboardAvoidingWrapper>
+                    <View style={{flexDirection:"row", marginBottom: 0, marginTop: 15 }}>
+                        <CustomButton onPress={onSubmitPressed} buttonName="Submit" type="PRIMARY"/>
+                    </View>
+                    <TouchableOpacity onPress={onCancelPressed}>
+                        <Text style = {{fontSize:13, marginTop: 0,  color: '#039be5'}} iconName="account-outline">
+                            Cancel
+                        </Text>
+                    </TouchableOpacity>
+                </View>  
+            </View>
+        </KeyboardAvoidingWrapper>
     )
 }
 

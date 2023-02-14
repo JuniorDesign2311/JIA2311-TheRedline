@@ -79,8 +79,6 @@ const AccountCreationScreen2 = ({ navigation, route }) => {
                 email: email,
                 emailToLowerCase: email.toLowerCase(),
                 //attendee: attendeeClicked,
-                locationTracking: false,
-                locationAsked: false
             })
                 .catch((error) => {
                     console.error("Error adding document: ", error);
@@ -96,8 +94,6 @@ const AccountCreationScreen2 = ({ navigation, route }) => {
                 email: email,
                 emailToLowerCase: email.toLowerCase(),
                 //attendee: attendeeClicked,
-                locationTracking: false,
-                locationAsked: false
             })
                 .catch((error) => {
                     console.error("Error adding document: ", error);

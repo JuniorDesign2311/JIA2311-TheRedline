@@ -1,11 +1,9 @@
-import React, {useRef, useMemo} from 'react'
+import React from 'react'
 import { View, Text, StyleSheet} from 'react-native'
 import CustomButton from '../components/CustomButton';
 
 
 const AccountCreatedScreen = ({navigation, route}) => {
-    const sheetRef = useRef(null);
-    const snapPoints = useMemo(() => [ '75%', '75%' ]);
     const returnToLoginPressed = () => {
         navigation.navigate("Login", {
             email: route.params.email1,

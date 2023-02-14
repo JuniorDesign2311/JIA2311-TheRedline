@@ -3,20 +3,17 @@ import { View, Text, StyleSheet, TouchableWithoutFeedback, Keyboard, TouchableOp
 import CustomInput from '../components/CustomInput';
 import CustomButton from '../components/CustomButton';
 import EventDescriptionInput from '../components/EventDescriptionInput';
-import { auth } from '../firebaseConfig';
 import { db } from '../firebaseConfig';
 import firebase from "firebase/app";
 import uuid from 'react-native-uuid';
 
-const EventCreationScreen = ({ navigation, route }) => {
+const EventCreationScreen = ({ navigation }) => {
     /* useState returns the original value argument that's passed in and a function that returns the changed value */
     const [title, setTitle] = useState('');
     const [location, setLocation] = useState('');
     const [oldDate, setOldDate] = useState('');
     const [time, setTime] = useState('');
     const [description, setDescription] = useState('');
-    const [date, setDate] = useState(new Date())
-    const [open, setOpen] = useState(false)
     // Error Handling
     const [titleError, setTitleError] = useState('');
     const [locationError, setLocationError] = useState('');
@@ -32,7 +29,6 @@ const EventCreationScreen = ({ navigation, route }) => {
 
     //User Data
     const user = firebase.auth().currentUser;
-    const [username, setUsername] = useState('');
 
     //Event ID
     const eventID = uuid.v4();

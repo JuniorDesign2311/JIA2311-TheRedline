@@ -28,10 +28,6 @@ const AccountCreationScreen = ({ navigation }) => {
     const [isValidConfirm, setIsValidConfirm] = useState(true);
     const [isValidPhone, setIsValidPhone] = useState(true);
 
-
-    // Document id to distinguish each user within our database
-    const documentId = username+phoneNumber;
-
     const validateUser = () => {
         var db = firebase.firestore();
         var attendeeRef = db.collection("attendees");

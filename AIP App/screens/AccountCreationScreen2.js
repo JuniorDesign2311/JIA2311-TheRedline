@@ -1,14 +1,12 @@
 import React, {useState, useRef, useMemo} from 'react'
-import { View, Text, StyleSheet, ScrollView, TouchableWithoutFeedback, Keyboard, TouchableOpacity } from 'react-native'
+import { View, Text, StyleSheet, TouchableWithoutFeedback, Keyboard, TouchableOpacity } from 'react-native'
 import CustomInput from '../components/CustomInput';
 import CustomButton from '../components/CustomButton';
 import AttendeeHostButtons from '../components/AttendeeHostButtons';
 import HostButton from '../components/HostButton';
 import States from '../components/States';
 import { auth } from '../firebaseConfig';
-import { db } from '../firebaseConfig';
 import firebase from "firebase/app";
-import { useNavigation } from '@react-navigation/native';
 import "firebase/firestore";
 import BottomSheet from '@gorhom/bottom-sheet';
 
@@ -30,8 +28,6 @@ const AccountCreationScreen2 = ({ navigation, route }) => {
     const sheetRef = useRef(null);
     const snapPoints = useMemo(() => [ '75%', '75%' ]);
     var db = firebase.firestore();
-    //var usersRef = db.collection("users");
-    //var documentId = route.params.docID
     var username = route.params.username
     var email = route.params.email
     var phoneNumber = route.params.phoneNumber
@@ -78,7 +74,6 @@ const AccountCreationScreen2 = ({ navigation, route }) => {
                 state: state,
                 email: email,
                 emailToLowerCase: email.toLowerCase(),
-                //attendee: attendeeClicked,
             })
                 .catch((error) => {
                     console.error("Error adding document: ", error);
@@ -93,7 +88,6 @@ const AccountCreationScreen2 = ({ navigation, route }) => {
                 state: state,
                 email: email,
                 emailToLowerCase: email.toLowerCase(),
-                //attendee: attendeeClicked,
             })
                 .catch((error) => {
                     console.error("Error adding document: ", error);

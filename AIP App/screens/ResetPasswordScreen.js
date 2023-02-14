@@ -1,6 +1,5 @@
 import React, {useState, useRef, useMemo} from 'react'
-import { View, Text, TouchableOpacity, Keyboard, ScrollView, StyleSheet, TouchableWithoutFeedback } from 'react-native'
-import ResetPasswordInput from '../components/ResetPasswordInput';
+import { View, Text, TouchableOpacity, Keyboard, StyleSheet, TouchableWithoutFeedback } from 'react-native'
 import CustomButton from '../components/CustomButton';
 import { auth } from '../firebaseConfig';
 import BottomSheet from '@gorhom/bottom-sheet';

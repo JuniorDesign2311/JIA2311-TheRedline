@@ -3,7 +3,6 @@ import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 import { StyleSheet, Text, View, ScrollView, TouchableOpacity} from 'react-native';
 import BottomSheet from '@gorhom/bottom-sheet';
 import PlusButton from '../components/PlusButton';
-import { auth } from '../firebaseConfig';
 import { db } from '../firebaseConfig';
 import firebase from "firebase/app";
 import { Marker } from "react-native-maps";
@@ -16,7 +15,6 @@ const MapScreen = ({navigation, route}) => {
   const sheetRef = useRef(null);
 
   const snapPoints = useMemo(() => [ '10%', '45%', '90%' ]);
-  const user = firebase.auth().currentUser;
 
   const [events, setEvents] = useState([]);
 
@@ -40,13 +38,6 @@ const MapScreen = ({navigation, route}) => {
   const addEvent = () => {
     navigation.navigate("EventCreation");
   }
-
-    // const tokyoRegion = {
-    //     latitude: 35.6762,
-    //     longitude: 139.6503,
-    //     latitudeDelta: 0.01,
-    //     longitudeDelta: 0.01,
-    // };
 
     const atlantaMarker = {
       latitude: 33.7495,

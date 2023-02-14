@@ -1,9 +1,8 @@
 import React, {useState, useRef, useMemo, useEffect} from 'react';
 import {Alert} from 'react-native';
-import { View, Text, TouchableOpacity, Keyboard, ScrollView, StyleSheet, TouchableWithoutFeedback } from 'react-native';
+import { View, Text, TouchableOpacity, Keyboard, StyleSheet, TouchableWithoutFeedback } from 'react-native';
 import CustomInput from '../components/CustomInput';
 import CustomButton from '../components/CustomButton';
-import firebase from "firebase/app";
 import { auth } from '../firebaseConfig';
 import { useIsFocused } from '@react-navigation/native';
 import BottomSheet from '@gorhom/bottom-sheet';
@@ -22,7 +21,6 @@ const LoginScreen = ({navigation, route}) => {
 
     const [loginError, setLoginError] = useState(false);
 
-    const user = firebase.auth().currentUser;
     var longitude = -122.43;
     var latitude = 37.77;
 
@@ -97,7 +95,6 @@ const LoginScreen = ({navigation, route}) => {
         loginSuccessful = false;
         auth.signInWithEmailAndPassword(email, password)
             .then(userCredential => {
-                var user = userCredential.user;
                 loginSuccessful = true;
                 getPermissions();
             })

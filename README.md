@@ -1,4 +1,4 @@
-# AutoIndustryPortal
+# The Redline
 There is currently no centralized place for vintage car enthusiasts to connect with the greater car community. 
 Our application is an all-in-one platform that will aggregate car show events and meetups, 
 allowing users to favorite and post their own events.
@@ -44,3 +44,4 @@ not allowing them to reuse their information previously chosen.
 dismissed it would distort the screen size of the map screen after so we fixed this by dismissing the keyboard upon login.
 * We found a bug with the form validation changing only after we move backwards to the page. We fixed this error by
 redesigning our form validation logic.
+* Location tracking will occasionally zoom out on an area because area tracking accuracy is set to low.

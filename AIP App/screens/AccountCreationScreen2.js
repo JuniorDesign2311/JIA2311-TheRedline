@@ -11,6 +11,7 @@ import firebase from "firebase/app";
 import { useNavigation } from '@react-navigation/native';
 import "firebase/firestore";
 import BottomSheet from '@gorhom/bottom-sheet';
+import KeyboardAvoidingWrapper from '../components/KeyboardAvoidingWrapper';
 
 
 /*
@@ -103,7 +104,8 @@ const AccountCreationScreen2 = ({ navigation, route }) => {
 
     const onAttendeePressed = () => {
         if (hostClicked)  {
-            alert("Please only choose one account type.");
+            setAttendeeClicked(!attendeeClicked);
+            setHostClicked(!hostClicked);
         } else {
             setAttendeeClicked(!attendeeClicked);
         }
@@ -111,7 +113,8 @@ const AccountCreationScreen2 = ({ navigation, route }) => {
 
     const onHostPressed = () => {
         if (attendeeClicked)  {
-            alert("Please only choose one account type.");
+            setAttendeeClicked(!attendeeClicked);
+            setHostClicked(!hostClicked);
         } else {
             setHostClicked(!hostClicked);
         }
@@ -183,44 +186,41 @@ const AccountCreationScreen2 = ({ navigation, route }) => {
     }
 
     return (
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-            <View style={{flex:1,justifyContent:'center',alignItems:'center',backgroundColor: 'white'}}>
-                <Text style={[styles.header]}> Create Account </Text>
-                <BottomSheet
-                ref={sheetRef}
-                index={1}
-                snapPoints={snapPoints}
-                handleIndicatorStyle={{ display: "none" }}
-                >
-                    <View style={styles.sheet}>
-                    
-                    
-                    <CustomInput placeholder="First Name" value={firstName} setValue={setFirstName} secureTextEntry={false} inputError={firstNameError} isValid={isValidFirstName}/>
-                    <CustomInput placeholder="Last Name" value={lastName} setValue={setLastName} secureTextEntry={false} inputError={lastNameError} isValid={isValidLastName}/>
-                    <States state={state} setState={setState} hasError={hasStateError}/>
-                    <Text style={{color: "red"}}> {stateError} </Text>
+        <KeyboardAvoidingWrapper>
+                <View style={{flex:1,justifyContent:'center',alignItems:'center',backgroundColor: 'white'}}>
+                    <Text style={[styles.header]}> Create Account </Text>
+                    <BottomSheet
+                    ref={sheetRef}
+                    index={1}
+                    snapPoints={snapPoints}
+                    handleIndicatorStyle={{ display: "none" }}
+                    >
+                        <View style={styles.sheet}> 
+                            <CustomInput placeholder="First Name" value={firstName} setValue={setFirstName} secureTextEntry={false} inputError={firstNameError} isValid={isValidFirstName}/>
+                            <CustomInput placeholder="Last Name" value={lastName} setValue={setLastName} secureTextEntry={false} inputError={lastNameError} isValid={isValidLastName}/>
+                            <States state={state} setState={setState} hasError={hasStateError}/>
+                            <Text style={{color: "red"}}> {stateError} </Text>
 
-                    <View style={{ flexDirection: "row" }}>
-                        <AttendeeHostButtons onPress={onAttendeePressed} buttonClicked={attendeeClicked} buttonName="Attendee" inputError={AttendeeHostButtons} hasError={hasAttendeeHostError}/>
-                        <HostButton onPress={onHostPressed} buttonClicked={hostClicked} buttonName="Host" hasError={hasAttendeeHostError}/>
-                    </View>
+                            <View style={{ flexDirection: "row" }}>
+                                <AttendeeHostButtons onPress={onAttendeePressed} buttonClicked={attendeeClicked} buttonName="Attendee" inputError={AttendeeHostButtons} hasError={hasAttendeeHostError}/>
+                                <HostButton onPress={onHostPressed} buttonClicked={hostClicked} buttonName="Host" hasError={hasAttendeeHostError}/>
+                            </View>
 
-                    <Text style={{color: "red"}}> {attendeeHostError} </Text>
+                            <Text style={{color: "red"}}> {attendeeHostError} </Text>
                     
-                    <View style={{ flexDirection: "row"}}>
+                            <View style={{ flexDirection: "row"}}>
+                                <CustomButton onPress={onCreateAccountPressed} buttonName="Create Account" type="PRIMARY" />
+                            </View>
                         
-                        <CustomButton onPress={onCreateAccountPressed} buttonName="Create Account" type="PRIMARY" /></View>
-                        
-                        <TouchableOpacity onPress={onGoBackPressed}>
-                        <Text style = {{fontSize:13, marginTop: 0,  color: '#039be5'}}>
-                            Go Back
-                        </Text>
-                    </TouchableOpacity>
-                    
-                    </View>
-                </BottomSheet>
-            </View>
-        </TouchableWithoutFeedback>
+                            <TouchableOpacity onPress={onGoBackPressed}>
+                                <Text style = {{fontSize:13, marginTop: 0,  color: '#039be5'}}>
+                                    Go Back
+                                </Text>
+                            </TouchableOpacity>
+                         </View>
+                    </BottomSheet>
+                </View>
+            </KeyboardAvoidingWrapper>
     )
 }
 
@@ -244,8 +244,8 @@ const styles = StyleSheet.create({
         fontSize: 45,
         fontFamily: 'Helvetica Neue',
         fontWeight: 'bold',
-        paddingTop: 50,
-        marginBottom: 600,
+        paddingTop: '30%',
+        marginBottom: '175%',
         textAlign: 'left',
     },
     error: {

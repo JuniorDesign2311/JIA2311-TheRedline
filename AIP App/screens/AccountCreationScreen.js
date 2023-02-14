@@ -5,6 +5,7 @@ import CustomButton from '../components/CustomButton';
 import firebase from "firebase/app";
 import "firebase/firestore";
 import BottomSheet from '@gorhom/bottom-sheet';
+import KeyboardAvoidingWrapper from '../components/KeyboardAvoidingWrapper';
 
 const AccountCreationScreen = ({ navigation }) => {
     /* useState returns the original value argument that's passed in and a function that returns the changed value */
@@ -276,53 +277,36 @@ const AccountCreationScreen = ({ navigation }) => {
         navigation.navigate("Login");
     }
 
-    return (
-        
-        <ScrollView showsVerticalScrollIndicator={false}>
-        <TouchableWithoutFeedback onPress={()=>Keyboard.dismiss} accessible={false}>
-       
-        <View style={{flex:1,justifyContent:'center',alignItems:'center',backgroundColor: 'white'}}>
-                <Text style={[styles.header]}> Create Account </Text>
-
-                
-                <BottomSheet
-                ref={sheetRef}
-                index={1}
-                snapPoints={snapPoints}
-                handleIndicatorStyle={{ display: "none" }}
-                >   
-
-                  
-
-                    <View style={styles.sheet}>
-                    <CustomInput placeholder="Username" value={username} setValue={setUsername} secureTextEntry={false} iconName="account-outline" inputError={usernameError} isValid={isValidUsername}/>
-                    <CustomInput placeholder="Email Address" value={email} setValue={setEmail} secureTextEntry={false} keyboardType = 'email-address' iconName="email-outline" inputError={emailError} isValid={isValidEmail}/>
-                    <CustomInput placeholder="Password" value={password} setValue={setPassword} secureTextEntry={true} iconName="lock-outline" inputError={passwordError} isValid={isValidPassword}/>
-                    <CustomInput placeholder="Confirm Password" value={cpassword} setValue={setcPassword} secureTextEntry={true} iconName="lock-outline" inputError={confirmError} isValid={isValidConfirm} textContentType = 'oneTimeCode'/>
-                    <CustomInput placeholder="Phone Number" value={phoneNumber} setValue={setPhoneNumber} secureTextEntry={false} keyboardType = 'phone-pad' iconName="phone-outline" inputError={phoneError} isValid={isValidPhone}/>
+    return (  
+        <KeyboardAvoidingWrapper>
+                <View style={{flex:1,justifyContent:'center',alignItems:'center',backgroundColor: 'white'}}>
+                    <Text style={[styles.header]}> Create Account </Text>
+                    <BottomSheet
+                        ref={sheetRef}
+                        index={1}
+                        snapPoints={snapPoints}
+                        handleIndicatorStyle={{ display: "none" }}
+                    >   
+                        <View style={styles.sheet}>
+                            <CustomInput placeholder="Username" value={username} setValue={setUsername} secureTextEntry={false} iconName="account-outline" inputError={usernameError} isValid={isValidUsername}/>
+                            <CustomInput placeholder="Email Address" value={email} setValue={setEmail} secureTextEntry={false} keyboardType = 'email-address' iconName="email-outline" inputError={emailError} isValid={isValidEmail}/>
+                            <CustomInput placeholder="Password" value={password} setValue={setPassword} secureTextEntry={true} iconName="lock-outline" inputError={passwordError} isValid={isValidPassword}/>
+                            <CustomInput placeholder="Confirm Password" value={cpassword} setValue={setcPassword} secureTextEntry={true} iconName="lock-outline" inputError={confirmError} isValid={isValidConfirm} textContentType = 'oneTimeCode'/>
+                            <CustomInput placeholder="Phone Number" value={phoneNumber} setValue={setPhoneNumber} secureTextEntry={false} keyboardType = 'phone-pad' iconName="phone-outline" inputError={phoneError} isValid={isValidPhone}/>
                    
-                    <View style={{flexDirection:"row", marginBottom: 0, marginTop: 0 }}>
-                        <CustomButton onPress={onContinuePressed} buttonName="Continue" type="PRIMARY"/>
-                    </View>
+                            <View style={{flexDirection:"row", marginBottom: 0, marginTop: 0 }}>
+                                <CustomButton onPress={onContinuePressed} buttonName="Continue" type="PRIMARY"/>
+                            </View>
 
-                    <TouchableOpacity onPress={onCancelPressed}>
-                        <Text style = {{fontSize:13, marginTop: 0,  color: '#039be5'}}>
-                            Back To Login
-                        </Text>
-                    </TouchableOpacity>
-                    </View>  
-                   
-                    
-                </BottomSheet>
-                
-        </View>
-        
-        </TouchableWithoutFeedback>
-        </ScrollView>
-                
-      
-
-        
+                            <TouchableOpacity onPress={onCancelPressed}>
+                                <Text style = {{fontSize:13, marginTop: 0,  color: '#039be5'}}>
+                                    Back To Login
+                                </Text>
+                            </TouchableOpacity>
+                        </View>  
+                    </BottomSheet>
+                </View>
+            </KeyboardAvoidingWrapper>
     )
 }
 

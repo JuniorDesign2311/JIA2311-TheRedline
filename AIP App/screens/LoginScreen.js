@@ -99,7 +99,7 @@ const LoginScreen = ({navigation, route}) => {
             .then(userCredential => {
                 var user = userCredential.user;
                 loginSuccessful = true;
-                getPermissions();
+                checkUserType();
             })
             .catch(error => {
                 console.warn(error.message);
@@ -110,11 +110,57 @@ const LoginScreen = ({navigation, route}) => {
         )
     };
 
-    const getPermissions = async () => {
+    const checkUserType = () => {
+        firebase.firestore().collection("attendees").doc(user.uid).get().then((snapshot) => { 
+            if (snapshot.exists) {
+                checkLocationAsked("attendees");
+            } else {
+                firebase.firestore().collection("hosts").doc(user.uid).get().then((snapshot) => { 
+                    if (snapshot.exists) {
+                        checkLocationAsked("hosts");
+                    } else {
+                        console.log("User does not exist");
+                    }
+                });
+            }
+        });
+    }
+
+    const checkLocationAsked = (userType) => {
+        var locationAsked;
+        var locationTracking;
+        firebase.firestore().collection(userType).doc(user.uid).get().then((snapshot) => { 
+            if (snapshot.exists) {
+                const userData = snapshot.data();
+                locationAsked = userData["locationAsked"].toString();
+                locationTracking = userData["locationTracking"].toString();
+                    if (locationAsked === "true") {
+                        if (locationTracking === "true"){
+                            getLocation();
+                        } else {
+                            navigation.navigate("Map", {
+                                long: longitude,
+                                lat: latitude,
+                            });
+                        }
+                    } else {
+                        getPermissions(userType);
+                    }
+            } else {
+                console.log("Snapshot does not exist");
+            }
+        })
+    }
+
+    const getPermissions = async (userType) => {
         let { status } = await Location.requestForegroundPermissionsAsync();
         
         if (status !== 'granted') {
             Alert.alert('Permission to access location was denied. Please update in Settings.');
+            firebase.firestore().collection(userType).doc(user.uid).update({
+                locationTracking: false,
+                locationAsked: true,
+            });
 
             navigation.navigate("Map", {
                 long: longitude,
@@ -123,6 +169,11 @@ const LoginScreen = ({navigation, route}) => {
             
             return;
         }
+
+        firebase.firestore().collection(userType).doc(user.uid).update({
+            locationTracking: true,
+            locationAsked: true
+        });
 
         getLocation();
     };
@@ -156,48 +207,41 @@ const LoginScreen = ({navigation, route}) => {
     };
     
     return (
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-
-        <View style={{flex:1,justifyContent:'center',alignItems:'center', backgroundColor: 'white'}}>
-            <Text style={styles.header}>
-            Welcome!
-            </Text>
-
-
-            <BottomSheet
-            ref={sheetRef}
-            index={1}
-            snapPoints={snapPoints}
-            style={styles.bottomSheetStyle}
-            handleIndicatorStyle={{ display: "none" }}
-            >
-                <View style={styles.sheet}>
-                <Text style={styles.error}> {loginError} </Text>
-                <CustomInput placeholder="Email Address" value={email} setValue={setEmail} secureTextEntry={false} iconName="email-outline" defaultValue={route?.params?.username} isValid = {hasValidEmail} inputError = {emailError}/>
-                <CustomInput placeholder="Password" value={password} setValue={setPassword} secureTextEntry={true} iconName="lock-outline" defaultValue={route?.params?.password} isValid = {hasValidPassword} inputError = {passwordError}/>
-                <CustomButton onPress={onLoginPressed} buttonName="Log in" type="PRIMARY"/>
-                <View style={{flexDirection: 'row', alignItems: 'center', marginLeft: 25, marginRight: 25}}>
-                <View style={{flex: 1, height: 1, backgroundColor: 'lightgrey'}} />
-                    <View>
-                    <Text style={{width: 50, color:'grey', textAlign: 'center', fontFamily: 'Helvetica Neue'}}>or</Text>
-                    </View>
-
-                <View style={{flex: 1, height: 1, backgroundColor: 'lightgrey'}} />
+        <ScrollView showsVerticalScrollIndicator={false}>
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+                <View style={{flex:1,justifyContent:'center',alignItems:'center', backgroundColor: 'white'}}>
+                    <Text style={styles.header}> Welcome! </Text>
+                    <BottomSheet
+                        ref={sheetRef}
+                        index={1}
+                        snapPoints={snapPoints}
+                        style={styles.bottomSheetStyle}
+                        handleIndicatorStyle={{ display: "none" }}
+                    >
+                        <View style={styles.sheet}>
+                            <Text style={styles.error}> {loginError} </Text>
+                            <CustomInput placeholder="Email Address" value={email} setValue={setEmail} secureTextEntry={false} iconName="email-outline" defaultValue={route?.params?.username} isValid = {hasValidEmail} inputError = {emailError}/>
+                            <CustomInput placeholder="Password" value={password} setValue={setPassword} secureTextEntry={true} iconName="lock-outline" defaultValue={route?.params?.password} isValid = {hasValidPassword} inputError = {passwordError}/>
+                            <CustomButton onPress={onLoginPressed} buttonName="Log in" type="PRIMARY"/>
+                            <View style={{flexDirection: 'row', alignItems: 'center', marginLeft: 25, marginRight: 25}}>
+                                <View style={{flex: 1, height: 1, backgroundColor: 'lightgrey'}} />
+                                    <View>
+                                        <Text style={{width: 50, color:'grey', textAlign: 'center', fontFamily: 'Helvetica Neue'}}> or </Text>
+                                    </View>
+                                <View style={{flex: 1, height: 1, backgroundColor: 'lightgrey'}} />
+                            </View>
+                            <CustomButton onPress={onCreateAccountPressed} buttonName="Create Account" type="PRIMARY"/>
+                            <TouchableOpacity
+                                onPress={onForgotPasswordPressed}
+                                style={{ alignItems: 'center', marginTop: 5, }}
+                            >
+                                <Text style = {{fontSize:13, color: '#039be5'}}> Forgot password? </Text>
+                            </TouchableOpacity>
+                        </View>
+                    </BottomSheet>
                 </View>
-
-                <CustomButton onPress={onCreateAccountPressed} buttonName="Create Account" type="PRIMARY"/>
-                <TouchableOpacity
-                    onPress={onForgotPasswordPressed}
-                    style={{alignItems: 'center', marginTop: 5,}}>
-                <Text style = {{fontSize:13, color: '#039be5'}}>
-                    Forgot password?
-                </Text>
-            </TouchableOpacity>
-                </View>
-            </BottomSheet>
-            </View>
-        </TouchableWithoutFeedback>
-
+            </TouchableWithoutFeedback>
+        </ScrollView>
     )
 };
 
@@ -206,7 +250,8 @@ const styles = StyleSheet.create({
         fontSize: 45,
         fontFamily: 'Helvetica Neue',
         fontWeight: 'bold',
-        marginBottom: '135%',
+        paddingTop: "30%",
+        marginBottom: '175%',
         marginRight: '37%',
     },
     error: {

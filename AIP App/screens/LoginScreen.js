@@ -3,10 +3,12 @@ import {Alert} from 'react-native';
 import { View, Text, TouchableOpacity, Keyboard, StyleSheet, TouchableWithoutFeedback } from 'react-native';
 import CustomInput from '../components/CustomInput';
 import CustomButton from '../components/CustomButton';
+import firebase from "firebase/app";
 import { auth } from '../firebaseConfig';
 import { useIsFocused } from '@react-navigation/native';
 import BottomSheet from '@gorhom/bottom-sheet';
 import * as Location from 'expo-location';
+import KeyboardAvoidingWrapper from '../components/KeyboardAvoidingWrapper';
 
 
 const LoginScreen = ({navigation, route}) => {
@@ -18,6 +20,7 @@ const LoginScreen = ({navigation, route}) => {
     
     const [hasValidEmail, setHasValidEmail] = useState(true);
     const [hasValidPassword, setHasValidPassword] = useState(true);
+    const user = firebase.auth().currentUser;
 
     const [loginError, setLoginError] = useState(false);
 
@@ -95,6 +98,7 @@ const LoginScreen = ({navigation, route}) => {
         loginSuccessful = false;
         auth.signInWithEmailAndPassword(email, password)
             .then(userCredential => {
+                var user = userCredential.user;
                 loginSuccessful = true;
                 checkUserType();
             })
@@ -204,41 +208,39 @@ const LoginScreen = ({navigation, route}) => {
     };
     
     return (
-        <ScrollView showsVerticalScrollIndicator={false}>
-            <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-                <View style={{flex:1,justifyContent:'center',alignItems:'center', backgroundColor: 'white'}}>
-                    <Text style={styles.header}> Welcome! </Text>
-                    <BottomSheet
-                        ref={sheetRef}
-                        index={1}
-                        snapPoints={snapPoints}
-                        style={styles.bottomSheetStyle}
-                        handleIndicatorStyle={{ display: "none" }}
-                    >
-                        <View style={styles.sheet}>
-                            <Text style={styles.error}> {loginError} </Text>
-                            <CustomInput placeholder="Email Address" value={email} setValue={setEmail} secureTextEntry={false} iconName="email-outline" defaultValue={route?.params?.username} isValid = {hasValidEmail} inputError = {emailError}/>
-                            <CustomInput placeholder="Password" value={password} setValue={setPassword} secureTextEntry={true} iconName="lock-outline" defaultValue={route?.params?.password} isValid = {hasValidPassword} inputError = {passwordError}/>
-                            <CustomButton onPress={onLoginPressed} buttonName="Log in" type="PRIMARY"/>
-                            <View style={{flexDirection: 'row', alignItems: 'center', marginLeft: 25, marginRight: 25}}>
-                                <View style={{flex: 1, height: 1, backgroundColor: 'lightgrey'}} />
-                                    <View>
-                                        <Text style={{width: 50, color:'grey', textAlign: 'center', fontFamily: 'Helvetica Neue'}}> or </Text>
-                                    </View>
-                                <View style={{flex: 1, height: 1, backgroundColor: 'lightgrey'}} />
-                            </View>
-                            <CustomButton onPress={onCreateAccountPressed} buttonName="Create Account" type="PRIMARY"/>
-                            <TouchableOpacity
-                                onPress={onForgotPasswordPressed}
-                                style={{ alignItems: 'center', marginTop: 5, }}
-                            >
-                                <Text style = {{fontSize:13, color: '#039be5'}}> Forgot password? </Text>
-                            </TouchableOpacity>
+        <KeyboardAvoidingWrapper>
+            <View style={{flex:1,justifyContent:'center',alignItems:'center', backgroundColor: 'white'}}>
+                <Text style={styles.header}> Welcome! </Text>
+                <BottomSheet
+                    ref={sheetRef}
+                    index={1}
+                    snapPoints={snapPoints}
+                    style={styles.bottomSheetStyle}
+                    handleIndicatorStyle={{ display: "none" }}
+                >
+                    <View style={styles.sheet}>
+                        <Text style={styles.error}> {loginError} </Text>
+                        <CustomInput placeholder="Email Address" value={email} setValue={setEmail} secureTextEntry={false} iconName="email-outline" defaultValue={route?.params?.username} isValid = {hasValidEmail} inputError = {emailError}/>
+                        <CustomInput placeholder="Password" value={password} setValue={setPassword} secureTextEntry={true} iconName="lock-outline" defaultValue={route?.params?.password} isValid = {hasValidPassword} inputError = {passwordError}/>
+                        <CustomButton onPress={onLoginPressed} buttonName="Log in" type="PRIMARY"/>
+                        <View style={{flexDirection: 'row', alignItems: 'center', marginLeft: 25, marginRight: 25}}>
+                            <View style={{flex: 1, height: 1, backgroundColor: 'lightgrey'}} />
+                                <View>
+                                    <Text style={{width: 50, color:'grey', textAlign: 'center', fontFamily: 'Helvetica Neue'}}> or </Text>
+                                </View>
+                            <View style={{flex: 1, height: 1, backgroundColor: 'lightgrey'}} />
                         </View>
-                    </BottomSheet>
-                </View>
-            </TouchableWithoutFeedback>
-        </ScrollView>
+                        <CustomButton onPress={onCreateAccountPressed} buttonName="Create Account" type="PRIMARY"/>
+                        <TouchableOpacity
+                            onPress={onForgotPasswordPressed}
+                            style={{ alignItems: 'center', marginTop: 5, }}
+                        >
+                            <Text style = {{fontSize:13, color: '#039be5'}}> Forgot password? </Text>
+                        </TouchableOpacity>
+                    </View>
+                </BottomSheet>
+            </View>
+        </KeyboardAvoidingWrapper>
     )
 };
 

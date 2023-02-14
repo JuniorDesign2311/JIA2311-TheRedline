@@ -33,6 +33,7 @@ not allowing them to reuse their information previously chosen.
 * Functioning Location Permission Services
 * Current Location Functionality
 * Event Map Markers
+* Split the databse "users" into "hosts" and "attendees"
 
 ### Bug Fixes
 * Fixed an issue in which certain buttons pressed would result in Render Errors due to invalid objects.

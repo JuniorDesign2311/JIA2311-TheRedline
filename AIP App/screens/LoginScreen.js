@@ -1,9 +1,8 @@
 import React, {useState, useRef, useMemo, useEffect} from 'react';
 import {Alert} from 'react-native';
-import { View, Text, TouchableOpacity, Keyboard, StyleSheet, TouchableWithoutFeedback } from 'react-native';
+import { View, Text, TouchableOpacity, Keyboard, StyleSheet } from 'react-native';
 import CustomInput from '../components/CustomInput';
 import CustomButton from '../components/CustomButton';
-import firebase from "firebase/app";
 import { auth } from '../firebaseConfig';
 import { useIsFocused } from '@react-navigation/native';
 import BottomSheet from '@gorhom/bottom-sheet';
@@ -20,7 +19,6 @@ const LoginScreen = ({navigation, route}) => {
     
     const [hasValidEmail, setHasValidEmail] = useState(true);
     const [hasValidPassword, setHasValidPassword] = useState(true);
-    const user = firebase.auth().currentUser;
 
     const [loginError, setLoginError] = useState(false);
 
@@ -100,7 +98,7 @@ const LoginScreen = ({navigation, route}) => {
             .then(userCredential => {
                 var user = userCredential.user;
                 loginSuccessful = true;
-                checkUserType();
+                getPermissions();
             })
             .catch(error => {
                 console.warn(error.message);
@@ -111,57 +109,11 @@ const LoginScreen = ({navigation, route}) => {
         )
     };
 
-    const checkUserType = () => {
-        firebase.firestore().collection("attendees").doc(user.uid).get().then((snapshot) => { 
-            if (snapshot.exists) {
-                checkLocationAsked("attendees");
-            } else {
-                firebase.firestore().collection("hosts").doc(user.uid).get().then((snapshot) => { 
-                    if (snapshot.exists) {
-                        checkLocationAsked("hosts");
-                    } else {
-                        console.log("User does not exist");
-                    }
-                });
-            }
-        });
-    }
-
-    const checkLocationAsked = (userType) => {
-        var locationAsked;
-        var locationTracking;
-        firebase.firestore().collection(userType).doc(user.uid).get().then((snapshot) => { 
-            if (snapshot.exists) {
-                const userData = snapshot.data();
-                locationAsked = userData["locationAsked"].toString();
-                locationTracking = userData["locationTracking"].toString();
-                    if (locationAsked === "true") {
-                        if (locationTracking === "true"){
-                            getLocation();
-                        } else {
-                            navigation.navigate("Map", {
-                                long: longitude,
-                                lat: latitude,
-                            });
-                        }
-                    } else {
-                        getPermissions(userType);
-                    }
-            } else {
-                console.log("Snapshot does not exist");
-            }
-        })
-    }
-
-    const getPermissions = async (userType) => {
+    const getPermissions = async () => {
         let { status } = await Location.requestForegroundPermissionsAsync();
         
         if (status !== 'granted') {
             Alert.alert('Permission to access location was denied. Please update in Settings.');
-            firebase.firestore().collection(userType).doc(user.uid).update({
-                locationTracking: false,
-                locationAsked: true,
-            });
 
             navigation.navigate("Map", {
                 long: longitude,
@@ -170,11 +122,6 @@ const LoginScreen = ({navigation, route}) => {
             
             return;
         }
-
-        firebase.firestore().collection(userType).doc(user.uid).update({
-            locationTracking: true,
-            locationAsked: true
-        });
 
         getLocation();
     };

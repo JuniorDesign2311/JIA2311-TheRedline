@@ -4,7 +4,6 @@ import { StyleSheet, Text, View, ScrollView, TouchableOpacity} from 'react-nativ
 import BottomSheet from '@gorhom/bottom-sheet';
 import PlusButton from '../components/PlusButton';
 import { db } from '../firebaseConfig';
-import firebase from "firebase/app";
 import { Marker } from "react-native-maps";
 
 

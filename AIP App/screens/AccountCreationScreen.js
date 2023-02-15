@@ -1,5 +1,5 @@
 import React, {useState, useRef, useMemo} from 'react'
-import { View, Text,  StyleSheet, ScrollView, TouchableWithoutFeedback, Keyboard, TouchableOpacity} from 'react-native'
+import { View, Text,  StyleSheet, TouchableOpacity} from 'react-native'
 import CustomInput from '../components/CustomInput';
 import CustomButton from '../components/CustomButton';
 import firebase from "firebase/app";

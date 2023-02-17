@@ -6,6 +6,7 @@ import firebase from "firebase/app";
 import "firebase/firestore";
 import BottomSheet from '@gorhom/bottom-sheet';
 import KeyboardAvoidingWrapper from '../components/KeyboardAvoidingWrapper';
+import GlobalStyles from '../components/GlobalStyles';
 
 const AccountCreationScreen = ({ navigation }) => {
     /* useState returns the original value argument that's passed in and a function that returns the changed value */
@@ -275,15 +276,15 @@ const AccountCreationScreen = ({ navigation }) => {
 
     return (  
         <KeyboardAvoidingWrapper>
-            <View style={{flex:1,justifyContent:'center',alignItems:'center',backgroundColor: 'white'}}>
-                <Text style={[styles.header]}> Create Account </Text>
+            <View style={GlobalStyles.viewStyle}>
+                <Text style={[GlobalStyles.header]}> Create Account </Text>
                 <BottomSheet
                     ref={sheetRef}
                     index={1}
                     snapPoints={snapPoints}
                     handleIndicatorStyle={{ display: "none" }}
                 >   
-                    <View style={styles.sheet}>
+                    <View style={GlobalStyles.sheet}>
                         <CustomInput placeholder="Username" value={username} setValue={setUsername} secureTextEntry={false} iconName="account-outline" inputError={usernameError} isValid={isValidUsername}/>
                         <CustomInput placeholder="Email Address" value={email} setValue={setEmail} secureTextEntry={false} keyboardType = 'email-address' iconName="email-outline" inputError={emailError} isValid={isValidEmail}/>
                         <CustomInput placeholder="Password" value={password} setValue={setPassword} secureTextEntry={true} iconName="lock-outline" inputError={passwordError} isValid={isValidPassword}/>
@@ -295,9 +296,7 @@ const AccountCreationScreen = ({ navigation }) => {
                         </View>
 
                         <TouchableOpacity onPress={onCancelPressed}>
-                            <Text style = {{fontSize:13, marginTop: 0,  color: '#039be5'}}>
-                                Back To Login
-                            </Text>
+                            <Text style={GlobalStyles.blueText}> Back To Login </Text>
                         </TouchableOpacity>
                     </View>  
                 </BottomSheet>
@@ -306,39 +305,4 @@ const AccountCreationScreen = ({ navigation }) => {
     )
 }
 
-const styles = StyleSheet.create({
-    root: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        paddingTop: 50,
-    },
-    setTitleFont: {
-        fontSize: 20,
-        marginTop: 150,
-        marginBottom: 30,
-    },
-    text: {
-        textAlign: "left"
-    },
-    header: {
-        fontSize: 45,
-        fontFamily: 'Helvetica Neue',
-        fontWeight: 'bold',
-        paddingTop: "30%",
-        marginBottom: "175%",
-        textAlign: 'left',
-    },
-    error: {
-        color:'red',
-        fontSize: 15,
-        fontWeight: 'bold',
-        textAlign: 'center'
-    },
-    sheet: {
-        alignItems: 'center',
-    },
-    bottomSheetStyle: {
-        borderRadius: 50,
-    }
-})
 export default AccountCreationScreen;

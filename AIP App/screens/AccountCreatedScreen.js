@@ -13,7 +13,7 @@ const AccountCreatedScreen = ({navigation, route}) => {
     }
 
     return (
-        <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
+        <View style={styles.container}>
             <Text style={styles.baseText}>
             Account Successfully Created!
             </Text>
@@ -26,6 +26,11 @@ const styles = StyleSheet.create({
     baseText: {
       fontSize: 20,
     },
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center'
+    }
   });
 
 

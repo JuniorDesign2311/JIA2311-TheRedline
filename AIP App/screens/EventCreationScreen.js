@@ -7,6 +7,7 @@ import { db } from '../firebaseConfig';
 import firebase from "firebase/app";
 import uuid from 'react-native-uuid';
 import KeyboardAvoidingWrapper from '../components/KeyboardAvoidingWrapper';
+import GlobalStyles from '../components/GlobalStyles';
 
 const EventCreationScreen = ({ navigation }) => {
     /* useState returns the original value argument that's passed in and a function that returns the changed value */
@@ -158,7 +159,7 @@ const EventCreationScreen = ({ navigation }) => {
 
     return (
         <KeyboardAvoidingWrapper>
-            <View style={{flex:1,justifyContent:'center',alignItems:'center',backgroundColor: 'white'}}>
+            <View style={GlobalStyles.viewStyle}>
                 <Text style={[styles.header]}> Create Event </Text>
                 <View style={styles.sheet}>
                     <CustomInput placeholder="Event Title" value={title} setValue={setTitle} secureTextEntry={false} inputError={titleError} isValid={isValidTitle}/>
@@ -172,9 +173,7 @@ const EventCreationScreen = ({ navigation }) => {
                         <CustomButton onPress={onSubmitPressed} buttonName="Submit" type="PRIMARY"/>
                     </View>
                     <TouchableOpacity onPress={onCancelPressed}>
-                        <Text style = {{fontSize:13, marginTop: 0,  color: '#039be5'}} iconName="account-outline">
-                            Cancel
-                        </Text>
+                        <Text style = {GlobalStyles.blueText} iconName="account-outline"> Cancel </Text>
                     </TouchableOpacity>
                 </View>  
             </View>
@@ -183,9 +182,6 @@ const EventCreationScreen = ({ navigation }) => {
 }
 
 const styles = StyleSheet.create({
-    text: {
-        textAlign: "left"
-    },
     header: {
         fontSize: 45,
         fontFamily: 'Helvetica Neue',
@@ -193,12 +189,6 @@ const styles = StyleSheet.create({
         paddingTop: '40%',
         marginBottom: "10%",
         textAlign: 'left',
-    },
-    error: {
-        color:'red',
-        fontSize: 15,
-        fontWeight: 'bold',
-        textAlign: 'center'
     },
     sheet: {
         alignItems: 'center',

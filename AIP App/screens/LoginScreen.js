@@ -8,6 +8,7 @@ import { useIsFocused } from '@react-navigation/native';
 import BottomSheet from '@gorhom/bottom-sheet';
 import * as Location from 'expo-location';
 import KeyboardAvoidingWrapper from '../components/KeyboardAvoidingWrapper';
+import GlobalStyles from '../components/GlobalStyles';
 
 
 const LoginScreen = ({navigation, route}) => {
@@ -156,17 +157,17 @@ const LoginScreen = ({navigation, route}) => {
     
     return (
         <KeyboardAvoidingWrapper>
-            <View style={{flex:1,justifyContent:'center',alignItems:'center', backgroundColor: 'white'}}>
-                <Text style={styles.header}> Welcome! </Text>
+            <View style={GlobalStyles.viewStyle}>
+                <Text style={GlobalStyles.header}> Welcome! </Text>
                 <BottomSheet
                     ref={sheetRef}
                     index={1}
                     snapPoints={snapPoints}
-                    style={styles.bottomSheetStyle}
+                    style={GlobalStyles.bottomSheet}
                     handleIndicatorStyle={{ display: "none" }}
                 >
-                    <View style={styles.sheet}>
-                        <Text style={styles.error}> {loginError} </Text>
+                    <View style={GlobalStyles.sheet}>
+                        <Text style={GlobalStyles.error}> {loginError} </Text>
                         <CustomInput placeholder="Email Address" value={email} setValue={setEmail} secureTextEntry={false} iconName="email-outline" defaultValue={route?.params?.username} isValid = {hasValidEmail} inputError = {emailError}/>
                         <CustomInput placeholder="Password" value={password} setValue={setPassword} secureTextEntry={true} iconName="lock-outline" defaultValue={route?.params?.password} isValid = {hasValidPassword} inputError = {passwordError}/>
                         <CustomButton onPress={onLoginPressed} buttonName="Log in" type="PRIMARY"/>
@@ -182,7 +183,7 @@ const LoginScreen = ({navigation, route}) => {
                             onPress={onForgotPasswordPressed}
                             style={{ alignItems: 'center', marginTop: 5, }}
                         >
-                            <Text style = {{fontSize:13, color: '#039be5'}}> Forgot password? </Text>
+                            <Text style = {GlobalStyles.blueText}> Forgot password? </Text>
                         </TouchableOpacity>
                     </View>
                 </BottomSheet>
@@ -190,27 +191,5 @@ const LoginScreen = ({navigation, route}) => {
         </KeyboardAvoidingWrapper>
     )
 };
-
-const styles = StyleSheet.create({
-    header: {
-        fontSize: 45,
-        fontFamily: 'Helvetica Neue',
-        fontWeight: 'bold',
-        paddingTop: "30%",
-        marginBottom: '175%',
-        marginRight: '37%',
-    },
-    error: {
-        fontSize: 15,
-        fontWeight: 'bold',
-        color:'red'
-    },
-    sheet: {
-        alignItems: 'center',
-    },
-    bottomSheetStyle: {
-        borderRadius: 50
-    }
-  });
 
 export default LoginScreen

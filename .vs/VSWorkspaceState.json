@@ -2,11 +2,9 @@
   "ExpandedNodes": [
     "",
     "\\AIP App",
-    "\\AIP App\\.expo",
-    "\\AIP App\\assets",
     "\\AIP App\\components",
     "\\AIP App\\screens"
   ],
-  "SelectedNode": "\\AIP App\\screens\\AccountCreationScreen.js",
+  "SelectedNode": "\\AIP App\\screens\\ResetPasswordScreen.js",
   "PreviewInSolutionExplorer": false
 }

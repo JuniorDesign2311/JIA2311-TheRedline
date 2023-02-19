@@ -62,11 +62,11 @@ const LoginScreen = ({navigation}) => {
         navigation.navigate("Login");
         setEmailError('');
     }
-    
+
     return (
-        <KeyboardAvoidingWrapper>
-            <View style={GlobalStyles.viewStyle}>
-                <Text style={GlobalStyles.header2}> Reset Password </Text>
+      <KeyboardAvoidingWrapper>
+          <View style={GlobalStyles.viewStyle}>
+              <Text style={GlobalStyles.header2}> Reset Password </Text>
                 <BottomSheet
                     ref={sheetRef}
                     index={1}

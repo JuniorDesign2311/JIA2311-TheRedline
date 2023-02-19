@@ -10,30 +10,30 @@ import { Marker } from "react-native-maps";
 const MapScreen = ({navigation, route}) => {
   const longitude = route?.params?.long ?? -122.43;
   const latitude = route?.params?.lat ??  37.77;
-  
+
   const sheetRef = useRef(null);
 
   const snapPoints = useMemo(() => [ '10%', '45%', '90%' ]);
 
   const [events, setEvents] = useState([]);
 
- 
+
   //useEffect makes the function within it only be called only on the first render (the page re-renders if something on the screen changes
   //in other words, the state changes.)
   useEffect(() => {
 
     //.get() only takes from the database once (whenever useEffect() is called) and the data won't ever be taken again until
-    // useEffect() is called again. 
+    // useEffect() is called again.
     //.onSnapshot() makes it so whenever the database changes, the function will be called and the data will be taken again
     db.collection('events').onSnapshot((querySnapshot) => {
       setEvents(querySnapshot.docs.map(snapshot => { //querySnapshot.docs gives us an array of a reference to all the documents in the snapshot (not the data)
-          const data = snapshot.data();  //data object   
+          const data = snapshot.data();  //data object
           return data;
       }))
     })
   }, []);
-  
-  
+
+
   const addEvent = () => {
     navigation.navigate("EventCreation");
   }
@@ -101,16 +101,16 @@ const MapScreen = ({navigation, route}) => {
               <Text style={styles.events}>Date: {data["date"]}</Text>
               <Text style={styles.events}>Time: {data["time"]}</Text>
               <Text style={styles.events}>Location: {data["location"]}</Text>
-              <Text style={styles.events}>Description: {data["description"]}</Text>  
-            </TouchableOpacity> 
+              <Text style={styles.events}>Description: {data["description"]}</Text>
+            </TouchableOpacity>
             </>
-                    
+
           ))}
       </View>
 
       </View>
         </ScrollView>
-        
+
       </BottomSheet>
 
       </View>
@@ -118,38 +118,38 @@ const MapScreen = ({navigation, route}) => {
 };
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        alignItems: 'center'
-    },
-    map: {
-        width: '100%',
-        height: '100%',
-    },
-    events: {
-    
-    },
-    eventTitle: {
-        fontWeight: 'bold',
-        fontSize: 25,
-        textAlign: 'right'
-    },
-    allEvents: {
-        alignItems: 'left',
-        width: '90%',
-        marginBottom: 20
+  container: {
+    flex: 1,
+    alignItems: 'center'
+  },
+  map: {
+    width: '100%',
+    height: '100%',
+  },
+  events: {
 
-    }, 
-    eachEvent: {
-        alignItems: 'left',
-        borderWidth: 1,
-        width: '100%',
-        paddingBottom: '2%',
-        borderRadius: '20%',
-        paddingLeft: '3%',
-        paddingTop: '2%',
-        backgroundColor: '#E5E4E2'
-    },
+  },
+  eventTitle: {
+    fontWeight: 'bold',
+    fontSize: 25,
+    textAlign: 'right'
+  },
+  allEvents: {
+    alignItems: 'left',
+    width: '90%',
+    marginBottom: 20
+
+  },
+  eachEvent: {
+    alignItems: 'left',
+    borderWidth: 1,
+    width: '100%',
+    paddingBottom: '2%',
+    borderRadius: '20%',
+    paddingLeft: '3%',
+    paddingTop: '2%',
+    backgroundColor: '#E5E4E2'
+  }
 });
 
 export default MapScreen;

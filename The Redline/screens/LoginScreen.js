@@ -10,14 +10,13 @@ import * as Location from 'expo-location';
 import KeyboardAvoidingWrapper from '../components/KeyboardAvoidingWrapper';
 import GlobalStyles from '../components/GlobalStyles';
 
-
 const LoginScreen = ({navigation, route}) => {
     const [email, setEmail] = useState(route?.params?.email);
     const [password, setPassword] = useState(route?.params?.password);
 
     const [emailError, setEmailError] = useState("");
     const [passwordError, setPasswordError] = useState("");
-    
+
     const [hasValidEmail, setHasValidEmail] = useState(true);
     const [hasValidPassword, setHasValidPassword] = useState(true);
 
@@ -66,7 +65,7 @@ const LoginScreen = ({navigation, route}) => {
             setEmailError('');
             setHasValidEmail(true);
         }
-        
+
         if (!password) {
             noErrors = false;
             setPasswordError('Password Field is Empty');
@@ -86,7 +85,7 @@ const LoginScreen = ({navigation, route}) => {
             setPasswordError('');
             setHasValidPassword(true);
         }
-       
+
 
         if (noErrors) {
             handleLogin();
@@ -112,7 +111,7 @@ const LoginScreen = ({navigation, route}) => {
 
     const getPermissions = async () => {
         let { status } = await Location.requestForegroundPermissionsAsync();
-        
+
         if (status !== 'granted') {
             Alert.alert('Permission to access location was denied. Please update in Settings.');
 
@@ -120,7 +119,7 @@ const LoginScreen = ({navigation, route}) => {
                 long: longitude,
                 lat: latitude,
             });
-            
+
             return;
         }
 
@@ -141,10 +140,10 @@ const LoginScreen = ({navigation, route}) => {
     }
 
     const onForgotPasswordPressed = () => {
-        navigation.navigate("ResetPassword");   
+        navigation.navigate("ResetPassword");
         setLoginError('');
     }
-    
+
     const onLoginPressed = () => {
         Keyboard.dismiss();
         validateLogin();
@@ -154,20 +153,19 @@ const LoginScreen = ({navigation, route}) => {
         navigation.navigate("TermsOfService");
         setLoginError('');
     };
-    
+
     return (
         <KeyboardAvoidingWrapper>
-            <View style={GlobalStyles.viewStyle}>
-                <Text style={GlobalStyles.header}> Welcome! </Text>
-                <BottomSheet
+        <View style={GlobalStyles.viewStyle}>
+            <Text style={GlobalStyles.header}> Welcome! </Text>
                     ref={sheetRef}
                     index={1}
                     snapPoints={snapPoints}
                     style={GlobalStyles.bottomSheet}
                     handleIndicatorStyle={{ display: "none" }}
                 >
-                    <View style={GlobalStyles.sheet}>
-                        <Text style={GlobalStyles.error}> {loginError} </Text>
+                <View style={GlobalStyles.sheet}>
+                    <Text style={GlobalStyles.error}> {loginError} </Text>
                         <CustomInput placeholder="Email Address" value={email} setValue={setEmail} secureTextEntry={false} iconName="email-outline" defaultValue={route?.params?.username} isValid = {hasValidEmail} inputError = {emailError}/>
                         <CustomInput placeholder="Password" value={password} setValue={setPassword} secureTextEntry={true} iconName="lock-outline" defaultValue={route?.params?.password} isValid = {hasValidPassword} inputError = {passwordError}/>
                         <CustomButton onPress={onLoginPressed} buttonName="Log in" type="PRIMARY"/>

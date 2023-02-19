@@ -4,11 +4,10 @@ import TOSButton from '../components/TOSButton';
 import BottomSheet from '@gorhom/bottom-sheet';
 import GlobalStyles from '../components/GlobalStyles';
 
-
 const TermsOfServiceScreen = ({navigation, route}) => {
     const sheetRef = useRef(null);
     const snapPoints = useMemo(() => [ '75%', '75%' ]);
-    
+
     const returnToLoginPressed = () => {
         navigation.navigate("Login");
     }

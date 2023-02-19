@@ -7,6 +7,7 @@ import { db } from '../firebaseConfig';
 import firebase from "firebase/app";
 import uuid from 'react-native-uuid';
 import KeyboardAvoidingWrapper from '../components/KeyboardAvoidingWrapper';
+import GlobalStyles from '../components/GlobalStyles';
 import { GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
 
 const EventCreationScreen = ({ navigation }) => {
@@ -38,7 +39,7 @@ const EventCreationScreen = ({ navigation }) => {
     // Method that writes the event data into The Redline's Firebase Firestore
     const handleEventLogging = async () => {
         //Code to log user data and make it an object and then log the object's username
-        firebase.firestore().collection("hosts").doc(user.uid).get().then((snapshot) => { 
+        firebase.firestore().collection("hosts").doc(user.uid).get().then((snapshot) => {
             if (snapshot.exists) {
             const userData = snapshot.data();
             userData["username"].toString();
@@ -63,7 +64,7 @@ const EventCreationScreen = ({ navigation }) => {
     // Method that validates the inputs within each of the fields
     const validateInput = () => {
         // Error Handling
-        
+
         var noError = true;
 
         // Title Validation
@@ -113,7 +114,7 @@ const EventCreationScreen = ({ navigation }) => {
             setDateError('');
             setIsValidDate(true);
         }
-        
+
         // Time Validation
         if (time.length === 0) {
             noError = false;
@@ -137,7 +138,7 @@ const EventCreationScreen = ({ navigation }) => {
             setDescriptionError('');
             setIsValidDescription(true);
         }
-        
+
         return noError;
     }
 
@@ -161,33 +162,30 @@ const EventCreationScreen = ({ navigation }) => {
     // UI Components
     return (
         <KeyboardAvoidingWrapper>
-            
-            <View style={{flex:1,justifyContent:'center',alignItems:'center',backgroundColor: 'white'}}>
+            <View style={GlobalStyles.viewStyle}>
                 <Text style={[styles.header]}> Create Event </Text>
                 <View style={styles.sheet}>
                     <CustomInput placeholder="Event Title" value={title} setValue={setTitle} secureTextEntry={false} inputError={titleError} isValid={isValidTitle}/>
                     <CustomInput placeholder="Location" value={location} setValue={setLocation} secureTextEntry={false} inputError={locationError} isValid={isValidLocation}/>
                     <GooglePlacesAutocomplete
-                            placeholder="Location"
-                            onPress={(data, details = null) => {
-                                console.log(data,details);
-                            }}
-                            query={{
-                                key: 'AIzaSyDTKNiZ9cnqslVZD9GS_1F_Z6K_6DJ9kfw',
-                                language: 'en',
-                            }}
+                        placeholder="Location"
+                        onPress={(data, details = null) => {
+                            console.log(data,details);
+                        }}
+                        query={{
+                            key: 'AIzaSyDTKNiZ9cnqslVZD9GS_1F_Z6K_6DJ9kfw',
+                            language: 'en',
+                        }}
                     />
                     <CustomInput placeholder="Date" value={oldDate} setValue={setOldDate} secureTextEntry={false} inputError={dateError} isValid={isValidDate}/>
                     <CustomInput placeholder="Time" value={time} setValue={setTime} secureTextEntry={false} inputError={timeError} isValid={isValidTime} textContentType = 'oneTimeCode'/>
                     <EventDescriptionInput placeholder="Event Description" value={description} setValue={setDescription} secureTextEntry={false} inputError={descriptionError} isValid={isValidDescription}/>
-                   
+
                     <View style={{flexDirection:"row", marginBottom: 0, marginTop: 15 }}>
                         <CustomButton onPress={onSubmitPressed} buttonName="Submit" type="PRIMARY"/>
                     </View>
                     <TouchableOpacity onPress={onCancelPressed}>
-                        <Text style = {{fontSize:13, marginTop: 0,  color: '#039be5'}} iconName="account-outline">
-                            Cancel
-                        </Text>
+                        <Text style = {GlobalStyles.blueText} iconName="account-outline"> Cancel </Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -196,9 +194,6 @@ const EventCreationScreen = ({ navigation }) => {
 }
 
 const styles = StyleSheet.create({
-    text: {
-        textAlign: "left"
-    },
     header: {
         fontSize: 45,
         fontFamily: 'Helvetica Neue',
@@ -206,12 +201,6 @@ const styles = StyleSheet.create({
         paddingTop: '40%',
         marginBottom: "10%",
         textAlign: 'left',
-    },
-    error: {
-        color:'red',
-        fontSize: 15,
-        fontWeight: 'bold',
-        textAlign: 'center'
     },
     sheet: {
         alignItems: 'center',
@@ -394,4 +383,3 @@ export default EventCreationScreen;
 //     }
 // })
 // export default EventCreationScreen;
-	

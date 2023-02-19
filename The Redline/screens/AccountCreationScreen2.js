@@ -10,7 +10,7 @@ import firebase from "firebase/app";
 import "firebase/firestore";
 import BottomSheet from '@gorhom/bottom-sheet';
 import KeyboardAvoidingWrapper from '../components/KeyboardAvoidingWrapper';
-
+import GlobalStyles from '../components/GlobalStyles';
 
 const AccountCreationScreen2 = ({ navigation, route }) => {
     /* useState returns the original value argument that's passed in and a function that returns the changed value */
@@ -36,14 +36,14 @@ const AccountCreationScreen2 = ({ navigation, route }) => {
     const [isValidLastName, setIsValidLastName] = useState(true);
     const [hasStateError, setHasStateError] = useState(false);
     const [hasAttendeeHostError, setHasAttendeeHostError] = useState(false);
-   
-    
+
+
     // Method to create the user
     const createUser = async () => {
         auth.createUserWithEmailAndPassword(email, password)
         .then(userCredential => {
             var userID = userCredential.user.uid;
-            // Signed in 
+            // Signed in
             writeUserData(userID);
             //Navigates to second creation screen and passes data through
             Keyboard.dismiss();
@@ -166,7 +166,7 @@ const AccountCreationScreen2 = ({ navigation, route }) => {
     }
 
     // Method that hanldes Create Account button click
-    const onCreateAccountPressed = () => {    
+    const onCreateAccountPressed = () => {
         Keyboard.dismiss();
         if (!validateInputs()) {
             console.warn("Error creating account")
@@ -184,15 +184,15 @@ const AccountCreationScreen2 = ({ navigation, route }) => {
     // UI Components
     return (
         <KeyboardAvoidingWrapper>
-            <View style={{flex:1,justifyContent:'center',alignItems:'center',backgroundColor: 'white'}}>
-                <Text style={[styles.header]}> Create Account </Text>
+            <View style={GlobalStyles.viewStyle}>
+                <Text style={[GlobalStyles.header]}> Create Account </Text>
                 <BottomSheet
-                ref={sheetRef}
-                index={1}
-                snapPoints={snapPoints}
-                handleIndicatorStyle={{ display: "none" }}
+                    ref={sheetRef}
+                    index={1}
+                    snapPoints={snapPoints}
+                    handleIndicatorStyle={{ display: "none" }}
                 >
-                    <View style={styles.sheet}> 
+                    <View style={GlobalStyles.sheet}>
                         <CustomInput placeholder="First Name" value={firstName} setValue={setFirstName} secureTextEntry={false} inputError={firstNameError} isValid={isValidFirstName}/>
                         <CustomInput placeholder="Last Name" value={lastName} setValue={setLastName} secureTextEntry={false} inputError={lastNameError} isValid={isValidLastName}/>
                         <States state={state} setState={setState} hasError={hasStateError}/>
@@ -204,58 +204,19 @@ const AccountCreationScreen2 = ({ navigation, route }) => {
                         </View>
 
                         <Text style={{color: "red"}}> {attendeeHostError} </Text>
-                    
+
                         <View style={{ flexDirection: "row"}}>
                             <CustomButton onPress={onCreateAccountPressed} buttonName="Create Account" type="PRIMARY" />
                         </View>
-                        
+
                         <TouchableOpacity onPress={onGoBackPressed}>
-                            <Text style = {{fontSize:13, marginTop: 0,  color: '#039be5'}}>
-                                Go Back
-                            </Text>
+                            <Text style = {GlobalStyles.blueText}> Go Back </Text>
                         </TouchableOpacity>
-                        </View>
+                    </View>
                 </BottomSheet>
             </View>
         </KeyboardAvoidingWrapper>
     )
 }
 
-
-
-const styles = StyleSheet.create({
-    root: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        paddingTop: 50,
-    },
-    setTitleFont: {
-        fontSize: 20,
-        marginTop: 40,
-        marginBottom: 30,
-    },
-    text: {
-        textAlign: "left"
-    },
-    header: {
-        fontSize: 45,
-        fontFamily: 'Helvetica Neue',
-        fontWeight: 'bold',
-        paddingTop: '30%',
-        marginBottom: '175%',
-        textAlign: 'left',
-    },
-    error: {
-        color:'red',
-        fontSize: 15,
-        fontWeight: 'bold',
-        textAlign: 'center'
-    },
-    sheet: {
-        alignItems: 'center',
-    },
-    bottomSheetStyle: {
-        borderRadius: 50
-    }
-})
 export default AccountCreationScreen2

@@ -19,7 +19,7 @@ const TermsOfServiceScreen = ({navigation, route}) => {
     return (
         <ScrollView>
             <View style={GlobalStyles.viewStyle}>
-                <Text style={GlobalStyles.header2}> Terms of Service </Text>
+                <Text style={GlobalStyles.header}> Terms of Service </Text>
                 <BottomSheet
                     ref={sheetRef}
                     index={1}

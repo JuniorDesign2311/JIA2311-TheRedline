@@ -10,14 +10,6 @@ const GlobalStyles = StyleSheet.create({
         marginBottom: '175%',
         textAlign: 'left',
     },
-    // used in ResetPasswordScreen, TermsOfServiceScreen
-    header2: {
-        fontSize: 45,
-        fontFamily: 'Helvetica Neue',
-        fontWeight: 'bold',
-        paddingTop: 50,
-        marginBottom: 600,
-    },
     // bottom sheet that has content right below the header
     sheet: {
         alignItems: 'center',

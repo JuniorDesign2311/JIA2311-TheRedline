@@ -156,8 +156,9 @@ const LoginScreen = ({navigation, route}) => {
 
     return (
         <KeyboardAvoidingWrapper>
-        <View style={GlobalStyles.viewStyle}>
-            <Text style={GlobalStyles.header}> Welcome! </Text>
+            <View style={GlobalStyles.viewStyle}>
+                <Text style={GlobalStyles.header}> Welcome! </Text>
+                <BottomSheet
                     ref={sheetRef}
                     index={1}
                     snapPoints={snapPoints}

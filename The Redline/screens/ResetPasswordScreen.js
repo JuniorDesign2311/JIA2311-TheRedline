@@ -66,7 +66,7 @@ const LoginScreen = ({navigation}) => {
     return (
       <KeyboardAvoidingWrapper>
           <View style={GlobalStyles.viewStyle}>
-              <Text style={GlobalStyles.header2}> Reset Password </Text>
+              <Text style={GlobalStyles.header}> Reset Password </Text>
                 <BottomSheet
                     ref={sheetRef}
                     index={1}

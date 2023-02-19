@@ -2,11 +2,10 @@
   "ExpandedNodes": [
     "",
     "\\AIP App",
-    "\\AIP App\\.expo",
-    "\\AIP App\\assets",
     "\\AIP App\\components",
-    "\\AIP App\\screens"
+    "\\AIP App\\screens",
+    "\\The Redline"
   ],
-  "SelectedNode": "\\AIP App\\screens\\AccountCreationScreen.js",
+  "SelectedNode": "\\The Redline",
   "PreviewInSolutionExplorer": false
 }

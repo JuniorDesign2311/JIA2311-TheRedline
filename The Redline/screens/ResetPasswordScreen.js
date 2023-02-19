@@ -4,6 +4,8 @@ import CustomButton from '../components/CustomButton';
 import { auth } from '../firebaseConfig';
 import BottomSheet from '@gorhom/bottom-sheet';
 import CustomInput from '../components/CustomInput';
+import KeyboardAvoidingWrapper from '../components/KeyboardAvoidingWrapper'
+import GlobalStyles from '../components/GlobalStyles';
 
 const LoginScreen = ({navigation}) => {
     const [email, setEmail] = useState('');
@@ -62,60 +64,42 @@ const LoginScreen = ({navigation}) => {
     }
     
     return (
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-        <View style={{flex:1,justifyContent:'center',alignItems:'center',backgroundColor: "white"}}>
-            <Text style={styles.header}>
-            Reset Password
-            </Text>
+        <KeyboardAvoidingWrapper>
+            <View style={GlobalStyles.viewStyle}>
+                <Text style={GlobalStyles.header2}> Reset Password </Text>
                 <BottomSheet
-                ref={sheetRef}
-                index={1}
-                snapPoints={snapPoints}
-                style={styles.bottomSheetStyle}
-                handleIndicatorStyle={{ display: "none" }}
+                    ref={sheetRef}
+                    index={1}
+                    snapPoints={snapPoints}
+                    style={GlobalStyles.bottomSheet}
+                    handleIndicatorStyle={{ display: "none" }}
                 >
-                    <View style={styles.sheet}>
-                <Text style = {{fontSize:14, textAlign: 'center', color: 'grey', marginRight:15, marginLeft:15, marginBottom:5, textAlign: 'center'}}>
-                    Please enter the email address you'd like your password reset information to be sent to.
-                </Text>
-                    <CustomInput placeholder="Enter Email Address" value={email} setValue={setEmail} secureTextEntry={false} iconName="email-outline" isValid = {hasValidEmail} inputError = {emailError}/>
-                    <CustomButton onPress={SendLinkPressed} buttonName="Request Reset Link" type="PRIMARY"/>
-                    <TouchableOpacity
-                        onPress={onCancelPressed}
-                    >
-                        <Text style = {{fontSize:13, marginTop: 0,  color: '#039be5'}}>
-                            Back To Login
+                    <View style={GlobalStyles.sheet}>
+                        <Text style = {styles.text}>
+                            Please enter the email address you'd like your password reset information to be sent to.
                         </Text>
-                    </TouchableOpacity>
+                        <CustomInput placeholder="Enter Email Address" value={email} setValue={setEmail} secureTextEntry={false} iconName="email-outline" isValid = {hasValidEmail} inputError = {emailError}/>
+                        <CustomButton onPress={SendLinkPressed} buttonName="Request Reset Link" type="PRIMARY"/>
+                        <TouchableOpacity onPress={onCancelPressed}>
+                            <Text style = {GlobalStyles.blueText}> Back To Login </Text>
+                        </TouchableOpacity>
                     </View>
                 </BottomSheet>
-        </View>
-        </TouchableWithoutFeedback>
-
+            </View>
+        </KeyboardAvoidingWrapper>
     );
 }
 
 const styles = StyleSheet.create({
-    header: {
-        fontSize: 45,
-        fontFamily: 'Helvetica Neue',
-        fontWeight: 'bold',
-        paddingTop: 50,
-        marginBottom: 600
-    },
-    error: {
-        color:'red',
-        fontSize: 15,
-        fontWeight: 'bold',
+    text: {
+        fontSize: 14,
+        textAlign: 'center',
+        color: 'grey',
+        marginRight: 15,
+        marginLeft: 15,
+        marginBottom: 5,
         textAlign: 'center'
-    },
-    sheet: {
-        alignItems: 'center',
-    },
-    bottomSheetStyle: {
-        borderRadius: 50
     }
-  });
-
+});
 
 export default LoginScreen

@@ -12,6 +12,14 @@ import BottomSheet from '@gorhom/bottom-sheet';
 import KeyboardAvoidingWrapper from '../components/KeyboardAvoidingWrapper';
 import GlobalStyles from '../components/GlobalStyles';
 
+
+/*
+const isValidEmail = (email) =>
+/^\w+([.-]?\w+)@\w+([.-]?\w+)(.\w{2,3})+$/.test(email);
+
+const isValidPhoneNumber = (phone) =>
+/^(?(\d{3}))?[- ]?(\d{3})[- ]?(\d{4})$/.test(phone);
+*/
 const AccountCreationScreen2 = ({ navigation, route }) => {
     /* useState returns the original value argument that's passed in and a function that returns the changed value */
     const [firstName, setFirstName] = useState('');
@@ -26,24 +34,25 @@ const AccountCreationScreen2 = ({ navigation, route }) => {
     var email = route.params.email
     var phoneNumber = route.params.phoneNumber
     var password = route.params.password
-    // Form Validation Handling
+
+    // Error Handling
     const [firstNameError, setFirstNameError] = useState('');
     const [lastNameError, setLastNameError] = useState('');
     const [stateError, setStateError] = useState('');
     const [attendeeHostError, setAttendeeHostError] = useState('');
-    // Error variables for input fields
+    
     const [isValidFirstName, setIsValidFirstName] = useState(true);
     const [isValidLastName, setIsValidLastName] = useState(true);
     const [hasStateError, setHasStateError] = useState(false);
     const [hasAttendeeHostError, setHasAttendeeHostError] = useState(false);
+   
+    
 
-
-    // Method to create the user
     const createUser = async () => {
         auth.createUserWithEmailAndPassword(email, password)
         .then(userCredential => {
             var userID = userCredential.user.uid;
-            // Signed in
+            // Signed in 
             writeUserData(userID);
             //Navigates to second creation screen and passes data through
             Keyboard.dismiss();
@@ -56,7 +65,6 @@ const AccountCreationScreen2 = ({ navigation, route }) => {
         .catch(error => console.warn(error.message))
     }
 
-    // Method that writes the user's inputted data into The Redline's Firebase Firestore
     const writeUserData = async (userID) => {
         if (hostClicked) {
             db.collection("hosts").doc(userID).set({
@@ -89,7 +97,6 @@ const AccountCreationScreen2 = ({ navigation, route }) => {
         }
     }
 
-    // Method that checks if the Attendee user type is selected
     const onAttendeePressed = () => {
         if (hostClicked)  {
             setAttendeeClicked(!attendeeClicked);
@@ -99,7 +106,6 @@ const AccountCreationScreen2 = ({ navigation, route }) => {
         }
     }
 
-    // Method that checks if the Host user type is selected
     const onHostPressed = () => {
         if (attendeeClicked)  {
             setAttendeeClicked(!attendeeClicked);
@@ -109,11 +115,9 @@ const AccountCreationScreen2 = ({ navigation, route }) => {
         }
     }
 
-    // Method that validates the inputs within each of the fields
     const validateInputs = () => {
         var noError = true;
 
-        // First Name Validation
         if (!firstName) {
             noError = false;
             setFirstNameError('First Name is Empty');
@@ -127,7 +131,6 @@ const AccountCreationScreen2 = ({ navigation, route }) => {
             setIsValidFirstName(true);
         }
 
-        // Last Name Validation
         if (!lastName) {
             noError = false;
             setLastNameError('Last Name is Empty');
@@ -141,7 +144,6 @@ const AccountCreationScreen2 = ({ navigation, route }) => {
             setIsValidLastName(true);
         }
 
-        // State Validation
         if (!state) {
             noError = false;
             setStateError('Please Select a State')
@@ -151,7 +153,6 @@ const AccountCreationScreen2 = ({ navigation, route }) => {
             setHasStateError(false);
         }
 
-        // User Type Validation
         if (attendeeClicked === false && hostClicked === false) {
             noError = false;
             setAttendeeHostError('Please select an account type');
@@ -161,12 +162,11 @@ const AccountCreationScreen2 = ({ navigation, route }) => {
             setAttendeeHostError('');
             setHasAttendeeHostError(false);
         }
-
         return noError;
     }
 
-    // Method that hanldes Create Account button click
-    const onCreateAccountPressed = () => {
+
+    const onCreateAccountPressed = () => {    
         Keyboard.dismiss();
         if (!validateInputs()) {
             console.warn("Error creating account")
@@ -176,12 +176,10 @@ const AccountCreationScreen2 = ({ navigation, route }) => {
         }
     }
 
-    // Method that handles Go Back button click
     const onGoBackPressed = () => {
         navigation.navigate("AccountCreation");
     }
 
-    // UI Components
     return (
         <KeyboardAvoidingWrapper>
             <View style={GlobalStyles.viewStyle}>
@@ -192,7 +190,7 @@ const AccountCreationScreen2 = ({ navigation, route }) => {
                     snapPoints={snapPoints}
                     handleIndicatorStyle={{ display: "none" }}
                 >
-                    <View style={GlobalStyles.sheet}>
+                    <View style={GlobalStyles.sheet}> 
                         <CustomInput placeholder="First Name" value={firstName} setValue={setFirstName} secureTextEntry={false} inputError={firstNameError} isValid={isValidFirstName}/>
                         <CustomInput placeholder="Last Name" value={lastName} setValue={setLastName} secureTextEntry={false} inputError={lastNameError} isValid={isValidLastName}/>
                         <States state={state} setState={setState} hasError={hasStateError}/>
@@ -204,11 +202,11 @@ const AccountCreationScreen2 = ({ navigation, route }) => {
                         </View>
 
                         <Text style={{color: "red"}}> {attendeeHostError} </Text>
-
+                    
                         <View style={{ flexDirection: "row"}}>
                             <CustomButton onPress={onCreateAccountPressed} buttonName="Create Account" type="PRIMARY" />
                         </View>
-
+                        
                         <TouchableOpacity onPress={onGoBackPressed}>
                             <Text style = {GlobalStyles.blueText}> Go Back </Text>
                         </TouchableOpacity>

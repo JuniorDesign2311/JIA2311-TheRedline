@@ -118,52 +118,38 @@ const MapScreen = ({navigation, route}) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center'
-  },
-  map: {
-    width: '100%',
-    height: '100%',
-  },
-  headline: {
-    textAlign: 'center',
-    fontWeight: 'bold',
-    fontSize: 18,
-  },
-  roundButton1: {
-      width: 100,
-      height: 100,
-      justifyContent: 'center',
-      alignItems: 'center',
-      padding: 10,
-      borderRadius: 100,
-      backgroundColor: 'orange',
+    container: {
+        flex: 1,
+        alignItems: 'center'
     },
-  events: {
+    map: {
+        width: '100%',
+        height: '100%',
+    },
+    events: {
     
-  },
-  eventTitle: {
-    fontWeight: 'bold',
-    fontSize: 25,
-    textAlign: 'right'
-  },
-  allEvents: {
-    alignItems: 'left',
-    width: '90%',
-    marginBottom: 20
+    },
+    eventTitle: {
+        fontWeight: 'bold',
+        fontSize: 25,
+        textAlign: 'right'
+    },
+    allEvents: {
+        alignItems: 'left',
+        width: '90%',
+        marginBottom: 20
 
-  }, 
-  eachEvent: {
-    alignItems: 'left',
-    borderWidth: 1,
-    width: '100%',
-    paddingBottom: '2%',
-    borderRadius: '20%',
-    paddingLeft: '3%',
-    paddingTop: '2%',
-    backgroundColor: '#E5E4E2'
-  }
+    }, 
+    eachEvent: {
+        alignItems: 'left',
+        borderWidth: 1,
+        width: '100%',
+        paddingBottom: '2%',
+        borderRadius: '20%',
+        paddingLeft: '3%',
+        paddingTop: '2%',
+        backgroundColor: '#E5E4E2'
+    },
 });
 
 export default MapScreen;

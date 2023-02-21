@@ -43,7 +43,6 @@ const EventCreationScreen = ({ navigation }) => {
             if (snapshot.exists) {
             const userData = snapshot.data();
             userData["username"].toString();
-            console.log(userData["username"].toString());
             db.collection("events").doc(eventID).set({
                 title: title,
                 location: location,
@@ -56,7 +55,6 @@ const EventCreationScreen = ({ navigation }) => {
                     console.error("Error adding document: ", error);
                 });
             } else {
-            console.log("User does not exist");
             }
         })
     }
@@ -148,7 +146,6 @@ const EventCreationScreen = ({ navigation }) => {
             // If validateInput returns false, then user had error creating account
             console.warn("Account could not be created");
         } else {
-            console.log(eventID);
             handleEventLogging();
             navigation.navigate("Map");
         }

@@ -168,7 +168,7 @@ const EventCreationScreen = ({ navigation }) => {
     
     const handleConfirm = (input) => {
         console.warn("A date has been picked: ", input);
-        setDate(input.toString(0, 15)); // date will be in format: YYY-MM-DDTXX:XX:XX.XXXZ
+        setDate(input.toString().substring(0, 15)); // date will be in format: YYY-MM-DDTXX:XX:XX.XXXZ
         hideDatePicker();
     };
 

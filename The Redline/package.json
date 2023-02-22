@@ -13,6 +13,7 @@
     "@gorhom/bottom-sheet": "^4",
     "@react-native-community/datetimepicker": "^6.7.3",
     "@react-native-firebase/app": "^16.5.0",
+    "@react-navigation/bottom-tabs": "^6.5.5",
     "@react-navigation/native": "^6.1.2",
     "@react-navigation/native-stack": "^6.9.8",
     "@react-navigation/stack": "^6.3.11",

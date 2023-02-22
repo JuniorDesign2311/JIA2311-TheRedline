@@ -115,7 +115,7 @@ const LoginScreen = ({navigation, route}) => {
         if (status !== 'granted') {
             Alert.alert('Permission to access location was denied. Please update in Settings.');
 
-            navigation.navigate("Map", {
+            navigation.navigate("BottomTabs", {
                 long: longitude,
                 lat: latitude,
             });
@@ -133,7 +133,7 @@ const LoginScreen = ({navigation, route}) => {
         longitude = currentLocation.coords.longitude;
         latitude = currentLocation.coords.latitude;
 
-        navigation.navigate("Map", {
+        navigation.navigate("BottomTabs", {
             long: longitude,
             lat: latitude,
         });

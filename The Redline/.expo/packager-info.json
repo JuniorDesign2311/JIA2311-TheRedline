@@ -1,9 +1,9 @@
 {
-  "expoServerPort": null,
+  "expoServerPort": 19000,
   "packagerPort": 19000,
   "packagerPid": null,
-  "expoServerNgrokUrl": "https://eg-cu5.mjdemars.the-redline.exp.direct",
-  "packagerNgrokUrl": "https://eg-cu5.mjdemars.the-redline.exp.direct",
-  "ngrokPid": 13117,
+  "expoServerNgrokUrl": null,
+  "packagerNgrokUrl": null,
+  "ngrokPid": null,
   "webpackServerPort": null
 }

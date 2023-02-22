@@ -22,7 +22,7 @@ const GlobalStyles = StyleSheet.create({
         fontSize: 15,
         fontWeight: 'bold',
         color: 'red',
-        align: 'center'
+        textAlign: 'center'
     },
     blueText: {
         fontSize: 13,

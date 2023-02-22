@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
+import { Button, View, Text, StyleSheet, TouchableOpacity } from 'react-native'
 import CustomInput from '../components/CustomInput';
 import CustomButton from '../components/CustomButton';
 import EventDescriptionInput from '../components/EventDescriptionInput';
@@ -9,12 +9,14 @@ import uuid from 'react-native-uuid';
 import KeyboardAvoidingWrapper from '../components/KeyboardAvoidingWrapper';
 import GlobalStyles from '../components/GlobalStyles';
 import { GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 const EventCreationScreen = ({ navigation }) => {
     /* useState returns the original value argument that's passed in and a function that returns the changed value */
     const [title, setTitle] = useState('');
     const [location, setLocation] = useState('');
-    const [oldDate, setOldDate] = useState('');
+    const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+    const [date, setDate] = useState('Select a date');
     const [time, setTime] = useState('');
     const [description, setDescription] = useState('');
     // Form Validation Handling
@@ -41,20 +43,20 @@ const EventCreationScreen = ({ navigation }) => {
         //Code to log user data and make it an object and then log the object's username
         firebase.firestore().collection("hosts").doc(user.uid).get().then((snapshot) => {
             if (snapshot.exists) {
-            const userData = snapshot.data();
-            userData["username"].toString();
-            console.log(userData["username"].toString());
-            db.collection("events").doc(eventID).set({
-                title: title,
-                location: location,
-                date: oldDate,
-                time: time,
-                description: description,
-                host: userData["username"].toString()
-            })
-                .catch((error) => {
-                    console.error("Error adding document: ", error);
-                });
+                const userData = snapshot.data();
+                userData["username"].toString();
+                console.log(userData["username"].toString());
+                db.collection("events").doc(eventID).set({
+                    title: title,
+                    location: location,
+                    date: date,
+                    time: time,
+                    description: description,
+                    host: userData["username"].toString()
+                })
+                    .catch((error) => {
+                        console.error("Error adding document: ", error);
+                    });
             } else {
             console.log("User does not exist");
             }
@@ -102,13 +104,9 @@ const EventCreationScreen = ({ navigation }) => {
         }
 
         // Date Validation
-        if (oldDate.length === 0) {
+        if (date.length === 0) {
             noError = false;
             setDateError('Date Field is Empty');
-            setIsValidDate(false);
-        } else if (oldDate.indexOf(' ') >= 0) {
-            noError = false;
-            setDateError('Date Cannot Contain Spaces');
             setIsValidDate(false);
         } else {
             setDateError('');
@@ -159,6 +157,21 @@ const EventCreationScreen = ({ navigation }) => {
         navigation.navigate("Map");
     }
 
+    // Methods for toggling visibility of date-picker
+    const showDatePicker = () => {
+        setDatePickerVisibility(true);
+    };
+    
+    const hideDatePicker = () => {
+        setDatePickerVisibility(false);
+    };
+    
+    const handleConfirm = (input) => {
+        console.warn("A date has been picked: ", input);
+        setDate(input.toString().substring(0, 15)); // date will be in format: YYY-MM-DDTXX:XX:XX.XXXZ
+        hideDatePicker();
+    };
+
     // UI Components
     return (
         <KeyboardAvoidingWrapper>
@@ -177,8 +190,25 @@ const EventCreationScreen = ({ navigation }) => {
                             language: 'en',
                         }}
                     />
-                    <CustomInput placeholder="Date" value={oldDate} setValue={setOldDate} secureTextEntry={false} inputError={dateError} isValid={isValidDate}/>
-                    <CustomInput placeholder="Time" value={time} setValue={setTime} secureTextEntry={false} inputError={timeError} isValid={isValidTime} textContentType = 'oneTimeCode'/>
+
+                    <DateTimePickerModal
+                        isVisible={isDatePickerVisible}
+                        mode="date"
+                        onConfirm={handleConfirm}
+                        onCancel={hideDatePicker}
+                    />
+                    <View style={styles.dateContainer}>
+                        <Text>Date</Text>
+                        <Button
+                            title={date.substring(0,15)}
+                            onPress={showDatePicker}
+                            borderColor="#D3D3D3"
+                            inputError={dateError}
+                            isValid={isValidDate}
+                        />
+                    </View>
+
+                    <CustomInput placeholder="Time" value={time} setValue={setTime} secureTextEntry={false} inputError={timeError} isValid={isValidTime} textContentType = 'oneTimeCode' onPress={showDatePicker}/>
                     <EventDescriptionInput placeholder="Event Description" value={description} setValue={setDescription} secureTextEntry={false} inputError={descriptionError} isValid={isValidDescription}/>
 
                     <View style={{flexDirection:"row", marginBottom: 0, marginTop: 15 }}>
@@ -205,7 +235,11 @@ const styles = StyleSheet.create({
     sheet: {
         alignItems: 'center',
         marginBottom: '40%',
-    }
+    },
+    dateContainer:{
+        flexDirection: 'column',
+        alignSelf: 'flex-start',
+    },
 })
 export default EventCreationScreen;
 

@@ -41,7 +41,6 @@ const LoginScreen = ({navigation}) => {
     const handlePasswordReset = async () => {
         auth.sendPasswordResetEmail(email)
         .then(userCredential => {
-            console.log("Email sent")
             navigation.navigate("Login");
         })
         .catch(error => console.warn(error.message))
@@ -52,7 +51,6 @@ const LoginScreen = ({navigation}) => {
         validateEmail();
         if (emailError === '') {
             handlePasswordReset();
-            console.warn("A reset link has been sent to your email")
         } else {
             validateEmail();
         }

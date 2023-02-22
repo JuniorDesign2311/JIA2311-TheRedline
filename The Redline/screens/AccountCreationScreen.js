@@ -49,7 +49,6 @@ const AccountCreationScreen = ({ navigation }) => {
                                         } else {
                                             setEmailError('Email already linked to an account')
                                             setIsValidEmail(false);
-                                            console.warn("Email already linked to an account.")
                                         }
 
                                     })
@@ -62,7 +61,6 @@ const AccountCreationScreen = ({ navigation }) => {
                             } else {
                                 setPhoneError('Phone number already linked to an account');
                                 setIsValidPhone(false);
-                                console.warn("Phone number already linked to an account.");
                             }
 
                         })
@@ -76,7 +74,6 @@ const AccountCreationScreen = ({ navigation }) => {
                 } else {
                     setUsernameError('Username already taken');
                     setIsValidUsername(false);
-                    console.warn("Username already taken.")
                 }
             })
             .then(createdAttendee => {
@@ -113,7 +110,6 @@ const AccountCreationScreen = ({ navigation }) => {
                                         } else {
                                             setEmailError('Email already linked to an account')
                                             setIsValidEmail(false);
-                                            console.warn("Email already linked to an account.")
                                         }
 
                                     })
@@ -126,7 +122,6 @@ const AccountCreationScreen = ({ navigation }) => {
                             } else {
                                 setPhoneError('Phone number already linked to an account');
                                 setIsValidPhone(false);
-                                console.warn("Phone number already linked to an account.");
                             }
 
                         })
@@ -140,7 +135,6 @@ const AccountCreationScreen = ({ navigation }) => {
                 } else {
                     setUsernameError('Username already taken');
                     setIsValidUsername(false);
-                    console.warn("Username already taken.")
                 }
             })
             .then(createdHost => {

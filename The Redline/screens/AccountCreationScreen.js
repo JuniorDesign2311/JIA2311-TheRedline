@@ -29,230 +29,192 @@ const AccountCreationScreen = ({ navigation }) => {
     const [isValidPassword, setIsValidPassword] = useState(true);
     const [isValidConfirm, setIsValidConfirm] = useState(true);
     const [isValidPhone, setIsValidPhone] = useState(true);
-
-    // Method to check if the user exists or not (within the user collection of the database)
-    const validateUser = () => {
-        var db = firebase.firestore();
-        var attendeeRef = db.collection("attendees");
-        // query for inputted username
-        attendeeRef.where("usernameToLowerCase", '==', username.toLowerCase()).get()
-            .then(snapshot => {
-                if (snapshot.empty) {
-                    // query for inputted phone number
-                    attendeeRef.where("phoneNumber", "==", phoneNumber).get()
-                        .then(snapshot => {
-                            if (snapshot.empty) {
-                                attendeeRef.where("emailToLowerCase", "==", email.toLowerCase()).get()
-                                    .then(snapshot => {
-                                        if (snapshot.empty) {
-                                            checkHosts();
-                                        } else {
-                                            setEmailError('Email already linked to an account')
-                                            setIsValidEmail(false);
-                                        }
-
-                                    })
-                                    .then(createdAttendee => {
-                                        db.collection("attendees").doc(createdAttendee.user.uid).set({ email: email });
-                                    })
-                                    .catch(err => {
-                                        console.log("Error: ", err);
-                                    })
-                            } else {
-                                setPhoneError('Phone number already linked to an account');
-                                setIsValidPhone(false);
-                            }
-
-                        })
-                        .then(createdAttendee => {
-                            db.collection("attendees").doc(createdAttendee.user.uid).set({ phoneNumber: phoneNumber });
-                        })
-                        .catch(err => {
-                            console.log("Error: ", err);
-                        })
-
-                } else {
-                    setUsernameError('Username already taken');
-                    setIsValidUsername(false);
-                }
-            })
-            .then(createdAttendee => {
-                //Create the user doc in the users collection
-                db.collection("attendees").doc(createdAttendee.user.uid).set({ username: username });
-            })
-            .catch(err => {
-                console.log("Error: ", err);
-            });
-    }
-
-    // Method to check if the user exists or not (within the host collection of the database)
-    const checkHosts = () => {
-        var db = firebase.firestore();
-        var hostRef = db.collection("hosts");
-        // query for inputted username
-        hostRef.where("usernameToLowerCase", '==', username.toLowerCase()).get()
-            .then(snapshot => {
-                if (snapshot.empty) {
-                    // query for inputted phone number
-                    hostRef.where("phoneNumber", "==", phoneNumber).get()
-                        .then(snapshot => {
-                            if (snapshot.empty) {
-                                hostRef.where("emailToLowerCase", "==", email.toLowerCase()).get()
-                                    .then(snapshot => {
-                                        if (snapshot.empty) {
-                                            navigation.navigate('AccountCreation2', {
-                                                docID: (username+phoneNumber),
-                                                username: username,
-                                                email: email,
-                                                phoneNumber: phoneNumber,
-                                                password: password
-                                            });
-                                        } else {
-                                            setEmailError('Email already linked to an account')
-                                            setIsValidEmail(false);
-                                        }
-
-                                    })
-                                    .then(createdHost => {
-                                        db.collection("hosts").doc(createdHost.user.uid).set({ email: email });
-                                    })
-                                    .catch(err => {
-                                        console.log("Error: ", err);
-                                    })
-                            } else {
-                                setPhoneError('Phone number already linked to an account');
-                                setIsValidPhone(false);
-                            }
-
-                        })
-                        .then(createdHost => {
-                            db.collection("hosts").doc(createdHost.user.uid).set({ phoneNumber: phoneNumber });
-                        })
-                        .catch(err => {
-                            console.log("Error: ", err);
-                        })
-
-                } else {
-                    setUsernameError('Username already taken');
-                    setIsValidUsername(false);
-                }
-            })
-            .then(createdHost => {
-                //Create the user doc in the users collection
-                db.collection("hosts").doc(createdHost.user.uid).set({ username: username });
-            })
-            .catch(err => {
-                console.log("Error: ", err);
-            });
-    }
-
+    // Variable check to navigate to next screen
+    const [usernameNavigationCheck, setUsernameNavigationCheck] = useState(false);
+    const [emailNavigationCheck, setEmailNavigationCheck] = useState(false);
+    const [passwordNavigationCheck, setPasswordNavigationCheck] = useState(false);
+    const [confirmNavigationCheck, setConfirmNavigationCheck] = useState(false);
+    const [phoneNavigationCheck, setPhoneNavigationCheck] = useState(false);
 
     // Method that validates the inputs within each of the fields
     const validateInput = () => {
-        // Error Handling
+        var db = firebase.firestore();
+        var hostRef = db.collection("hosts");
+        var attendeeRef = db.collection("attendees");
 
-        var noError = true;
-
-        if (username.length === 0) {
-            noError = false;
+        if (!username) {
             setUsernameError('Username Field is Empty');
             setIsValidUsername(false);
+            setUsernameNavigationCheck(false);
         } else if (username.indexOf(' ') >= 0) {
-            noError = false;
             setUsernameError('Username Cannot Contain Spaces');
             setIsValidUsername(false);
+            setUsernameNavigationCheck(false);
         } else if (username.indexOf('&') >= 0 || username.indexOf('=') >= 0 || username.indexOf('_') >= 0 || username.indexOf("'") >= 0 || username.indexOf('-') >= 0 || username.indexOf('%') >= 0 || username.indexOf('$') >= 0
                     || username.indexOf('+') >= 0 || username.indexOf(',') >= 0 || username.indexOf('<') >= 0 || username.indexOf('>') >= 0 || username.indexOf('~') >= 0 || username.indexOf('"') >= 0 || username.indexOf('.') >= 0) {
-            noError = false;
             setUsernameError('Username Cannot Contain Special Characters');
             setIsValidUsername(false);
+            setUsernameNavigationCheck(false);
         } else {
-            setUsernameError('');
-            setIsValidUsername(true);
+            attendeeRef.where("usernameToLowerCase", '==', username.toLowerCase()).get()
+            .then(snapshot => {
+                if (snapshot.empty) {
+                    setUsernameNavigationCheck(true);
+                    setUsernameError('');
+                    setIsValidUsername(true);
+                } else {
+                    setUsernameNavigationCheck(false);
+                    setUsernameError('Username already taken');
+                    setIsValidUsername(false);
+                }
+            })
+            hostRef.where("usernameToLowerCase", '==', username.toLowerCase()).get()
+            .then(snapshot => {
+                if (snapshot.empty) {
+                    setUsernameNavigationCheck(true);
+                    setUsernameError('');
+                    setIsValidUsername(true);
+                } else {
+                    setUsernameNavigationCheck(false);
+                    setUsernameError('Username already taken');
+                    setIsValidUsername(false);
+                }
+            })
         }
-
+        
         // Email Validation
         if (email.length === 0) {
-            noError = false;
             setEmailError('Email Field is Empty');
             setIsValidEmail(false);
+            setEmailNavigationCheck(false);
         } else if (!email.includes('@')) {
-            noError = false;
             setEmailError('Invalid Email Address');
             setIsValidEmail(false);
+            setEmailNavigationCheck(false);
         } else if (!email.includes('.')) {
-            noError = false;
             setEmailError('Invalid Email Address');
             setIsValidEmail(false);
+            setEmailNavigationCheck(false);
         } else if (email.indexOf(' ') >= 0 || email.indexOf('&') >= 0 || email.indexOf('=') >= 0 || email.indexOf("'") >= 0 || email.indexOf('*') >= 0 || email.indexOf('%') >= 0
         || email.indexOf('+') >= 0 || email.indexOf(',') >= 0 || email.indexOf('<') >= 0 || email.indexOf('>') >= 0 || email.indexOf('$') >= 0 || email.indexOf('"') >= 0) {
-            noError = false;
             setEmailError('Email Cannot Contain Special Characters');
             setIsValidEmail(false);
+            setEmailNavigationCheck(false);
         } else {
-            setEmailError('');
-            setIsValidEmail(true);
+            attendeeRef.where("emailToLowerCase", "==", email.toLowerCase()).get()
+            .then(snapshot => {
+                if (snapshot.empty) {
+                    setEmailNavigationCheck(true);
+                    setEmailError('');
+                    setIsValidEmail(true);
+                } else {
+                    setEmailNavigationCheck(false);
+                    setEmailError('Email Address already taken');
+                    setIsValidEmail(false);
+                }
+            })
+            hostRef.where("emailToLowerCase", "==", email.toLowerCase()).get()
+            .then(snapshot => {
+                if (snapshot.empty) {
+                    setEmailNavigationCheck(true);
+                    setEmailError('');
+                    setIsValidEmail(true);
+                } else {
+                    setEmailNavigationCheck(false);
+                    setEmailError('Email Address already taken');
+                    setIsValidEmail(false);
+                }
+            })
         }
 
         // Password Validation
         if (password.length === 0) {
-            noError = false;
+            setPasswordNavigationCheck(false);
             setPasswordError('Password Field is Empty');
             setIsValidPassword(false);
         } else if (password.length < 6) {
-            noError = false;
+            setPasswordNavigationCheck(false);
             setPasswordError('Password must be at least 6 characters');
             setIsValidPassword(false);
         } else if (password.length > 40) {
-            noError = false;
+            setPasswordNavigationCheck(false);
             setPasswordError("Password can't be longer than 40 charaters");
             setIsValidPassword(false);
         } else if (password.indexOf(' ') >= 0) {
-            noError = false;
+            setPasswordNavigationCheck(false);
             setPasswordError('Password Cannot Contain Spaces');
             setIsValidPassword(false);
         } else {
+            setPasswordNavigationCheck(true);
             setPasswordError('');
             setIsValidPassword(true);
         }
 
         // Confirm Password Validation
         if (!cpassword) {
+            setConfirmNavigationCheck(false);
             setConfirmError('Please confirm password');
             setIsValidConfirm(false);
         } else if (password != cpassword) {
-            noError = false;
+            setConfirmNavigationCheck(false);
             setConfirmError('Passwords do not match');
             setIsValidConfirm(false);
         } else {
+            setConfirmNavigationCheck(true);
             setConfirmError('');
             setIsValidConfirm(true);
         }
 
         // Phone Number Validation
         if (phoneNumber.length === 0) {
-            noError = false;
+            setPhoneNavigationCheck(false);
             setPhoneError('Phone Number Field is Empty');
             setIsValidPhone(false);
         } else if (phoneNumber.length != 10) {
-            noError = false;
+            setPhoneNavigationCheck(false);
             setPhoneError('Phone Number is not valid');
             setIsValidPhone(false);
         } else {
-            setPhoneError('');
-            setIsValidPhone(true);
+            attendeeRef.where("phoneNumber", '==', phoneNumber).get()
+            .then(snapshot => {
+                if (snapshot.empty) {
+                    setPhoneNavigationCheck(true);
+                    setPhoneError('');
+                    setIsValidPhone(true);
+                } else {
+                    setPhoneNavigationCheck(false);
+                    setPhoneError('Phone Number linked to an account');
+                    setIsValidPhone(false);
+                }
+            })
+            hostRef.where("phoneNumber", '==', phoneNumber).get()
+            .then(snapshot => {
+                if (snapshot.empty) {
+                    setPhoneNavigationCheck(true);
+                    setPhoneError('');
+                    setIsValidPhone(true);
+                } else {
+                    setPhoneNavigationCheck(false);
+                    setPhoneError('Phone Number linked to an account');
+                    setIsValidPhone(false);
+                }
+            })
         }
-
-        return noError;
+        if (phoneNavigationCheck && passwordNavigationCheck && emailNavigationCheck && confirmNavigationCheck && passwordNavigationCheck) {
+            navigation.navigate('AccountCreation2', {
+                docID: (username+phoneNumber),
+                username: username,
+                email: email,
+                phoneNumber: phoneNumber,
+                password: password
+            });
+        }
     }
 
     // Method to handle Continue button click
     const onContinuePressed = () => {
-        if (!validateInput()) {
-            // If validateInput returns false, then user had error creating account
-        } else {
-            validateUser();
-        }
+        validateInput()
+        
     }
 
     // Method to handle Cancel button click

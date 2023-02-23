@@ -8,15 +8,9 @@ import { Marker } from "react-native-maps";
 
 
 const MapScreen = ({navigation, route}) => {
-  const longitude = route?.params?.long ?? -122.43;
-  const latitude = route?.params?.lat ??  37.77;
-
   const sheetRef = useRef(null);
-
   const snapPoints = useMemo(() => [ '10%', '45%', '90%' ]);
-
   const [events, setEvents] = useState([]);
-
 
   //useEffect makes the function within it only be called only on the first render (the page re-renders if something on the screen changes
   //in other words, the state changes.)
@@ -66,11 +60,13 @@ const MapScreen = ({navigation, route}) => {
                 provider={PROVIDER_GOOGLE}
                 style={styles.map}
                 initialRegion={{
-                  longitude: longitude,
-                  latitude: latitude,
+                  longitude: route?.params?.long ?? -122.43,
+                  latitude: route?.params?.lat ??  37.77,
                   latitudeDelta: 0.09,
                   longitudeDelta: 0.04,
                 }}
+                showsUserLocation={route.params.trackLocation}
+                followsUserLocation={route.params.trackLocation}
 
                 // initialRegion={tokyoRegion} //your region data goes here.
             >

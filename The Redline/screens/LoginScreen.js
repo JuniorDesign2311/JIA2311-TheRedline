@@ -13,18 +13,11 @@ import GlobalStyles from '../components/GlobalStyles';
 const LoginScreen = ({navigation, route}) => {
     const [email, setEmail] = useState(route?.params?.email);
     const [password, setPassword] = useState(route?.params?.password);
-
     const [emailError, setEmailError] = useState("");
     const [passwordError, setPasswordError] = useState("");
-
     const [hasValidEmail, setHasValidEmail] = useState(true);
     const [hasValidPassword, setHasValidPassword] = useState(true);
-
     const [loginError, setLoginError] = useState(false);
-
-    var longitude = -122.43;
-    var latitude = 37.77;
-
     var loginSuccessful;
 
     const focus = useIsFocused();
@@ -117,7 +110,11 @@ const LoginScreen = ({navigation, route}) => {
 
             navigation.navigate("BottomTabs", {
                 screen: 'Map',
-                params: {long: longitude, lat: latitude}
+                params: {
+                    long: -122.43, 
+                    lat: 37.77,
+                    trackLocation: false,
+                }
             });
 
             return;
@@ -135,7 +132,11 @@ const LoginScreen = ({navigation, route}) => {
 
         navigation.navigate("BottomTabs", {
             screen: 'Map',
-            params: {long: longitude, lat: latitude}
+            params: {
+                long: longitude, 
+                lat: latitude,
+                trackLocation: true,
+            }
         });
     }
 

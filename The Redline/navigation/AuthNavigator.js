@@ -71,12 +71,7 @@ function AuthNavigator() {
                     headerShown: false, gestureEnabled: false}}
                 />
 
-                <Stack.Screen 
-                    name="BottomTabs" 
-                    component={Tabs}
-                    options={{title: "BottomTabs",
-                    headerShown: false, gestureEnabled: false}}
-                />
+                <Stack.Screen name="BottomTabs" component={Tabs} options={{headerShown: false}}/>
 
                 <Stack.Screen
                     name="EventCreation"

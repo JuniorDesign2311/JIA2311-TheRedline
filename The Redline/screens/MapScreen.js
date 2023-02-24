@@ -67,6 +67,8 @@ const MapScreen = ({navigation, route}) => {
                 }}
                 showsUserLocation={route.params.trackLocation}
                 followsUserLocation={route.params.trackLocation}
+                showsMyLocationButton={true}
+                mapPadding={{top:0, right:0, left:0, bottom:80}}
 
                 // initialRegion={tokyoRegion} //your region data goes here.
             >

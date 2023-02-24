@@ -145,13 +145,13 @@ const EventCreationScreen = ({ navigation }) => {
         } else {
             console.log(eventID);
             handleEventLogging();
-            navigation.navigate("Map");
+            navigation.navigate("BottomTabs");
         }
     }
 
     // Method that handles Cancel button click
     const onCancelPressed = () => {
-        navigation.navigate("Map");
+        navigation.navigate("BottomTabs");
     }
 
     // Methods for toggling visibility of date-picker

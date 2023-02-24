@@ -145,7 +145,7 @@ const EventCreationScreen = ({ navigation }) => {
         } else {
             console.log(eventID);
             handleEventLogging();
-            navigation.navigate("BottomTabs");
+            navigation.navigate("BottomTabs")
         }
     }
 

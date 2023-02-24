@@ -17,7 +17,8 @@ const EventCreationScreen = ({ navigation }) => {
     const [location, setLocation] = useState('');
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
     const [date, setDate] = useState('Select a date');
-    const [time, setTime] = useState('');
+    const [isTimePickerVisible, setTimePickerVisibility] = useState(false);
+    const [time, setTime] = useState('Select a time');
     const [description, setDescription] = useState('');
     // Form Validation Handling
     const [titleError, setTitleError] = useState('');
@@ -118,10 +119,6 @@ const EventCreationScreen = ({ navigation }) => {
             noError = false;
             setTimeError('Time Field is Empty');
             setIsValidTime(false);
-        } else if (time.indexOf(' ') >= 0) {
-            noError = false;
-            setTimeError('Time Cannot Contain Spaces');
-            setIsValidTime(false);
         } else {
             setTimeError('');
             setIsValidTime(true);
@@ -161,15 +158,26 @@ const EventCreationScreen = ({ navigation }) => {
     const showDatePicker = () => {
         setDatePickerVisibility(true);
     };
-    
     const hideDatePicker = () => {
         setDatePickerVisibility(false);
     };
-    
     const handleConfirm = (input) => {
         console.warn("A date has been picked: ", input);
         setDate(input.toString().substring(0, 15)); // date will be in format: YYY-MM-DDTXX:XX:XX.XXXZ
         hideDatePicker();
+    };
+
+    // Methods for toggling visibility of time-picker
+    const showTimePicker = () => {
+        setTimePickerVisibility(true);
+    };
+    const hideTimePicker = () => {
+        setTimePickerVisibility(false);
+    };
+    const handleTimeConfirm = (timeInput) => {
+        console.warn("A time has been picked: ", timeInput);
+        setTime(timeInput.toString().substring(16,21));
+        hideTimePicker();
     };
 
     // UI Components
@@ -193,7 +201,8 @@ const EventCreationScreen = ({ navigation }) => {
 
                     <DateTimePickerModal
                         isVisible={isDatePickerVisible}
-                        mode="date"
+                        mode='date'
+                        display='inline'
                         onConfirm={handleConfirm}
                         onCancel={hideDatePicker}
                     />
@@ -208,7 +217,24 @@ const EventCreationScreen = ({ navigation }) => {
                         />
                     </View>
 
-                    <CustomInput placeholder="Time" value={time} setValue={setTime} secureTextEntry={false} inputError={timeError} isValid={isValidTime} textContentType = 'oneTimeCode' onPress={showDatePicker}/>
+                    <DateTimePickerModal
+                        isVisible={isTimePickerVisible}
+                        timeZoneOffsetInSeconds={3600}
+                        mode='time'
+                        onConfirm={handleTimeConfirm}
+                        onCancel={hideTimePicker}
+                    />
+                    <View style={styles.dateContainer}>
+                        <Text>Time</Text>
+                        <Button
+                            title={time}
+                            onPress={showTimePicker}
+                            borderColor="#D3D3D3"
+                            inputError={timeError}
+                            isValid={isValidTime}
+                        />
+                    </View>
+
                     <EventDescriptionInput placeholder="Event Description" value={description} setValue={setDescription} secureTextEntry={false} inputError={descriptionError} isValid={isValidDescription}/>
 
                     <View style={{flexDirection:"row", marginBottom: 0, marginTop: 15 }}>

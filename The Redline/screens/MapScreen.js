@@ -5,12 +5,14 @@ import BottomSheet from '@gorhom/bottom-sheet';
 import PlusButton from '../components/PlusButton';
 import { db } from '../firebaseConfig';
 import { Marker } from "react-native-maps";
+import {SearchBar} from "react-native-elements";
 
 
 const MapScreen = ({navigation, route}) => {
   const sheetRef = useRef(null);
   const snapPoints = useMemo(() => [ '10%', '45%', '90%' ]);
   const [events, setEvents] = useState([]);
+  const [searchValue, setSearchValue] = useState("");
 
   //useEffect makes the function within it only be called only on the first render (the page re-renders if something on the screen changes
   //in other words, the state changes.)
@@ -27,6 +29,25 @@ const MapScreen = ({navigation, route}) => {
     })
   }, []);
 
+
+  const searchFilter = (text) => {
+    if (text == "") {
+      db.collection('events').onSnapshot((querySnapshot) => {
+        setEvents(querySnapshot.docs.map(snapshot => { //querySnapshot.docs gives us an array of a reference to all the documents in the snapshot (not the data)
+            const data = snapshot.data();  //data object
+            return data;
+        }))
+      })
+      return events;
+    } else {
+      setSearchValue(text);
+      setEvents(events.filter((item) => {
+        const item_data = `${item.title.toUpperCase()})`;
+        const text_data = text.toUpperCase();
+        return item_data.indexOf(text_data) > -1;
+      }))
+    }
+  }
 
   const addEvent = () => {
     navigation.navigate("EventCreation");
@@ -83,13 +104,25 @@ const MapScreen = ({navigation, route}) => {
         snapPoints={snapPoints}
         style={{paddingBottom: 20}}
       >
-      <ScrollView>
-        <View style={styles.container}>
-          <View style={styles.allEvents}>
-        <View style={{paddingHorizontal: 310}}>
+        <View style={{flexDirection:'row'}}> 
+        <View style={{flex: 1}}> 
+          <SearchBar placeholder="Search for an event..."
+          lightTheme
+          round
+          showCancel
+          inputStyle = {{backgroundColor: '#e6e6e6'}}
+          containerStyle= {{backgroundColor: 'white', borderWidth: 0, borderRadius: 9}}
+          inputContainerStyle={{backgroundColor: '#e6e6e6', borderWidth: 1}}
+          onChangeText={(text) => searchFilter(text)}
+          value={searchValue}/>
+          </View>
+         <View style={{paddingHorizontal: 0}}>
       <PlusButton onPress={addEvent} buttonName="+" type="PRIMARY"/>
       </View>
-
+      </View>
+      <ScrollView>
+      <View style={styles.container}>
+          <View style={styles.allEvents}>
           {events.map((data) => (
             <>
             <Text></Text>

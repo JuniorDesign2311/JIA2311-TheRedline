@@ -188,16 +188,18 @@ const EventCreationScreen = ({ navigation }) => {
                 <View style={styles.sheet}>
                     <CustomInput placeholder="Event Title" value={title} setValue={setTitle} secureTextEntry={false} inputError={titleError} isValid={isValidTitle}/>
                     <CustomInput placeholder="Location" value={location} setValue={setLocation} secureTextEntry={false} inputError={locationError} isValid={isValidLocation}/>
-                    <GooglePlacesAutocomplete
-                        placeholder="Location"
-                        onPress={(data, details = null) => {
-                            console.log(data,details);
-                        }}
-                        query={{
-                            key: 'AIzaSyDTKNiZ9cnqslVZD9GS_1F_Z6K_6DJ9kfw',
-                            language: 'en',
-                        }}
-                    />
+                    <View style={styles.locationContainer}>
+                        <GooglePlacesAutocomplete
+                            placeholder="Location"
+                            onPress={(data, details = null) => {
+                                console.log(data,details);
+                            }}
+                            query={{
+                                key: 'AIzaSyDTKNiZ9cnqslVZD9GS_1F_Z6K_6DJ9kfw',
+                                language: 'en',
+                            }}
+                        />
+                    </View>
 
                     <DateTimePickerModal
                         isVisible={isDatePickerVisible}
@@ -261,6 +263,10 @@ const styles = StyleSheet.create({
     sheet: {
         alignItems: 'center',
         marginBottom: '40%',
+    },
+    locationContainer:{
+        flex: 1,
+        backgroundColor: '#ecf0f1',
     },
     dateContainer:{
         flexDirection: 'column',

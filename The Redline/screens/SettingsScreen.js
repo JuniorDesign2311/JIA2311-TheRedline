@@ -5,8 +5,19 @@ import KeyboardAvoidingWrapper from '../components/KeyboardAvoidingWrapper';
 import GlobalStyles from '../components/GlobalStyles';
 
 const SettingsScreen = ({navigation, route}) => {
+    const onBackPressed = () => {
+        navigation.navigate("BottomTabs", {
+            screen: 'Profile'
+        });
+    }
+
     return (
-        <Text>Settings</Text>
+        <KeyboardAvoidingWrapper>
+            <View style={GlobalStyles.viewStyle}>
+                <Text>Settings</Text>
+                <CustomButton onPress={onBackPressed} buttonName="Back" type="PRIMARY"/>
+            </View>
+        </KeyboardAvoidingWrapper>
     )
 }
 

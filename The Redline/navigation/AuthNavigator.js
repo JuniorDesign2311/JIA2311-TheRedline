@@ -16,7 +16,7 @@ import LoginScreen from '../screens/LoginScreen';
 import ResetPasswordScreen from '../screens/ResetPasswordScreen';
 import TermsOfServiceScreen from '../screens/TermsOfServiceScreen';
 import EventCreationScreen from '../screens/EventCreationScreen';
-
+import SettingsScreen from '../screens/SettingsScreen';
 
 const Stack = createStackNavigator(); //object that includes the Navigator, Screen, and Group
 
@@ -77,6 +77,13 @@ function AuthNavigator() {
                     name="EventCreation"
                     component={EventCreationScreen}
                     options={{title: "Event Creation",
+                    headerShown: false, gestureEnabled: false}}
+                />
+
+                <Stack.Screen
+                    name="Settings"
+                    component={SettingsScreen}
+                    options={{title: "Settings",
                     headerShown: false, gestureEnabled: false}}
                 />
         

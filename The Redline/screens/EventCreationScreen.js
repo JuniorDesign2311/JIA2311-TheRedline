@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import { Button, View, Text, StyleSheet, TouchableOpacity } from 'react-native'
+import { Button, View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native'
 import CustomInput from '../components/CustomInput';
 import CustomButton from '../components/CustomButton';
 import EventDescriptionInput from '../components/EventDescriptionInput';
@@ -187,18 +187,20 @@ const EventCreationScreen = ({ navigation }) => {
                 <Text style={[styles.header]}> Create Event </Text>
                 <View style={styles.sheet}>
                     <CustomInput placeholder="Event Title" value={title} setValue={setTitle} secureTextEntry={false} inputError={titleError} isValid={isValidTitle}/>
-                    <CustomInput placeholder="Location" value={location} setValue={setLocation} secureTextEntry={false} inputError={locationError} isValid={isValidLocation}/>
-                    <View style={styles.locationContainer}>
-                        <GooglePlacesAutocomplete
-                            placeholder="Location"
-                            onPress={(data, details = null) => {
-                                console.log(data,details);
-                            }}
-                            query={{
-                                key: 'AIzaSyDTKNiZ9cnqslVZD9GS_1F_Z6K_6DJ9kfw',
-                                language: 'en',
-                            }}
-                        />
+                    <View style={styles.locationContainer} horizontal={false}>
+                        <Text>Location</Text>
+                        <ScrollView horizontal={true}>
+                            <GooglePlacesAutocomplete
+                                placeholder="Search for location"
+                                onPress={(data, details = null) => {
+                                    console.log(data,details);
+                                }}
+                                query={{
+                                    key: 'AIzaSyDTKNiZ9cnqslVZD9GS_1F_Z6K_6DJ9kfw',
+                                    language: 'en',
+                                }}
+                            />
+                        </ScrollView>
                     </View>
 
                     <DateTimePickerModal
@@ -265,8 +267,8 @@ const styles = StyleSheet.create({
         marginBottom: '40%',
     },
     locationContainer:{
-        flex: 1,
-        backgroundColor: '#ecf0f1',
+        width: '100%',
+        alignSelf: 'flex-start',
     },
     dateContainer:{
         flexDirection: 'column',

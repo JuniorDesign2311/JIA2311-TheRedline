@@ -9,11 +9,16 @@ const ProfileScreen = ({navigation, route}) => {
         navigation.navigate("Settings");
     }
 
+    const onSignOutPressed = () => {
+        navigation.navigate("Login");
+    }
+
     return (
         <KeyboardAvoidingWrapper>
         <View style={GlobalStyles.viewStyle}>
             <Text style={[GlobalStyles.header]}> Profile </Text>
             <CustomButton onPress={onSettingsPressed} buttonName="Settings" type="PRIMARY"/>
+            <CustomButton onPress={onSignOutPressed} buttonName="Sign Out" type="PRIMARY"/>
         </View>
         </KeyboardAvoidingWrapper>
     )

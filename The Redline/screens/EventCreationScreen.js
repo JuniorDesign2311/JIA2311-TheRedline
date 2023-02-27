@@ -268,6 +268,7 @@ const styles = StyleSheet.create({
     },
     locationContainer:{
         width: '100%',
+        flex: 0,
         alignSelf: 'flex-start',
     },
     dateContainer:{

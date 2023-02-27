@@ -189,7 +189,7 @@ const EventCreationScreen = ({ navigation }) => {
                     <CustomInput placeholder="Event Title" value={title} setValue={setTitle} secureTextEntry={false} inputError={titleError} isValid={isValidTitle}/>
                     <View style={styles.locationContainer} horizontal={false}>
                         <Text>Location</Text>
-                        <ScrollView horizontal={true}>
+                        <ScrollView horizontal={true} keyboardShouldPersistTaps="handled">
                             <GooglePlacesAutocomplete
                                 placeholder={ location }
                                 onPress={(data, details = null) => {
@@ -202,6 +202,7 @@ const EventCreationScreen = ({ navigation }) => {
                                 }}
                                 isValid={isValidLocation}
                                 locationError={false}
+                                fetchDetails={true}
                             />
                         </ScrollView>
                     </View>

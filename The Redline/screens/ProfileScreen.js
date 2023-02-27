@@ -11,10 +11,10 @@ const ProfileScreen = ({navigation, route}) => {
 
     return (
         <KeyboardAvoidingWrapper>
-        <View style={GlobalStyles.viewStyle}>
-            <Text style={[GlobalStyles.header]}> Profile </Text>
-            <CustomButton onPress={onSettingsPressed} buttonName="Settings" type="PRIMARY"/>
-        </View>
+            <View style={GlobalStyles.viewStyle}>
+                <Text style={[GlobalStyles.header]}> Profile </Text>
+                <CustomButton onPress={onSettingsPressed} buttonName="Settings" type="PRIMARY"/>
+            </View>
         </KeyboardAvoidingWrapper>
     )
 }

@@ -166,8 +166,8 @@ const LoginScreen = ({navigation, route}) => {
                     style={GlobalStyles.bottomSheet}
                     handleIndicatorStyle={{ display: "none" }}
                 >
-                <View style={GlobalStyles.sheet}>
-                    <Text style={GlobalStyles.error}> {loginError} </Text>
+                    <View style={GlobalStyles.sheet}>
+                        <Text style={GlobalStyles.error}> {loginError} </Text>
                         <CustomInput placeholder="Email Address" value={email} setValue={setEmail} secureTextEntry={false} iconName="email-outline" defaultValue={route?.params?.username} isValid = {hasValidEmail} inputError = {emailError}/>
                         <CustomInput placeholder="Password" value={password} setValue={setPassword} secureTextEntry={true} iconName="lock-outline" defaultValue={route?.params?.password} isValid = {hasValidPassword} inputError = {passwordError}/>
                         <CustomButton onPress={onLoginPressed} buttonName="Log in" type="PRIMARY"/>

@@ -14,7 +14,7 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 const EventCreationScreen = ({ navigation }) => {
     /* useState returns the original value argument that's passed in and a function that returns the changed value */
     const [title, setTitle] = useState('');
-    const [location, setLocation] = useState('');
+    const [location, setLocation] = useState('Search for a location');
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
     const [date, setDate] = useState('Select a date');
     const [isTimePickerVisible, setTimePickerVisibility] = useState(false);
@@ -191,8 +191,7 @@ const EventCreationScreen = ({ navigation }) => {
                         <Text>Location</Text>
                         <ScrollView horizontal={true}>
                             <GooglePlacesAutocomplete
-                                GooglePlacesDetailsQuery={{ fields: "geometry" }}
-                                placeholder="Search for location"
+                                placeholder={ location }
                                 onPress={(data, details = null) => {
                                     console.log(data,details);
                                     handleLocationInput(data.description, data.place_id);
@@ -271,7 +270,7 @@ const styles = StyleSheet.create({
         marginBottom: '40%',
     },
     locationContainer:{
-        width: '100%',
+        width: '90%',
         flex: 0,
         alignSelf: 'flex-start',
     },

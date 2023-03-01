@@ -33,6 +33,12 @@ const EventCreationScreen = ({ navigation }) => {
     const [isValidDate, setIsValidDate] = useState(true);
     const [isValidTime, setIsValidTime] = useState(true);
     const [isValidDescription, setIsValidDescription] = useState(true);
+    // Variables to allow event creation
+    const [titleNavigationCheck, setTitleNavigationCheck] = useState(false);
+    const [locationNavigationCheck, setLocationNavigationCheck] = useState(false);
+    const [dateNavigationCheck, setDateNavigationCheck] = useState(false);
+    const [timeNavigationCheck, setTimeNavigationCheck] = useState(false);
+    const [descriptionNavigationCheck, setDescriptionNavigationCheck] = useState(false);
 
     //User Data
     const user = firebase.auth().currentUser;
@@ -83,36 +89,44 @@ const EventCreationScreen = ({ navigation }) => {
             setTitleError('Title Cannot Contain Special Characters');
             setIsValidTitle(false);
         } else {
+            console.log("no title error");
+            setTitleNavigationCheck(true);
             setTitleError('');
             setIsValidTitle(true);
         }
 
         // Location Validation
-        if (location.length === 0) {
-            noError = false;
+        if (location === "Search for a location") {
+            console.log("LocError2");
             setLocationError('Location Field is Empty');
             setIsValidLocation(false);
         } else {
+            console.log("No Loc Error");
+            setLocationNavigationCheck(true);
             setLocationError('');
             setIsValidLocation(true);
         }
 
         // Date Validation
-        if (date.length === 0) {
-            noError = false;
+        if (date === "Select a date") {
+            console.log("DateError2");
             setDateError('Date Field is Empty');
             setIsValidDate(false);
         } else {
+            console.log("No Date Error");
+            setDateNavigationCheck(true);
             setDateError('');
             setIsValidDate(true);
         }
 
         // Time Validation
-        if (time.length === 0) {
-            noError = false;
+        if (time === "Select a time") {
+            console.log("TimeError2");
             setTimeError('Time Field is Empty');
             setIsValidTime(false);
         } else {
+            console.log("No Time Error");
+            setTimeNavigationCheck(true);
             setTimeError('');
             setIsValidTime(true);
         }
@@ -123,23 +137,20 @@ const EventCreationScreen = ({ navigation }) => {
             setDescriptionError('Description Field is Empty');
             setIsValidDescription(false);
         } else {
+            setDescriptionNavigationCheck(true);
             setDescriptionError('');
             setIsValidDescription(true);
         }
 
-        return noError;
+        if (titleNavigationCheck && locationNavigationCheck && dateNavigationCheck && timeNavigationCheck && descriptionNavigationCheck) {
+            handleEventLogging();
+            navigation.navigate("BottomTabs")
+        }
     }
 
     // Method that handles Submit button click
     const onSubmitPressed = () => {
-        if (!validateInput()) {
-            // If validateInput returns false, then user had error creating account
-            console.warn("Account could not be created");
-        } else {
-            console.log(eventID);
-            handleEventLogging();
-            navigation.navigate("BottomTabs")
-        }
+        validateInput()
     }
 
     // Method that handles Cancel button click
@@ -211,6 +222,7 @@ const EventCreationScreen = ({ navigation }) => {
                         isVisible={isDatePickerVisible}
                         mode='date'
                         display='inline'
+                        minimumDate={new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate())}
                         onConfirm={handleConfirm}
                         onCancel={hideDatePicker}
                     />

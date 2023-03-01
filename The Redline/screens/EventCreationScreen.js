@@ -20,7 +20,9 @@ const EventCreationScreen = ({ navigation }) => {
     const [isTimePickerVisible, setTimePickerVisibility] = useState(false);
     const [time, setTime] = useState('Select a time');
     const [description, setDescription] = useState('');
-    const [placeID, setPlaceID] = useState('');
+    const [longitude, setLongitude] = useState('');
+    const [latitude, setLatitude] = useState('');
+
     // Form Validation Handling
     const [titleError, setTitleError] = useState('');
     const [locationError, setLocationError] = useState('');
@@ -57,7 +59,8 @@ const EventCreationScreen = ({ navigation }) => {
                 db.collection("events").doc(eventID).set({
                     title: title,
                     location: location,
-                    placeID: placeID,
+                    longitude: longitude,
+                    latitude: latitude,
                     date: date,
                     time: time,
                     description: description,
@@ -185,10 +188,10 @@ const EventCreationScreen = ({ navigation }) => {
     };
 
     //Google place setting place ID
-    const handleLocationInput = (description, locationID) => {
-        console.log(description, ", ", locationID);
+    const handleLocationInput = (description, longitude, latitude) => {
+        setLongitude(longitude)
+        setLatitude(latitude)
         setLocation(description);
-        setPlaceID(locationID);
     }
 
     // UI Components
@@ -204,8 +207,8 @@ const EventCreationScreen = ({ navigation }) => {
                             <GooglePlacesAutocomplete
                                 placeholder={ location }
                                 onPress={(data, details = null) => {
-                                    console.log(data,details);
-                                    handleLocationInput(data.description, data.place_id);
+                                    //console.log(data, details);
+                                    handleLocationInput(data.description, details.geometry.location.lat, details.geometry.location.lng);
                                 }}
                                 query={{
                                     key: 'AIzaSyDTKNiZ9cnqslVZD9GS_1F_Z6K_6DJ9kfw',

@@ -1,10 +1,11 @@
 import React, { useMemo, useRef, useState, useEffect } from 'react';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
-import { StyleSheet, Text, View, ScrollView, TouchableOpacity} from 'react-native';
+import { StyleSheet, Text, View, ScrollView, TouchableOpacity, Pressable} from 'react-native';
 import BottomSheet from '@gorhom/bottom-sheet';
 import PlusButton from '../components/PlusButton';
 import { db } from '../firebaseConfig';
 import {SearchBar} from "react-native-elements";
+import { GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
 
 
 const MapScreen = ({navigation, route}) => {
@@ -12,6 +13,7 @@ const MapScreen = ({navigation, route}) => {
   const snapPoints = useMemo(() => [ '10%', '45%', '90%' ]);
   const [events, setEvents] = useState([]);
   const [searchValue, setSearchValue] = useState("");
+  const [showMarker, setShowMarker] = useState({}); //shows true or false for whether each event should be shown on map
 
   //useEffect makes the function within it only be called only on the first render (the page re-renders if something on the screen changes
   //in other words, the state changes.)
@@ -21,13 +23,18 @@ const MapScreen = ({navigation, route}) => {
     // useEffect() is called again.
     //.onSnapshot() makes it so whenever the database changes, the function will be called and the data will be taken again
     db.collection('events').onSnapshot((querySnapshot) => {
+      var newShowMarker = {};
+      querySnapshot.forEach((doc) => {
+        newShowMarker[doc.id] = false
+      });
+      setShowMarker(newShowMarker);
       setEvents(querySnapshot.docs.map(snapshot => { //querySnapshot.docs gives us an array of a reference to all the documents in the snapshot (not the data)
           const data = snapshot.data();  //data object
+          data['id'] = snapshot.id;   //adding an id to the data object
           return data;
       }))
     })
   }, []);
-
 
   const searchFilter = (text) => {
     if (text == "") {
@@ -51,29 +58,6 @@ const MapScreen = ({navigation, route}) => {
   const addEvent = () => {
     navigation.navigate("EventCreation");
   }
-
-    const atlantaMarker = {
-      latitude: 33.7495,
-      longitude: -84.3882,
-      latitudeDelta: 0.01,
-      longitudeDelta: 0.01,
-    };
-
-    const avalonMarker = {
-      latitude: 34.0696,
-      longitude: -84.2454,
-      latitudeDelta: 0.01,
-      longitudeDelta: 0.01,
-    };
-
-    const georgiaTechMarker = {
-        latitude: 33.7758,
-        longitude: -84.3962,
-        latitudeDelta: 0.01,
-        longitudeDelta: 0.01,
-    };
-
-
     return (
         <View style={styles.container}>
             <MapView
@@ -88,13 +72,21 @@ const MapScreen = ({navigation, route}) => {
                 showsUserLocation={route.params.trackLocation}
                 followsUserLocation={route.params.trackLocation}
                 showsMyLocationButton={true}
-                mapPadding={{top:0, right:0, left:0, bottom:80}}
-
-                // initialRegion={tokyoRegion} //your region data goes here.
-            >
-                <Marker coordinate={atlantaMarker} />
-                <Marker coordinate={avalonMarker} />
-                <Marker coordinate={georgiaTechMarker} />
+                mapPadding={{top:0, right:0, left:0, bottom:80}}>   
+                
+                {events.map((data) => {             
+                    const eventMarker = {
+                      latitude: data["longitude"],
+                      longitude: data["latitude"],
+                      latitudeDelta: 0.01,
+                      longitudeDelta: 0.01,
+                    };
+                  
+                    return showMarker[data["id"]] && (
+                     <Marker coordinate={eventMarker}/>
+                    )
+                      
+                  })}
             </MapView>
 
       <BottomSheet
@@ -125,7 +117,24 @@ const MapScreen = ({navigation, route}) => {
           {events.map((data) => (
             <>
             <Text></Text>
-            <TouchableOpacity style={styles.eachEvent}>
+            <TouchableOpacity style={styles.eachEvent} onPress= {() => {
+              var newMark = {};
+              
+              for (const markers in showMarker) {
+                if (markers === data["id"]) {
+                  if (showMarker[markers] === true) {
+                    newMark[markers] = false; //deselect event
+                  } else {
+                    newMark[markers] = true; //event selected
+                  }
+                } else {
+                  newMark[markers] = showMarker[markers];
+                } 
+                setShowMarker(newMark);
+              }
+              
+            }}>
+
               <Text style={styles.eventTitle}>{data["title"]}</Text>
               <Text style={styles.events}>Host: {data["host"]}</Text>
               <Text style={styles.events}>Date: {data["date"]}</Text>

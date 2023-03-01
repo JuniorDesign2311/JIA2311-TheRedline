@@ -2,6 +2,7 @@ import React, {useState} from 'react'
 import { Button, View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native'
 import CustomInput from '../components/CustomInput';
 import CustomButton from '../components/CustomButton';
+import EmptyInputBox from '../components/EmptyInputBox';
 import EventDescriptionInput from '../components/EventDescriptionInput';
 import { db } from '../firebaseConfig';
 import firebase from "firebase/app";
@@ -259,7 +260,9 @@ const EventCreationScreen = ({ navigation }) => {
                     </View>
 
                     <EventDescriptionInput placeholder="Event Description" value={description} setValue={setDescription} secureTextEntry={false} inputError={descriptionError} isValid={isValidDescription}/>
-
+                    <EmptyInputBox inputError={locationError} isValid={isValidLocation} editable={false} />
+                    <EmptyInputBox inputError={dateError} isValid={isValidDate} editable={false} />
+                    <EmptyInputBox inputError={timeError} isValid={isValidTime} editable={false} />
                     <View style={{flexDirection:"row", marginBottom: 0, marginTop: 15 }}>
                         <CustomButton onPress={onSubmitPressed} buttonName="Submit" type="PRIMARY"/>
                     </View>

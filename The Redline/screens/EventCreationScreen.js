@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { Button, View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native'
 import CustomInput from '../components/CustomInput';
 import CustomButton from '../components/CustomButton';
+import EmptyInputBox from '../components/EmptyInputBox';
 import EventDescriptionInput from '../components/EventDescriptionInput';
 import { db } from '../firebaseConfig';
 import firebase from "firebase/app";
@@ -21,7 +22,9 @@ const EventCreationScreen = ({ navigation }) => {
     const [time, setTime] = useState('');
     const [time12Hour, setTime12Hour] = useState('Select a time');
     const [description, setDescription] = useState('');
-    const [placeID, setPlaceID] = useState('');
+    const [longitude, setLongitude] = useState('');
+    const [latitude, setLatitude] = useState('');
+
     // Form Validation Handling
     const [titleError, setTitleError] = useState('');
     const [locationError, setLocationError] = useState('');
@@ -58,7 +61,8 @@ const EventCreationScreen = ({ navigation }) => {
                 db.collection("events").doc(eventID).set({
                     title: title,
                     location: location,
-                    placeID: placeID,
+                    longitude: longitude,
+                    latitude: latitude,
                     date: date,
                     time: time,
                     time12Hour: time12Hour,
@@ -208,10 +212,10 @@ const EventCreationScreen = ({ navigation }) => {
     };
 
     //Google place setting place ID
-    const handleLocationInput = (description, locationID) => {
-        console.log(description, ", ", locationID);
+    const handleLocationInput = (description, longitude, latitude) => {
+        setLongitude(longitude)
+        setLatitude(latitude)
         setLocation(description);
-        setPlaceID(locationID);
     }
 
     // UI Components
@@ -227,8 +231,8 @@ const EventCreationScreen = ({ navigation }) => {
                             <GooglePlacesAutocomplete
                                 placeholder={location}
                                 onPress={(data, details = null) => {
-                                    console.log(data, details);
-                                    handleLocationInput(data.description, data.place_id);
+                                    //console.log(data, details);
+                                    handleLocationInput(data.description, details.geometry.location.lat, details.geometry.location.lng);
                                 }}
                                 query={{
                                     key: 'AIzaSyDTKNiZ9cnqslVZD9GS_1F_Z6K_6DJ9kfw',
@@ -278,10 +282,12 @@ const EventCreationScreen = ({ navigation }) => {
                         />
                     </View>
 
-                    <EventDescriptionInput placeholder="Event Description" value={description} setValue={setDescription} secureTextEntry={false} inputError={descriptionError} isValid={isValidDescription} />
-
-                    <View style={{ flexDirection: "row", marginBottom: 0, marginTop: 15 }}>
-                        <CustomButton onPress={onSubmitPressed} buttonName="Submit" type="PRIMARY" />
+                    <EventDescriptionInput placeholder="Event Description" value={description} setValue={setDescription} secureTextEntry={false} inputError={descriptionError} isValid={isValidDescription}/>
+                    <EmptyInputBox inputError={locationError} isValid={isValidLocation} editable={false} />
+                    <EmptyInputBox inputError={dateError} isValid={isValidDate} editable={false} />
+                    <EmptyInputBox inputError={timeError} isValid={isValidTime} editable={false} />
+                    <View style={{flexDirection:"row", marginBottom: 0, marginTop: 15 }}>
+                        <CustomButton onPress={onSubmitPressed} buttonName="Submit" type="PRIMARY"/>
                     </View>
                     <TouchableOpacity onPress={onCancelPressed}>
                         <Text style={GlobalStyles.blueText} iconName="account-outline"> Cancel </Text>

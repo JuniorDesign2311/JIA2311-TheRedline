@@ -1,3 +1,4 @@
+/** This navigation consists of all the screens in the bottom navigation tab. It is imported into the AuthNavigator.js */
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import MapScreen from  '../screens/MapScreen';
 import ProfileScreen from '../screens/ProfileScreen';
@@ -14,6 +15,7 @@ const Tabs = () => {
         <Tab.Navigator
             initialRouteName={mapName}
             screenOptions = {({route}) => ({
+                tabBarHideOnKeyboard: true,
                 tabBarIcon: ({focused, color, size}) => {
                     let iconName;
                     let routeName = route.name;
@@ -29,8 +31,10 @@ const Tabs = () => {
             },
                 tabBarStyle: {
                     backgroundColor: 'black',
-                    headerShown: false    
+                    headerShown: false 
+                       
                 }
+    
         })}>
 
             <Tab.Screen name={mapName} component={MapScreen} options={{headerShown: false}}/>

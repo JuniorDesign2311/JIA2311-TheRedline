@@ -19,7 +19,8 @@ const EventCreationScreen = ({ navigation }) => {
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
     const [date, setDate] = useState('Select a date');
     const [isTimePickerVisible, setTimePickerVisibility] = useState(false);
-    const [time, setTime] = useState('Select a time');
+    const [time, setTime] = useState(''); // 24-hour time. Stored in the backend
+    const [time12Hour, setTime12Hour] = useState('Select a time'); // 12-hour time. This is what the user sees
     const [description, setDescription] = useState('');
     const [longitude, setLongitude] = useState('');
     const [latitude, setLatitude] = useState('');
@@ -64,6 +65,7 @@ const EventCreationScreen = ({ navigation }) => {
                     latitude: latitude,
                     date: date,
                     time: time,
+                    time12Hour: time12Hour,
                     description: description,
                     host: userData["username"].toString(),
                 })
@@ -124,7 +126,7 @@ const EventCreationScreen = ({ navigation }) => {
         }
 
         // Time Validation
-        if (time === "Select a time") {
+        if (time12Hour === "Select a time") {
             console.log("TimeError2");
             setTimeError('Time Field is Empty');
             setIsValidTime(false);
@@ -170,8 +172,8 @@ const EventCreationScreen = ({ navigation }) => {
         setDatePickerVisibility(false);
     };
     const handleConfirm = (input) => {
-        console.warn("A date has been picked: ", input);
-        setDate(input.toString().substring(0, 15)); // date will be in format: YYY-MM-DDTXX:XX:XX.XXXZ
+        console.warn("A date has been picked: ", input); // date will be in format: YYYY-MM-DDTXX:XX:XX.XXXZ
+        setDate(input.toString().substring(0, 15));
         hideDatePicker();
     };
 
@@ -183,8 +185,29 @@ const EventCreationScreen = ({ navigation }) => {
         setTimePickerVisibility(false);
     };
     const handleTimeConfirm = (timeInput) => {
-        console.warn("A time has been picked: ", timeInput);
-        setTime(timeInput.toString().substring(16,21));
+        console.warn("A time has been picked: ", timeInput); // time will be in format: XXXX-XX-XXTHH:MM:XX.XXXZ
+
+        var convertTime = timeInput.toString().substring(16, 18) + timeInput.toString().substring(19, 21);
+        convertTime = parseInt(convertTime);
+        if (convertTime < 10) { // ------------------------------- 12:00AM - 12:09AM
+            convertTime = "12:0" + convertTime + " AM";
+        } else if (convertTime >= 10 && convertTime < 100) { //--- 12:10AM - 12:59AM
+            convertTime = "12:" + convertTime + " AM";
+        } else if (convertTime >= 100 && convertTime < 1000) { //- 1:00AM - 9:59AM
+            convertTime = Math.floor(convertTime / 100) + ":" + convertTime.toString().substring(1, 3) + " AM";
+        } else if (convertTime >= 1000 && convertTime < 1200) { // 10:00AM - 11:59AM
+            convertTime = Math.floor(convertTime / 100) + ":" + convertTime.toString().substring(2, 4) + " AM";
+        } else if (convertTime >= 1200 && convertTime < 1300) { // 12:00PM - 12:59PM
+            convertTime = Math.floor(convertTime / 100) + ":" + convertTime.toString().substring(2, 4) + " PM";
+        } else if (convertTime >= 1300 && convertTime < 2200) { // 1:00PM - 9:59PM
+            convertTime = convertTime - 1200;
+            convertTime = Math.floor(convertTime / 100) + ":" + convertTime.toString().substring(1, 3) + " PM";
+        } else if (convertTime >= 2200 && convertTime < 2400) { // 10:00PM - 11:59PM
+            convertTime = convertTime - 1200;
+            convertTime = Math.floor(convertTime / 100) + ":" + convertTime.toString().substring(2, 4) + " PM";
+        }
+        setTime12Hour(convertTime);
+        setTime(timeInput.toString().substring(16, 21));
         hideTimePicker();
     };
 
@@ -251,7 +274,7 @@ const EventCreationScreen = ({ navigation }) => {
                     <View style={styles.dateContainer}>
                         <Text>Time</Text>
                         <Button
-                            title={time}
+                            title={time12Hour}
                             onPress={showTimePicker}
                             borderColor="#D3D3D3"
                             inputError={timeError}

@@ -138,7 +138,7 @@ const MapScreen = ({navigation, route}) => {
               <Text style={styles.eventTitle}>{data["title"]}</Text>
               <Text style={styles.events}>Host: {data["host"]}</Text>
               <Text style={styles.events}>Date: {data["date"]}</Text>
-              <Text style={styles.events}>Time: {data["time"]}</Text>
+              <Text style={styles.events}>Time: {data["time12Hour"]}</Text>
               <Text style={styles.events}>Location: {data["location"]}</Text>
               <Text style={styles.events}>Description: {data["description"]}</Text>
             </TouchableOpacity>

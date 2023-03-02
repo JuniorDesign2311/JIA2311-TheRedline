@@ -126,7 +126,7 @@ const EventCreationScreen = ({ navigation }) => {
         }
 
         // Time Validation
-        if (time === "Select a time") {
+        if (time12Hour === "Select a time") {
             console.log("TimeError2");
             setTimeError('Time Field is Empty');
             setIsValidTime(false);

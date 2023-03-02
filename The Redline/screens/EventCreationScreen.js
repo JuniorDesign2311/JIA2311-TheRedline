@@ -49,7 +49,7 @@ const EventCreationScreen = ({ navigation }) => {
 
     //Event ID
     const eventID = uuid.v4();
-
+    
     // Method that writes the event data into The Redline's Firebase Firestore
     const handleEventLogging = async () => {
         //Code to log user data and make it an object and then log the object's username
@@ -231,7 +231,6 @@ const EventCreationScreen = ({ navigation }) => {
                             <GooglePlacesAutocomplete
                                 placeholder={ location }
                                 onPress={(data, details = null) => {
-                                    //console.log(data, details);
                                     handleLocationInput(data.description, details.geometry.location.lat, details.geometry.location.lng);
                                 }}
                                 query={{
@@ -255,13 +254,15 @@ const EventCreationScreen = ({ navigation }) => {
                     />
                     <View style={styles.dateContainer}>
                         <Text>Date</Text>
-                        <Button
-                            title={date.substring(0,15)}
-                            onPress={showDatePicker}
-                            borderColor="#D3D3D3"
-                            inputError={dateError}
-                            isValid={isValidDate}
-                        />
+                        <View style={styles.dateTimeInput}>
+                            <Button
+                                title={date.substring(0,15)}
+                                onPress={showDatePicker}
+                                borderColor="#D3D3D3"
+                                inputError={dateError}
+                                isValid={isValidDate}
+                            />
+                        </View>
                     </View>
 
                     <DateTimePickerModal
@@ -273,19 +274,17 @@ const EventCreationScreen = ({ navigation }) => {
                     />
                     <View style={styles.dateContainer}>
                         <Text>Time</Text>
-                        <Button
-                            title={time12Hour}
-                            onPress={showTimePicker}
-                            borderColor="#D3D3D3"
-                            inputError={timeError}
-                            isValid={isValidTime}
-                        />
+                        <View style={styles.dateTimeInput}>
+                            <Button
+                                title={time12Hour}
+                                onPress={showTimePicker}
+                                inputError={timeError}
+                                isValid={isValidTime}
+                            />
+                        </View>
                     </View>
 
                     <EventDescriptionInput placeholder="Event Description" value={description} setValue={setDescription} secureTextEntry={false} inputError={descriptionError} isValid={isValidDescription}/>
-                    <EmptyInputBox inputError={locationError} isValid={isValidLocation} editable={false} />
-                    <EmptyInputBox inputError={dateError} isValid={isValidDate} editable={false} />
-                    <EmptyInputBox inputError={timeError} isValid={isValidTime} editable={false} />
                     <View style={{flexDirection:"row", marginBottom: 0, marginTop: 15 }}>
                         <CustomButton onPress={onSubmitPressed} buttonName="Submit" type="PRIMARY"/>
                     </View>
@@ -320,5 +319,18 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         alignSelf: 'flex-start',
     },
+    dateTimeInput:{
+        backgroundColor: 'white',
+        width: '100%',
+        borderWidth: 1,
+        borderRadius: 15,
+        flexDirection: 'row',
+        borderColor: '#e8e8e8',
+
+        alignItems: "center",
+        paddingHorizontal: "2%",
+        paddingVertical: "2%",
+        marginVertical: "0.15%"
+    }
 })
 export default EventCreationScreen;

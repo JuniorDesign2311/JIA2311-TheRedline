@@ -5,7 +5,6 @@ import BottomSheet from '@gorhom/bottom-sheet';
 import PlusButton from '../components/PlusButton';
 import { db } from '../firebaseConfig';
 import {SearchBar} from "react-native-elements";
-import { GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
 
 
 const MapScreen = ({navigation, route}) => {
@@ -13,8 +12,9 @@ const MapScreen = ({navigation, route}) => {
   const snapPoints = useMemo(() => [ '10%', '45%', '90%' ]);
   const [events, setEvents] = useState([]);
   const [searchValue, setSearchValue] = useState("");
-  const [showMarker, setShowMarker] = useState({}); //shows true or false for whether each event should be shown on map
 
+
+  const mapView = React.createRef();
   //useEffect makes the function within it only be called only on the first render (the page re-renders if something on the screen changes
   //in other words, the state changes.)
   useEffect(() => {
@@ -23,11 +23,6 @@ const MapScreen = ({navigation, route}) => {
     // useEffect() is called again.
     //.onSnapshot() makes it so whenever the database changes, the function will be called and the data will be taken again
     db.collection('events').onSnapshot((querySnapshot) => {
-      var newShowMarker = {};
-      querySnapshot.forEach((doc) => {
-        newShowMarker[doc.id] = false
-      });
-      setShowMarker(newShowMarker);
       setEvents(querySnapshot.docs.map(snapshot => { //querySnapshot.docs gives us an array of a reference to all the documents in the snapshot (not the data)
           const data = snapshot.data();  //data object
           data['id'] = snapshot.id;   //adding an id to the data object
@@ -58,9 +53,13 @@ const MapScreen = ({navigation, route}) => {
   const addEvent = () => {
     navigation.navigate("EventCreation");
   }
+
+  
     return (
+      
         <View style={styles.container}>
             <MapView
+                ref={mapView}
                 provider={PROVIDER_GOOGLE}
                 style={styles.map}
                 initialRegion={{
@@ -74,6 +73,7 @@ const MapScreen = ({navigation, route}) => {
                 showsMyLocationButton={true}
                 mapPadding={{top:0, right:0, left:0, bottom:80}}>   
                 
+                {/*show markers*/}
                 {events.map((data) => {             
                     const eventMarker = {
                       latitude: data["longitude"],
@@ -81,12 +81,12 @@ const MapScreen = ({navigation, route}) => {
                       latitudeDelta: 0.01,
                       longitudeDelta: 0.01,
                     };
-                  
-                    return showMarker[data["id"]] && (
-                     <Marker coordinate={eventMarker}/>
-                    )
+                    
+                    return  <Marker coordinate={eventMarker}/>
                       
                   })}
+
+            
             </MapView>
 
       <BottomSheet
@@ -117,22 +117,14 @@ const MapScreen = ({navigation, route}) => {
           {events.map((data) => (
             <>
             <Text></Text>
-            <TouchableOpacity style={styles.eachEvent} onPress= {() => {
-              var newMark = {};
-              
-              for (const markers in showMarker) {
-                if (markers === data["id"]) {
-                  if (showMarker[markers] === true) {
-                    newMark[markers] = false; //deselect event
-                  } else {
-                    newMark[markers] = true; //event selected
-                  }
-                } else {
-                  newMark[markers] = showMarker[markers];
-                } 
-                setShowMarker(newMark);
-              }
-              
+            <TouchableOpacity style={[styles.eachEvent]} onPress= {() => {
+               const eventMarker = {
+                latitude: data["longitude"],
+                longitude: data["latitude"],
+                latitudeDelta: 0.01,
+                longitudeDelta: 0.01,
+              };
+              mapView.current.animateToRegion(eventMarker,2000); 
             }}>
 
               <Text style={styles.eventTitle}>{data["title"]}</Text>

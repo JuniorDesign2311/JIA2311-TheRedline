@@ -12,7 +12,7 @@ const MapScreen = ({navigation, route}) => {
   const snapPoints = useMemo(() => [ '10%', '45%', '90%' ]);
   const [events, setEvents] = useState([]);
   const [searchValue, setSearchValue] = useState("");
-  const [showMarker, setShowMarker] = useState({}); //shows true or false for whether each event should be shown on map
+
 
   const mapView = React.createRef();
   //useEffect makes the function within it only be called only on the first render (the page re-renders if something on the screen changes
@@ -23,11 +23,6 @@ const MapScreen = ({navigation, route}) => {
     // useEffect() is called again.
     //.onSnapshot() makes it so whenever the database changes, the function will be called and the data will be taken again
     db.collection('events').onSnapshot((querySnapshot) => {
-      var newShowMarker = {};
-      querySnapshot.forEach((doc) => {
-        newShowMarker[doc.id] = true
-      });
-      setShowMarker(newShowMarker);
       setEvents(querySnapshot.docs.map(snapshot => { //querySnapshot.docs gives us an array of a reference to all the documents in the snapshot (not the data)
           const data = snapshot.data();  //data object
           data['id'] = snapshot.id;   //adding an id to the data object
@@ -59,15 +54,7 @@ const MapScreen = ({navigation, route}) => {
     navigation.navigate("EventCreation");
   }
 
-  const zoomIn = (data) => {
-    const eventMarker = {
-      latitude: data["longitude"],
-      longitude: data["latitude"],
-      latitudeDelta: 0.01,
-      longitudeDelta: 0.01,
-    };
-    this.mapView.animateToRegion(eventMarker,2000); 
-  }
+  
     return (
       
         <View style={styles.container}>
@@ -95,7 +82,7 @@ const MapScreen = ({navigation, route}) => {
                       longitudeDelta: 0.01,
                     };
                     
-                    return showMarker[data["id"]] && <Marker coordinate={eventMarker}/>
+                    return  <Marker coordinate={eventMarker}/>
                       
                   })}
 
@@ -130,7 +117,7 @@ const MapScreen = ({navigation, route}) => {
           {events.map((data) => (
             <>
             <Text></Text>
-            <TouchableOpacity style={styles.eachEvent} onPress= {() => {
+            <TouchableOpacity style={[styles.eachEvent]} onPress= {() => {
                const eventMarker = {
                 latitude: data["longitude"],
                 longitude: data["latitude"],
@@ -138,21 +125,6 @@ const MapScreen = ({navigation, route}) => {
                 longitudeDelta: 0.01,
               };
               mapView.current.animateToRegion(eventMarker,2000); 
-            }} onLongPress = {() => {
-              var newMark = {};
-              
-              for (const markers in showMarker) {
-                if (markers === data["id"]) {
-                  if (showMarker[markers] === true) {
-                    newMark[markers] = false; //deselect event
-                  } else {
-                    newMark[markers] = true; //event selected
-                  }
-                } else {
-                  newMark[markers] = showMarker[markers];
-                } 
-                setShowMarker(newMark);
-              }
             }}>
 
               <Text style={styles.eventTitle}>{data["title"]}</Text>

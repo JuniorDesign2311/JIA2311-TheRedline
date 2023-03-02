@@ -5,7 +5,6 @@ import BottomSheet from '@gorhom/bottom-sheet';
 import PlusButton from '../components/PlusButton';
 import { db } from '../firebaseConfig';
 import {SearchBar} from "react-native-elements";
-import { GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
 
 
 const MapScreen = ({navigation, route}) => {
@@ -15,6 +14,7 @@ const MapScreen = ({navigation, route}) => {
   const [searchValue, setSearchValue] = useState("");
   const [showMarker, setShowMarker] = useState({}); //shows true or false for whether each event should be shown on map
 
+  const mapView = React.createRef();
   //useEffect makes the function within it only be called only on the first render (the page re-renders if something on the screen changes
   //in other words, the state changes.)
   useEffect(() => {
@@ -25,7 +25,7 @@ const MapScreen = ({navigation, route}) => {
     db.collection('events').onSnapshot((querySnapshot) => {
       var newShowMarker = {};
       querySnapshot.forEach((doc) => {
-        newShowMarker[doc.id] = false
+        newShowMarker[doc.id] = true
       });
       setShowMarker(newShowMarker);
       setEvents(querySnapshot.docs.map(snapshot => { //querySnapshot.docs gives us an array of a reference to all the documents in the snapshot (not the data)
@@ -58,9 +58,21 @@ const MapScreen = ({navigation, route}) => {
   const addEvent = () => {
     navigation.navigate("EventCreation");
   }
+
+  const zoomIn = (data) => {
+    const eventMarker = {
+      latitude: data["longitude"],
+      longitude: data["latitude"],
+      latitudeDelta: 0.01,
+      longitudeDelta: 0.01,
+    };
+    this.mapView.animateToRegion(eventMarker,2000); 
+  }
     return (
+      
         <View style={styles.container}>
             <MapView
+                ref={mapView}
                 provider={PROVIDER_GOOGLE}
                 style={styles.map}
                 initialRegion={{
@@ -74,6 +86,7 @@ const MapScreen = ({navigation, route}) => {
                 showsMyLocationButton={true}
                 mapPadding={{top:0, right:0, left:0, bottom:80}}>   
                 
+                {/*show markers*/}
                 {events.map((data) => {             
                     const eventMarker = {
                       latitude: data["longitude"],
@@ -81,12 +94,12 @@ const MapScreen = ({navigation, route}) => {
                       latitudeDelta: 0.01,
                       longitudeDelta: 0.01,
                     };
-                  
-                    return showMarker[data["id"]] && (
-                     <Marker coordinate={eventMarker}/>
-                    )
+                    
+                    return showMarker[data["id"]] && <Marker coordinate={eventMarker}/>
                       
                   })}
+
+            
             </MapView>
 
       <BottomSheet
@@ -118,6 +131,14 @@ const MapScreen = ({navigation, route}) => {
             <>
             <Text></Text>
             <TouchableOpacity style={styles.eachEvent} onPress= {() => {
+               const eventMarker = {
+                latitude: data["longitude"],
+                longitude: data["latitude"],
+                latitudeDelta: 0.01,
+                longitudeDelta: 0.01,
+              };
+              mapView.current.animateToRegion(eventMarker,2000); 
+            }} onLongPress = {() => {
               var newMark = {};
               
               for (const markers in showMarker) {
@@ -132,7 +153,6 @@ const MapScreen = ({navigation, route}) => {
                 } 
                 setShowMarker(newMark);
               }
-              
             }}>
 
               <Text style={styles.eventTitle}>{data["title"]}</Text>

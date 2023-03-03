@@ -82,7 +82,9 @@ const MapScreen = ({navigation, route}) => {
                       longitudeDelta: 0.01,
                     };
                     
-                    return  <Marker coordinate={eventMarker}/>
+                    return  <Marker title={data["title"]} 
+                                    description={data["description"]}
+                                    coordinate={eventMarker}/>
                       
                   })}
 

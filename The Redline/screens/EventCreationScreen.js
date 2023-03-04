@@ -19,8 +19,8 @@ const EventCreationScreen = ({ navigation }) => {
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
     const [date, setDate] = useState('Select a date');
     const [isTimePickerVisible, setTimePickerVisibility] = useState(false);
-    const [time, setTime] = useState(''); // 24-hour time. Stored in the backend
-    const [time12Hour, setTime12Hour] = useState('Select a time'); // 12-hour time. This is what the user sees
+    const [time, setTime] = useState('Select a time'); // 12-hour time. What the user sees
+    const [time24Hour, setTime24Hour] = useState(''); // 24-hour time. For backend use
     const [description, setDescription] = useState('');
     const [longitude, setLongitude] = useState('');
     const [latitude, setLatitude] = useState('');
@@ -65,7 +65,7 @@ const EventCreationScreen = ({ navigation }) => {
                     latitude: latitude,
                     date: date,
                     time: time,
-                    time12Hour: time12Hour,
+                    time24Hour: time24Hour,
                     description: description,
                     host: userData["username"].toString(),
                 })
@@ -126,7 +126,7 @@ const EventCreationScreen = ({ navigation }) => {
         }
 
         // Time Validation
-        if (time12Hour === "Select a time") {
+        if (time === "Select a time") {
             console.log("TimeError2");
             setTimeError('Time Field is Empty');
             setIsValidTime(false);
@@ -206,8 +206,8 @@ const EventCreationScreen = ({ navigation }) => {
             convertTime = convertTime - 1200;
             convertTime = Math.floor(convertTime / 100) + ":" + convertTime.toString().substring(2, 4) + " PM";
         }
-        setTime12Hour(convertTime);
-        setTime(timeInput.toString().substring(16, 21));
+        setTime(convertTime);
+        setTime24Hour(timeInput.toString().substring(16, 21));
         hideTimePicker();
     };
 
@@ -274,7 +274,7 @@ const EventCreationScreen = ({ navigation }) => {
                     <View style={styles.dateContainer}>
                         <Text>Time</Text>
                         <Button
-                            title={time12Hour}
+                            title={time}
                             onPress={showTimePicker}
                             borderColor="#D3D3D3"
                             inputError={timeError}

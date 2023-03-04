@@ -19,8 +19,8 @@ const EventCreationScreen = ({ navigation }) => {
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
     const [date, setDate] = useState('Select a date');
     const [isTimePickerVisible, setTimePickerVisibility] = useState(false);
-    const [time, setTime] = useState(''); // 24-hour time. Stored in the backend
-    const [time12Hour, setTime12Hour] = useState('Select a time'); // 12-hour time. This is what the user sees
+    const [time, setTime] = useState('Select a time'); // 12-hour time. What the user sees
+    const [time24Hour, setTime24Hour] = useState(''); // 24-hour time. For backend use
     const [description, setDescription] = useState('');
     const [longitude, setLongitude] = useState('');
     const [latitude, setLatitude] = useState('');
@@ -49,7 +49,7 @@ const EventCreationScreen = ({ navigation }) => {
 
     //Event ID
     const eventID = uuid.v4();
-    
+
     // Method that writes the event data into The Redline's Firebase Firestore
     const handleEventLogging = async () => {
         //Code to log user data and make it an object and then log the object's username
@@ -65,7 +65,7 @@ const EventCreationScreen = ({ navigation }) => {
                     latitude: latitude,
                     date: date,
                     time: time,
-                    time12Hour: time12Hour,
+                    time24Hour: time24Hour,
                     description: description,
                     host: userData["username"].toString(),
                 })
@@ -126,7 +126,7 @@ const EventCreationScreen = ({ navigation }) => {
         }
 
         // Time Validation
-        if (time12Hour === "Select a time") {
+        if (time === "Select a time") {
             console.log("TimeError2");
             setTimeError('Time Field is Empty');
             setIsValidTime(false);
@@ -206,8 +206,8 @@ const EventCreationScreen = ({ navigation }) => {
             convertTime = convertTime - 1200;
             convertTime = Math.floor(convertTime / 100) + ":" + convertTime.toString().substring(2, 4) + " PM";
         }
-        setTime12Hour(convertTime);
-        setTime(timeInput.toString().substring(16, 21));
+        setTime(convertTime);
+        setTime24Hour(timeInput.toString().substring(16, 21));
         hideTimePicker();
     };
 
@@ -231,6 +231,7 @@ const EventCreationScreen = ({ navigation }) => {
                             <GooglePlacesAutocomplete
                                 placeholder={ location }
                                 onPress={(data, details = null) => {
+                                    //console.log(data, details);
                                     handleLocationInput(data.description, details.geometry.location.lat, details.geometry.location.lng);
                                 }}
                                 query={{
@@ -254,15 +255,13 @@ const EventCreationScreen = ({ navigation }) => {
                     />
                     <View style={styles.dateContainer}>
                         <Text>Date</Text>
-                        <View style={styles.dateTimeInput}>
-                            <Button
-                                title={date.substring(0,15)}
-                                onPress={showDatePicker}
-                                borderColor="#D3D3D3"
-                                inputError={dateError}
-                                isValid={isValidDate}
-                            />
-                        </View>
+                        <Button
+                            title={date.substring(0,15)}
+                            onPress={showDatePicker}
+                            borderColor="#D3D3D3"
+                            inputError={dateError}
+                            isValid={isValidDate}
+                        />
                     </View>
 
                     <DateTimePickerModal
@@ -274,17 +273,19 @@ const EventCreationScreen = ({ navigation }) => {
                     />
                     <View style={styles.dateContainer}>
                         <Text>Time</Text>
-                        <View style={styles.dateTimeInput}>
-                            <Button
-                                title={time12Hour}
-                                onPress={showTimePicker}
-                                inputError={timeError}
-                                isValid={isValidTime}
-                            />
-                        </View>
+                        <Button
+                            title={time}
+                            onPress={showTimePicker}
+                            borderColor="#D3D3D3"
+                            inputError={timeError}
+                            isValid={isValidTime}
+                        />
                     </View>
 
                     <EventDescriptionInput placeholder="Event Description" value={description} setValue={setDescription} secureTextEntry={false} inputError={descriptionError} isValid={isValidDescription}/>
+                    <EmptyInputBox inputError={locationError} isValid={isValidLocation} editable={false} />
+                    <EmptyInputBox inputError={dateError} isValid={isValidDate} editable={false} />
+                    <EmptyInputBox inputError={timeError} isValid={isValidTime} editable={false} />
                     <View style={{flexDirection:"row", marginBottom: 0, marginTop: 15 }}>
                         <CustomButton onPress={onSubmitPressed} buttonName="Submit" type="PRIMARY"/>
                     </View>
@@ -319,18 +320,5 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         alignSelf: 'flex-start',
     },
-    dateTimeInput:{
-        backgroundColor: 'white',
-        width: '100%',
-        borderWidth: 1,
-        borderRadius: 15,
-        flexDirection: 'row',
-        borderColor: '#e8e8e8',
-
-        alignItems: "center",
-        paddingHorizontal: "2%",
-        paddingVertical: "2%",
-        marginVertical: "0.15%"
-    }
 })
 export default EventCreationScreen;

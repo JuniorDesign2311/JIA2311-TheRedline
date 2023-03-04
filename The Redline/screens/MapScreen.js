@@ -1,5 +1,5 @@
 import React, { useMemo, useRef, useState, useEffect } from 'react';
-import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
+import MapView, { PROVIDER_GOOGLE, Marker, Callout } from 'react-native-maps';
 import { StyleSheet, Text, View, ScrollView, TouchableOpacity, Pressable} from 'react-native';
 import BottomSheet from '@gorhom/bottom-sheet';
 import PlusButton from '../components/PlusButton';
@@ -74,18 +74,34 @@ const MapScreen = ({navigation, route}) => {
                 mapPadding={{top:0, right:0, left:0, bottom:80}}>   
                 
                 {/*show markers*/}
-                {events.map((data) => {             
+                {events.map((data) => {
                     const eventMarker = {
-                      latitude: data["longitude"],
-                      longitude: data["latitude"],
-                      latitudeDelta: 0.01,
-                      longitudeDelta: 0.01,
+                        latitude: data["longitude"],
+                        longitude: data["latitude"],
+                        latitudeDelta: 0.01,
+                        longitudeDelta: 0.01,
                     };
-                    
-                    return  <Marker title={data["title"]} 
-                                    description={data["description"]}
-                                    coordinate={eventMarker}/>
-                      
+
+                    return (
+                        <Marker
+                            coordinate={eventMarker}
+                        >
+                            <Callout>
+                                <View style={{ height: "100%", width: 263 }}>
+                                    <Text style={ styles.eventTitle2}>
+                                        {data["title"]}
+                                    </Text>
+                                    <Text> {
+                                        "\nHost: " + data["host"] +
+                                        "\nDate: " + data["date"] +
+                                        "\nTime: " + data["time"] +
+                                        "\nLocation: " + data["location"] +
+                                        "\nDescription: " + data["description"]
+                                    } </Text>
+                                </View>
+                            </Callout>
+                        </Marker>
+                        )
                   })}
 
             
@@ -126,15 +142,12 @@ const MapScreen = ({navigation, route}) => {
                 latitudeDelta: 0.01,
                 longitudeDelta: 0.01,
               };
-              mapView.current.animateToRegion(eventMarker,2000); 
+              mapView.current.animateToRegion(eventMarker,2000);
             }}>
 
               <Text style={styles.eventTitle}>{data["title"]}</Text>
-              <Text style={styles.events}>Host: {data["host"]}</Text>
               <Text style={styles.events}>Date: {data["date"]}</Text>
-              <Text style={styles.events}>Time: {data["time12Hour"]}</Text>
               <Text style={styles.events}>Location: {data["location"]}</Text>
-              <Text style={styles.events}>Description: {data["description"]}</Text>
             </TouchableOpacity>
             </>
 
@@ -166,6 +179,10 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 25,
     textAlign: 'right'
+  },
+  eventTitle2: {
+    fontWeight: 'bold',
+    fontSize: 20
   },
   allEvents: {
     alignItems: 'left',

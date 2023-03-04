@@ -228,6 +228,7 @@ const EventCreationScreen = ({ navigation }) => {
                     <View style={styles.locationContainer} horizontal={false}>
                         <Text>Location</Text>
                         <ScrollView horizontal={true} keyboardShouldPersistTaps="handled">
+                        <View style={[styles.boundingBox, {borderColor: isValidDate ? '#e8e8e8': 'red'}]}>
                             <GooglePlacesAutocomplete
                                 placeholder={ location }
                                 onPress={(data, details = null) => {
@@ -242,6 +243,7 @@ const EventCreationScreen = ({ navigation }) => {
                                 locationError={false}
                                 fetchDetails={true}
                             />
+                            </View>
                         </ScrollView>
                     </View>
 
@@ -255,13 +257,14 @@ const EventCreationScreen = ({ navigation }) => {
                     />
                     <View style={styles.dateContainer}>
                         <Text>Date</Text>
-                        <Button
-                            title={date.substring(0,15)}
-                            onPress={showDatePicker}
-                            borderColor="#D3D3D3"
-                            inputError={dateError}
-                            isValid={isValidDate}
-                        />
+                        <View style={[styles.boundingBox, {borderColor: isValidDate ? '#e8e8e8': 'red'}]}>
+                            <Button
+                                title={date.substring(0,15)}
+                                onPress={showDatePicker}
+                                inputError={dateError}
+                                isValid={isValidDate}
+                            />
+                        </View>
                     </View>
 
                     <DateTimePickerModal
@@ -273,19 +276,20 @@ const EventCreationScreen = ({ navigation }) => {
                     />
                     <View style={styles.dateContainer}>
                         <Text>Time</Text>
-                        <Button
-                            title={time}
-                            onPress={showTimePicker}
-                            borderColor="#D3D3D3"
-                            inputError={timeError}
-                            isValid={isValidTime}
-                        />
+                        <View style={[styles.boundingBox, {borderColor: isValidTime ? '#e8e8e8': 'red'}]}>
+                            <Button
+                                title={time}
+                                onPress={showTimePicker}
+                                inputError={timeError}
+                                isValid={isValidTime}
+                            />
+                        </View>
                     </View>
 
                     <EventDescriptionInput placeholder="Event Description" value={description} setValue={setDescription} secureTextEntry={false} inputError={descriptionError} isValid={isValidDescription}/>
-                    <EmptyInputBox inputError={locationError} isValid={isValidLocation} editable={false} />
+                    {/* <EmptyInputBox inputError={locationError} isValid={isValidLocation} editable={false} />
                     <EmptyInputBox inputError={dateError} isValid={isValidDate} editable={false} />
-                    <EmptyInputBox inputError={timeError} isValid={isValidTime} editable={false} />
+                    <EmptyInputBox inputError={timeError} isValid={isValidTime} editable={false} /> */}
                     <View style={{flexDirection:"row", marginBottom: 0, marginTop: 15 }}>
                         <CustomButton onPress={onSubmitPressed} buttonName="Submit" type="PRIMARY"/>
                     </View>
@@ -320,5 +324,18 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         alignSelf: 'flex-start',
     },
+    boundingBox:{
+        backgroundColor: 'white',
+        width: '100%',
+        borderWidth: 1,
+        borderRadius: 15,
+        flexDirection: 'row',
+        borderColor: '#e8e8e8',
+
+        alignItems: "center",
+        // paddingHorizontal: "1%",
+        paddingVertical: "2%",
+        marginVertical: "0.15%"
+    }
 })
 export default EventCreationScreen;

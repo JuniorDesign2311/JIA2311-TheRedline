@@ -11,11 +11,16 @@ const SettingsScreen = ({navigation, route}) => {
         });
     }
 
+    const onSignOutPressed = () => {
+        navigation.navigate("Login");
+    }
+
     return (
         <KeyboardAvoidingWrapper>
             <View style={GlobalStyles.viewStyle}>
                 <Text>Settings</Text>
                 <CustomButton onPress={onBackPressed} buttonName="Back" type="PRIMARY"/>
+                <CustomButton onPress={onSignOutPressed} buttonName="Sign Out" type="PRIMARY"/>
             </View>
         </KeyboardAvoidingWrapper>
     )

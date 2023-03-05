@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useMemo} from 'react'
-import { View, Text,  StyleSheet, TouchableOpacity} from 'react-native'
+import { View, Text,  Image, TouchableOpacity} from 'react-native'
 import CustomButton from '../components/CustomButton';
 import KeyboardAvoidingWrapper from '../components/KeyboardAvoidingWrapper';
 import GlobalStyles from '../components/GlobalStyles';
@@ -31,17 +31,20 @@ const ProfileScreen = ({navigation, route}) => {
         navigation.navigate("Settings");
     }
 
-    const onSignOutPressed = () => {
-        navigation.navigate("Login");
-    }
-
     return (
         <KeyboardAvoidingWrapper>
-        <View style={GlobalStyles.viewStyle}>
-            <Text style={[GlobalStyles.header]}> {username} </Text>
-            <CustomButton onPress={onSettingsPressed} buttonName="Settings" type="PRIMARY"/>
-            <CustomButton onPress={onSignOutPressed} buttonName="Sign Out" type="PRIMARY"/>
-        </View>
+            <View>
+                <View style={{flexDirection:'row', justifyContent:'space-between'}}> 
+                    <Text style={{paddingTop: '10%', paddingLeft: '2%', fontWeight: 'bold', fontSize: 35, textAlign: 'left',
+                        fontFamily: 'Helvetica Neue'}}> {username} </Text>
+                    <TouchableOpacity
+                        onPress={onSettingsPressed}
+                        style={{ paddingTop: '9%', alignSelf: 'flex-start', paddingRight: '2%'}}
+                    >
+                        <Image source={require('../assets/settings-icon.png')} />
+                    </TouchableOpacity>
+                </View>
+            </View>
         </KeyboardAvoidingWrapper>
     )
 }

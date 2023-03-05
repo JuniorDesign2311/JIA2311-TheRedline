@@ -86,6 +86,7 @@ function AuthNavigator() {
                     options={{title: "Settings",
                     headerShown: false, gestureEnabled: false}}
                 />
+                
         
             </Stack.Navigator>
         </KeyboardAvoidingView>

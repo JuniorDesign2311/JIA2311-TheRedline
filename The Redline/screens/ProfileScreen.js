@@ -1,12 +1,14 @@
 import React, {useState, useEffect, useMemo} from 'react'
-import { View, Text,  Image, TouchableOpacity} from 'react-native'
+import { StyleSheet, ScrollView, View, Text,  Image, TouchableOpacity} from 'react-native'
 import CustomButton from '../components/CustomButton';
 import KeyboardAvoidingWrapper from '../components/KeyboardAvoidingWrapper';
 import GlobalStyles from '../components/GlobalStyles';
 import firebase from "firebase/app";
+import { db } from '../firebaseConfig';
 
 const ProfileScreen = ({navigation, route}) => {
     const [username, setUsername] = useState('');
+    const [events, setEvents] = useState([]);
 
     const user = firebase.auth().currentUser;
 
@@ -25,10 +27,25 @@ const ProfileScreen = ({navigation, route}) => {
                 })
             }
         })
+
+        db.collection('events').onSnapshot((querySnapshot) => {
+            setEvents(querySnapshot.docs.map(snapshot => { //querySnapshot.docs gives us an array of a reference to all the documents in the snapshot (not the data)
+                const data = snapshot.data();  //data object
+                data['id'] = snapshot.id;   //adding an id to the data object
+                return data;
+            }))
+        })
+
+        //console.log(data)
+        console.log("events: " + events)
     }, []);
 
     const onSettingsPressed = () => {
         navigation.navigate("Settings");
+    }
+
+    const onShowAllPressed = () => {
+        navigation.navigate("Profile")
     }
 
     return (
@@ -44,9 +61,72 @@ const ProfileScreen = ({navigation, route}) => {
                         <Image source={require('../assets/settings-icon.png')} />
                     </TouchableOpacity>
                 </View>
+
+                <Image 
+                    style={{alignSelf: 'center'}}
+                    source={require('../assets/account-icon.png')} />
+                
+                <View style={{flexDirection:'row', justifyContent:'space-between'}}>
+                    <Text style={{paddingTop: '4%', paddingLeft: '4%', fontWeight: 'bold', fontSize: 20, textAlign: 'center',
+                        fontFamily: 'Helvetica Neue'}}>My Listed Events</Text>
+                    <CustomButton style={{paddingTop: '5%'}}
+                        onPress={onShowAllPressed} buttonName="Show All" type="SECONDARY"/>
+                </View>
             </View>
+            {/* <ScrollView> */}
+                {/* <View style={styles.container}>
+                    <View style={styles.allEvents}>
+                    {events.map((data) => (
+                        <> */}
+                        {/* <Text style={styles.eventTitle}>{events}</Text> */}
+                        {/* <Text style={styles.events}>Date: {events[0].date}</Text>
+                        <Text style={styles.events}>Location: {events[0].location}</Text> */}
+                        {/* </>
+                    ))} 
+                    </View>
+                </View>
+            </ScrollView> */}
         </KeyboardAvoidingWrapper>
     )
 }
+
+const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      alignItems: 'center'
+    },
+    map: {
+      width: '100%',
+      height: '100%',
+    },
+    events: {
+  
+    },
+    eventTitle: {
+      fontWeight: 'bold',
+      fontSize: 25,
+      textAlign: 'right'
+    },
+    eventTitle2: {
+      fontWeight: 'bold',
+      fontSize: 20
+    },
+    allEvents: {
+      alignItems: 'left',
+      width: '90%',
+      marginBottom: 20
+  
+    },
+    eachEvent: {
+      alignItems: 'left',
+      borderWidth: 1,
+      width: '100%',
+      paddingBottom: '2%',
+      borderRadius: '20%',
+      paddingLeft: '3%',
+      paddingTop: '2%',
+      backgroundColor: '#E5E4E2'
+    }
+});
 
 export default ProfileScreen

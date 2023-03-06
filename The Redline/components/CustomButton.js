@@ -12,6 +12,14 @@ const CustomButton = ({onPress, buttonName, type = "PRIMARY", color= 'white'}) =
                 <Text style= {[styles.text, {color: "black"}, {fontSize: 16}]} >{buttonName}</Text>
             </Pressable>
         )
+    } else if (type === "SECONDARY") {
+        return (
+        <Pressable 
+            style={[styles.container, styles['container_' + type], {backgroundColor: "white"}]}
+            onPress={() => {onPress()}}>
+                <Text style= {[styles.text, {color: "black"}, {fontSize: 16}]} >{buttonName}</Text>
+            </Pressable>
+        )
     }
 }
 
@@ -35,7 +43,7 @@ const styles = StyleSheet.create({
     },
 
     container_SECONDARY: {
-        width: "45%"
+        width: "25%"
     },
 
     text:{

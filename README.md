@@ -45,3 +45,19 @@ dismissed it would distort the screen size of the map screen after so we fixed t
 * We found a bug with the form validation changing only after we move backwards to the page. We fixed this error by
 redesigning our form validation logic.
 * Location tracking will occasionally zoom out on an area because area tracking accuracy is set to low.
+
+## Version 0.3.0
+
+### New Features
+* Button that moves map to user's current location
+* Each event in the event pull-up links with marker on map
+* Ability to delete events
+* Bottom Navigation Bar
+* Profile Page
+* Interactive Event Markers
+* Google Places Autocomplete
+* Date Picker for Creating Events
+* Time Picker for Creating Events
+
+### Bug Fixes
+* Corrected error handling in event creation page

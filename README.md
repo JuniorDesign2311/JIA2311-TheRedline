@@ -3,7 +3,7 @@ There is currently no centralized place for vintage car enthusiasts to connect w
 Our application is an all-in-one platform that will aggregate car show events and meetups, 
 allowing users to favorite and post their own events.
 
-## Release Notes
+# Release Notes
 
 ## Version 0.1.0
 
@@ -56,8 +56,9 @@ redesigning our form validation logic.
 * Profile Page
 * Interactive Event Markers
 * Google Places Autocomplete
-* Date Picker for Creating Events
-* Time Picker for Creating Events
+* Date Picker for creating events
+* Time Picker for creating events
+* Search bar that filters by event title
 
 ### Bug Fixes
 * Corrected error handling in event creation page

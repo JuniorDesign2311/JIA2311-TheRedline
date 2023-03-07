@@ -1,8 +1,7 @@
 import React, {useState} from 'react'
-import { Button, View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native'
+import { Dimensions, Button, View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native'
 import CustomInput from '../components/CustomInput';
 import CustomButton from '../components/CustomButton';
-import EmptyInputBox from '../components/EmptyInputBox';
 import EventDescriptionInput from '../components/EventDescriptionInput';
 import { db } from '../firebaseConfig';
 import firebase from "firebase/app";
@@ -226,7 +225,7 @@ const EventCreationScreen = ({ navigation }) => {
                 <View style={styles.sheet}>
                     <CustomInput placeholder="Event Title" value={title} setValue={setTitle} secureTextEntry={false} inputError={titleError} isValid={isValidTitle}/>
                     <Text style={styles.dateTimeText}>Location</Text>
-                    <View style={styles.locationContainer}>
+                    <View style={styles.fieldContainter}>
                         <ScrollView horizontal={true} keyboardShouldPersistTaps="handled">
                         <View style={[styles.boundingBox, {borderColor: isValidDate ? '#e8e8e8': 'red'}]}>
                             <GooglePlacesAutocomplete
@@ -256,7 +255,7 @@ const EventCreationScreen = ({ navigation }) => {
                         onCancel={hideDatePicker}
                     />
                     <Text style={styles.dateTimeText}>Date</Text>
-                    <View style={styles.dateContainer}>
+                    <View style={styles.fieldContainter}>
                         <View style={[styles.boundingBox, {borderColor: isValidDate ? '#e8e8e8': 'red'}]}>
                             <Button
                                 title={date.substring(0,15)}
@@ -275,7 +274,7 @@ const EventCreationScreen = ({ navigation }) => {
                         onCancel={hideTimePicker}
                     />
                     <Text style={styles.dateTimeText}>Time</Text>
-                    <View style={styles.timeContainer}>
+                    <View style={styles.fieldContainter}>
                         <View style={[styles.boundingBox, {borderColor: isValidTime ? '#e8e8e8': 'red'}]}>
                             <Button
                                 title={time}
@@ -315,22 +314,11 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginBottom: '40%',
     },
-    locationContainer:{
+    fieldContainter:{
         flexDirection: 'row',
         width: '100%',
-        paddingHorizontal: 20,
-        alignSelf: 'flex-start',
-    },
-    dateContainer:{
-        flexDirection: 'row',
-        width: '100%',
-        paddingHorizontal: 20,
-        alignSelf: 'flex-start',
-    },
-    timeContainer:{
-        flexDirection: 'row',
-        width: '100%',
-        paddingHorizontal: 20,
+        paddingHorizontal: '5%',
+        // paddingVertical: "1%",
         alignSelf: 'flex-start',
     },
     dateTimeText:{
@@ -347,8 +335,7 @@ const styles = StyleSheet.create({
         borderColor: '#e8e8e8',
 
         alignItems: "center",
-        // paddingHorizontal: "1%",
-        paddingVertical: "2%",
+        paddingVertical: "1%",
         marginVertical: "0.15%"
     }
 })

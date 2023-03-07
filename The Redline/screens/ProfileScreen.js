@@ -69,25 +69,26 @@ const ProfileScreen = ({navigation, route}) => {
                 <View style={{flexDirection:'row', justifyContent:'space-between'}}>
                     <Text style={{paddingTop: '4%', paddingLeft: '4%', fontWeight: 'bold', fontSize: 20, textAlign: 'center',
                         fontFamily: 'Helvetica Neue'}}>My Listed Events</Text>
-                    <CustomButton style={{paddingTop: '5%'}}
-                        onPress={onShowAllPressed} buttonName="Show All" type="SECONDARY"/>
+                    {/* <CustomButton style={{paddingTop: '5%'}}
+                        onPress={onShowAllPressed} buttonName="Show All" type="SECONDARY"/> */}
                 </View>
             </View>
-        <ScrollView>
-    
-          <View>
-          {events.map((data) => {
-            return (data["host"] === username) &&
-            <>
-              <Text style={styles.eventTitle}>{data["title"]}</Text>
-              <Text style={styles.events}>Host: {data["date"]}</Text>
-              <Text style={styles.events}>Date: {data["location"]}</Text>
-            </>
-       
-
-            })}
-      </View>
-        </ScrollView>
+            <ScrollView>
+                <View style={styles.container}>
+                    <View style={styles.allEvents}>
+                    {events.map((data) => {
+                        return (data["host"] === username) &&
+                        <>
+                        <View style={styles.eachEvent}>
+                            <Text style={styles.eventTitle}>{data["title"]}</Text>
+                            <Text style={styles.events}>Host: {data["date"]}</Text>
+                            <Text style={styles.events}>Date: {data["location"]}</Text>
+                        </View>
+                        </>
+                        })}
+                    </View>
+                </View>
+            </ScrollView>
         </View>
     )
 }
@@ -116,8 +117,8 @@ const styles = StyleSheet.create({
     allEvents: {
       alignItems: 'left',
       width: '90%',
-      marginBottom: 20
-  
+      marginBottom: 20,
+      paddingBottom: '2%'
     },
     eachEvent: {
       alignItems: 'left',
@@ -127,7 +128,8 @@ const styles = StyleSheet.create({
       borderRadius: '20%',
       paddingLeft: '3%',
       paddingTop: '2%',
-      backgroundColor: '#E5E4E2'
+      backgroundColor: '#E5E4E2',
+      marginTop: '3%'
     }
 });
 

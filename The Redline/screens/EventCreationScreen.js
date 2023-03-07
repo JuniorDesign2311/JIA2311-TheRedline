@@ -225,8 +225,8 @@ const EventCreationScreen = ({ navigation }) => {
                 <Text style={[styles.header]}> Create Event </Text>
                 <View style={styles.sheet}>
                     <CustomInput placeholder="Event Title" value={title} setValue={setTitle} secureTextEntry={false} inputError={titleError} isValid={isValidTitle}/>
-                    <View style={styles.locationContainer} horizontal={false}>
-                        <Text>Location</Text>
+                    <Text style={styles.dateTimeText}>Location</Text>
+                    <View style={styles.locationContainer}>
                         <ScrollView horizontal={true} keyboardShouldPersistTaps="handled">
                         <View style={[styles.boundingBox, {borderColor: isValidDate ? '#e8e8e8': 'red'}]}>
                             <GooglePlacesAutocomplete
@@ -255,8 +255,8 @@ const EventCreationScreen = ({ navigation }) => {
                         onConfirm={handleConfirm}
                         onCancel={hideDatePicker}
                     />
+                    <Text style={styles.dateTimeText}>Date</Text>
                     <View style={styles.dateContainer}>
-                        <Text>Date</Text>
                         <View style={[styles.boundingBox, {borderColor: isValidDate ? '#e8e8e8': 'red'}]}>
                             <Button
                                 title={date.substring(0,15)}
@@ -274,8 +274,8 @@ const EventCreationScreen = ({ navigation }) => {
                         onConfirm={handleTimeConfirm}
                         onCancel={hideTimePicker}
                     />
-                    <View style={styles.dateContainer}>
-                        <Text>Time</Text>
+                    <Text style={styles.dateTimeText}>Time</Text>
+                    <View style={styles.timeContainer}>
                         <View style={[styles.boundingBox, {borderColor: isValidTime ? '#e8e8e8': 'red'}]}>
                             <Button
                                 title={time}
@@ -316,12 +316,26 @@ const styles = StyleSheet.create({
         marginBottom: '40%',
     },
     locationContainer:{
-        width: '90%',
-        flex: 0,
+        flexDirection: 'row',
+        width: '100%',
+        paddingHorizontal: 20,
         alignSelf: 'flex-start',
     },
     dateContainer:{
-        flexDirection: 'column',
+        flexDirection: 'row',
+        width: '100%',
+        paddingHorizontal: 20,
+        alignSelf: 'flex-start',
+    },
+    timeContainer:{
+        flexDirection: 'row',
+        width: '100%',
+        paddingHorizontal: 20,
+        alignSelf: 'flex-start',
+    },
+    dateTimeText:{
+        width: '100%',
+        paddingHorizontal: 20,
         alignSelf: 'flex-start',
     },
     boundingBox:{

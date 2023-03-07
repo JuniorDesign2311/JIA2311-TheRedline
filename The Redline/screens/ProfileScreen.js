@@ -49,7 +49,7 @@ const ProfileScreen = ({navigation, route}) => {
     }
 
     return (
-        <KeyboardAvoidingWrapper>
+        <View>
             <View>
                 <View style={{flexDirection:'row', justifyContent:'space-between'}}> 
                     <Text style={{paddingTop: '10%', paddingLeft: '2%', fontWeight: 'bold', fontSize: 35, textAlign: 'left',
@@ -73,20 +73,22 @@ const ProfileScreen = ({navigation, route}) => {
                         onPress={onShowAllPressed} buttonName="Show All" type="SECONDARY"/>
                 </View>
             </View>
-            {/* <ScrollView> */}
-                {/* <View style={styles.container}>
-                    <View style={styles.allEvents}>
-                    {events.map((data) => (
-                        <> */}
-                        {/* <Text style={styles.eventTitle}>{events}</Text> */}
-                        {/* <Text style={styles.events}>Date: {events[0].date}</Text>
-                        <Text style={styles.events}>Location: {events[0].location}</Text> */}
-                        {/* </>
-                    ))} 
-                    </View>
-                </View>
-            </ScrollView> */}
-        </KeyboardAvoidingWrapper>
+        <ScrollView>
+    
+          <View>
+          {events.map((data) => {
+            return (data["host"] === username) &&
+            <>
+              <Text style={styles.eventTitle}>{data["title"]}</Text>
+              <Text style={styles.events}>Host: {data["date"]}</Text>
+              <Text style={styles.events}>Date: {data["location"]}</Text>
+            </>
+       
+
+            })}
+      </View>
+        </ScrollView>
+        </View>
     )
 }
 

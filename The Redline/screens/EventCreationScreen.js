@@ -222,12 +222,15 @@ const EventCreationScreen = ({ navigation }) => {
         <KeyboardAvoidingWrapper>
             <View style={GlobalStyles.viewStyle}>
                 <Text style={[styles.header]}> Create Event </Text>
+                
                 <View style={styles.sheet}>
                     <CustomInput placeholder="Event Title" value={title} setValue={setTitle} secureTextEntry={false} inputError={titleError} isValid={isValidTitle}/>
                     <Text style={styles.dateTimeText}>Location</Text>
-                    <View style={styles.fieldContainter}>
-                        <ScrollView horizontal={true} keyboardShouldPersistTaps="handled">
+                        
+                        <View style={styles.fieldContainter}>
                         <View style={[styles.boundingBox, {borderColor: isValidDate ? '#e8e8e8': 'red'}]}>
+
+                        <ScrollView horizontal={true} nestedScrollEnabled={true} keyboardShouldPersistTaps='handled' contentContainerStyle={{ flexGrow: 1 }}>
                             <GooglePlacesAutocomplete
                                 placeholder={ location }
                                 onPress={(data, details = null) => {
@@ -241,10 +244,13 @@ const EventCreationScreen = ({ navigation }) => {
                                 isValid={isValidLocation}
                                 locationError={false}
                                 fetchDetails={true}
+
                             />
+                            </ScrollView>
                             </View>
-                        </ScrollView>
-                    </View>
+                            </View>
+                        
+                
 
                     <DateTimePickerModal
                         isVisible={isDatePickerVisible}
@@ -255,15 +261,17 @@ const EventCreationScreen = ({ navigation }) => {
                         onCancel={hideDatePicker}
                     />
                     <Text style={styles.dateTimeText}>Date</Text>
-                    <View style={styles.fieldContainter}>
+                        <View style={styles.fieldContainter}>
                         <View style={[styles.boundingBox, {borderColor: isValidDate ? '#e8e8e8': 'red'}]}>
+                            
                             <Button
                                 title={date.substring(0,15)}
                                 onPress={showDatePicker}
                                 inputError={dateError}
                                 isValid={isValidDate}
                             />
-                        </View>
+                            </View>
+                           
                     </View>
 
                     <DateTimePickerModal
@@ -318,15 +326,17 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         width: '100%',
         paddingHorizontal: '5%',
-        // paddingVertical: "1%",
+        paddingVertical: "2%",
         alignSelf: 'flex-start',
+        backgroundColor: 'white'
     },
-    dateTimeText:{
+    dateTimeText:{      
         width: '100%',
         paddingHorizontal: 20,
         alignSelf: 'flex-start',
     },
     boundingBox:{
+        alignSelf: 'flex-start',
         backgroundColor: 'white',
         width: '100%',
         borderWidth: 1,
@@ -336,7 +346,7 @@ const styles = StyleSheet.create({
 
         alignItems: "center",
         paddingVertical: "1%",
-        marginVertical: "0.15%"
-    }
+        marginVertical: "0.15%",
+    },
 })
 export default EventCreationScreen;

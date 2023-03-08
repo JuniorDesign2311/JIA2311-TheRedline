@@ -44,12 +44,9 @@ const ProfileScreen = ({navigation, route}) => {
         navigation.navigate("Settings");
     }
 
-    const onShowAllPressed = () => {
-        navigation.navigate("Profile")
-    }
-
     return (
         <View>
+            <ScrollView>
             <View>
                 <View style={{flexDirection:'row', justifyContent:'space-between'}}> 
                     <Text style={{paddingTop: '10%', paddingLeft: '2%', fontWeight: 'bold', fontSize: 35, textAlign: 'left',
@@ -73,17 +70,20 @@ const ProfileScreen = ({navigation, route}) => {
                         onPress={onShowAllPressed} buttonName="Show All" type="SECONDARY"/> */}
                 </View>
             </View>
-            <ScrollView>
                 <View style={styles.container}>
                     <View style={styles.allEvents}>
                     {events.map((data) => {
                         return (data["host"] === username) &&
                         <>
-                        <View style={styles.eachEvent}>
+                        <TouchableOpacity style={styles.eachEvent} onPress= {() => {
+                            navigation.navigate("EventDeletion", {
+                                dataId: data["id"]
+                            })
+                        }}>
                             <Text style={styles.eventTitle}>{data["title"]}</Text>
                             <Text style={styles.events}>Host: {data["date"]}</Text>
                             <Text style={styles.events}>Date: {data["location"]}</Text>
-                        </View>
+                        </TouchableOpacity>
                         </>
                         })}
                     </View>

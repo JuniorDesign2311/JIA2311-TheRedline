@@ -1,8 +1,7 @@
 import React, {useState} from 'react'
-import { Button, View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native'
+import { Dimensions, Button, View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native'
 import CustomInput from '../components/CustomInput';
 import CustomButton from '../components/CustomButton';
-import EmptyInputBox from '../components/EmptyInputBox';
 import EventDescriptionInput from '../components/EventDescriptionInput';
 import { db } from '../firebaseConfig';
 import firebase from "firebase/app";
@@ -223,11 +222,15 @@ const EventCreationScreen = ({ navigation }) => {
         <KeyboardAvoidingWrapper>
             <View style={GlobalStyles.viewStyle}>
                 <Text style={[styles.header]}> Create Event </Text>
+                
                 <View style={styles.sheet}>
                     <CustomInput placeholder="Event Title" value={title} setValue={setTitle} secureTextEntry={false} inputError={titleError} isValid={isValidTitle}/>
-                    <View style={styles.locationContainer} horizontal={false}>
-                        <Text>Location</Text>
-                        <ScrollView horizontal={true} keyboardShouldPersistTaps="handled">
+                    <Text style={styles.dateTimeText}>Location</Text>
+                        
+                        <View style={styles.fieldContainter}>
+                        <View style={[styles.boundingBox, {borderColor: isValidDate ? '#e8e8e8': 'red'}]}>
+
+                        <ScrollView horizontal={true} nestedScrollEnabled={true} keyboardShouldPersistTaps='handled' contentContainerStyle={{ flexGrow: 1 }}>
                             <GooglePlacesAutocomplete
                                 placeholder={ location }
                                 onPress={(data, details = null) => {
@@ -241,9 +244,13 @@ const EventCreationScreen = ({ navigation }) => {
                                 isValid={isValidLocation}
                                 locationError={false}
                                 fetchDetails={true}
+
                             />
-                        </ScrollView>
-                    </View>
+                            </ScrollView>
+                            </View>
+                            </View>
+                        
+                
 
                     <DateTimePickerModal
                         isVisible={isDatePickerVisible}
@@ -253,15 +260,18 @@ const EventCreationScreen = ({ navigation }) => {
                         onConfirm={handleConfirm}
                         onCancel={hideDatePicker}
                     />
-                    <View style={styles.dateContainer}>
-                        <Text>Date</Text>
-                        <Button
-                            title={date.substring(0,15)}
-                            onPress={showDatePicker}
-                            borderColor="#D3D3D3"
-                            inputError={dateError}
-                            isValid={isValidDate}
-                        />
+                    <Text style={styles.dateTimeText}>Date</Text>
+                        <View style={styles.fieldContainter}>
+                        <View style={[styles.boundingBox, {borderColor: isValidDate ? '#e8e8e8': 'red'}]}>
+                            
+                            <Button
+                                title={date.substring(0,15)}
+                                onPress={showDatePicker}
+                                inputError={dateError}
+                                isValid={isValidDate}
+                            />
+                            </View>
+                           
                     </View>
 
                     <DateTimePickerModal
@@ -271,21 +281,22 @@ const EventCreationScreen = ({ navigation }) => {
                         onConfirm={handleTimeConfirm}
                         onCancel={hideTimePicker}
                     />
-                    <View style={styles.dateContainer}>
-                        <Text>Time</Text>
-                        <Button
-                            title={time}
-                            onPress={showTimePicker}
-                            borderColor="#D3D3D3"
-                            inputError={timeError}
-                            isValid={isValidTime}
-                        />
+                    <Text style={styles.dateTimeText}>Time</Text>
+                    <View style={styles.fieldContainter}>
+                        <View style={[styles.boundingBox, {borderColor: isValidTime ? '#e8e8e8': 'red'}]}>
+                            <Button
+                                title={time}
+                                onPress={showTimePicker}
+                                inputError={timeError}
+                                isValid={isValidTime}
+                            />
+                        </View>
                     </View>
 
                     <EventDescriptionInput placeholder="Event Description" value={description} setValue={setDescription} secureTextEntry={false} inputError={descriptionError} isValid={isValidDescription}/>
-                    <EmptyInputBox inputError={locationError} isValid={isValidLocation} editable={false} />
+                    {/* <EmptyInputBox inputError={locationError} isValid={isValidLocation} editable={false} />
                     <EmptyInputBox inputError={dateError} isValid={isValidDate} editable={false} />
-                    <EmptyInputBox inputError={timeError} isValid={isValidTime} editable={false} />
+                    <EmptyInputBox inputError={timeError} isValid={isValidTime} editable={false} /> */}
                     <View style={{flexDirection:"row", marginBottom: 0, marginTop: 15 }}>
                         <CustomButton onPress={onSubmitPressed} buttonName="Submit" type="PRIMARY"/>
                     </View>
@@ -311,14 +322,31 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginBottom: '40%',
     },
-    locationContainer:{
-        width: '90%',
-        flex: 0,
+    fieldContainter:{
+        flexDirection: 'row',
+        width: '100%',
+        paddingHorizontal: '5%',
+        paddingVertical: "2%",
+        alignSelf: 'flex-start',
+        backgroundColor: 'white'
+    },
+    dateTimeText:{      
+        width: '100%',
+        paddingHorizontal: 20,
         alignSelf: 'flex-start',
     },
-    dateContainer:{
-        flexDirection: 'column',
+    boundingBox:{
         alignSelf: 'flex-start',
+        backgroundColor: 'white',
+        width: '100%',
+        borderWidth: 1,
+        borderRadius: 15,
+        flexDirection: 'row',
+        borderColor: '#e8e8e8',
+
+        alignItems: "center",
+        paddingVertical: "1%",
+        marginVertical: "0.15%",
     },
 })
 export default EventCreationScreen;

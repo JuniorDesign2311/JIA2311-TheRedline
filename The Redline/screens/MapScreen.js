@@ -33,6 +33,7 @@ const MapScreen = ({navigation, route}) => {
 
   const searchFilter = (text) => {
     if (text == "") {
+      setSearchValue("");
       db.collection('events').onSnapshot((querySnapshot) => {
         setEvents(querySnapshot.docs.map(snapshot => { //querySnapshot.docs gives us an array of a reference to all the documents in the snapshot (not the data)
             const data = snapshot.data();  //data object
@@ -41,6 +42,7 @@ const MapScreen = ({navigation, route}) => {
       })
       return events;
     } else {
+      console.log(text);
       setSearchValue(text);
       setEvents(events.filter((item) => {
         const item_data = `${item.title.toUpperCase()})`;
@@ -74,14 +76,14 @@ const MapScreen = ({navigation, route}) => {
                 mapPadding={{top:0, right:0, left:0, bottom:80}}>   
                 
                 {/*show markers*/}
-                {events.map((data) => {
+                {events.map((data) => {             
                     const eventMarker = {
-                        latitude: data["longitude"],
-                        longitude: data["latitude"],
-                        latitudeDelta: 0.01,
-                        longitudeDelta: 0.01,
+                      latitude: data["longitude"],
+                      longitude: data["latitude"],
+                      latitudeDelta: 0.01,
+                      longitudeDelta: 0.01,
                     };
-
+                    
                     return (
                         <Marker
                             coordinate={eventMarker}
@@ -142,7 +144,7 @@ const MapScreen = ({navigation, route}) => {
                 latitudeDelta: 0.01,
                 longitudeDelta: 0.01,
               };
-              mapView.current.animateToRegion(eventMarker,2000);
+              mapView.current.animateToRegion(eventMarker,2000); 
             }}>
 
               <Text style={styles.eventTitle}>{data["title"]}</Text>
@@ -180,7 +182,7 @@ const styles = StyleSheet.create({
     fontSize: 25,
     textAlign: 'right'
   },
-  eventTitle2: {
+   eventTitle2: {
     fontWeight: 'bold',
     fontSize: 20
   },

@@ -62,3 +62,7 @@ redesigning our form validation logic.
 
 ### Bug Fixes
 * Corrected error handling in event creation page
+
+### Need to Fix
+* Search bar doesn't reset correctly
+* Event creation page submit button requires 2 presses

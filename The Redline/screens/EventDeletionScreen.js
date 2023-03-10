@@ -2,7 +2,6 @@ import React, {useState} from 'react'
 import { Button, View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native'
 import CustomInput from '../components/CustomInput';
 import CustomButton from '../components/CustomButton';
-import EmptyInputBox from '../components/EmptyInputBox';
 import EventDescriptionInput from '../components/EventDescriptionInput';
 import { db } from '../firebaseConfig';
 import firebase from "firebase/app";

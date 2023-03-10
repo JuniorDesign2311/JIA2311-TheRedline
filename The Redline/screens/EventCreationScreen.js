@@ -56,7 +56,6 @@ const EventCreationScreen = ({ navigation }) => {
             if (snapshot.exists) {
                 const userData = snapshot.data();
                 userData["username"].toString();
-                console.log(userData["username"].toString());
                 db.collection("events").doc(eventID).set({
                     title: title,
                     location: location,
@@ -72,7 +71,6 @@ const EventCreationScreen = ({ navigation }) => {
                         console.error("Error adding document: ", error);
                     });
             } else {
-            console.log("User does not exist");
             }
         })
     }
@@ -94,7 +92,6 @@ const EventCreationScreen = ({ navigation }) => {
             setTitleError('Title Cannot Contain Special Characters');
             setIsValidTitle(false);
         } else {
-            console.log("no title error");
             setTitleNavigationCheck(true);
             setTitleError('');
             setIsValidTitle(true);
@@ -102,11 +99,9 @@ const EventCreationScreen = ({ navigation }) => {
 
         // Location Validation
         if (location === "Search for a location") {
-            console.log("LocError2");
             setLocationError('Location Field is Empty');
             setIsValidLocation(false);
         } else {
-            console.log("No Loc Error");
             setLocationNavigationCheck(true);
             setLocationError('');
             setIsValidLocation(true);
@@ -114,11 +109,9 @@ const EventCreationScreen = ({ navigation }) => {
 
         // Date Validation
         if (date === "Select a date") {
-            console.log("DateError2");
             setDateError('Date Field is Empty');
             setIsValidDate(false);
         } else {
-            console.log("No Date Error");
             setDateNavigationCheck(true);
             setDateError('');
             setIsValidDate(true);
@@ -126,11 +119,9 @@ const EventCreationScreen = ({ navigation }) => {
 
         // Time Validation
         if (time === "Select a time") {
-            console.log("TimeError2");
             setTimeError('Time Field is Empty');
             setIsValidTime(false);
         } else {
-            console.log("No Time Error");
             setTimeNavigationCheck(true);
             setTimeError('');
             setIsValidTime(true);
@@ -171,7 +162,6 @@ const EventCreationScreen = ({ navigation }) => {
         setDatePickerVisibility(false);
     };
     const handleConfirm = (input) => {
-        console.warn("A date has been picked: ", input); // date will be in format: YYYY-MM-DDTXX:XX:XX.XXXZ
         setDate(input.toString().substring(0, 15));
         hideDatePicker();
     };
@@ -184,7 +174,6 @@ const EventCreationScreen = ({ navigation }) => {
         setTimePickerVisibility(false);
     };
     const handleTimeConfirm = (timeInput) => {
-        console.warn("A time has been picked: ", timeInput); // time will be in format: XXXX-XX-XXTHH:MM:XX.XXXZ
 
         var convertTime = timeInput.toString().substring(16, 18) + timeInput.toString().substring(19, 21);
         convertTime = parseInt(convertTime);
@@ -228,28 +217,33 @@ const EventCreationScreen = ({ navigation }) => {
                     <Text style={styles.dateTimeText}>Location</Text>
                         
                         <View style={styles.fieldContainter}>
-                        <View style={[styles.boundingBox, {borderColor: isValidDate ? '#e8e8e8': 'red'}]}>
+                            <View style={[styles.boundingBox, {borderColor: isValidLocation ? '#e8e8e8': 'red'}]}>
 
-                        <ScrollView horizontal={true} nestedScrollEnabled={true} keyboardShouldPersistTaps='handled' contentContainerStyle={{ flexGrow: 1 }}>
-                            <GooglePlacesAutocomplete
-                                placeholder={ location }
-                                onPress={(data, details = null) => {
-                                    //console.log(data, details);
-                                    handleLocationInput(data.description, details.geometry.location.lat, details.geometry.location.lng);
-                                }}
-                                query={{
-                                    key: 'AIzaSyDTKNiZ9cnqslVZD9GS_1F_Z6K_6DJ9kfw',
-                                    language: 'en',
-                                }}
-                                isValid={isValidLocation}
-                                locationError={false}
-                                fetchDetails={true}
+                            <ScrollView horizontal={true} nestedScrollEnabled={true} keyboardShouldPersistTaps='handled' contentContainerStyle={{ flexGrow: 1 }}>
+                                <GooglePlacesAutocomplete
+                                    placeholder={ location }
+                                    textInputProps={{
+                                        placeholderTextColor: '#D3D3D3',
+                                        returnKeyType: "search"
+                                      }}
+                                    onPress={(data, details = null) => {
+                                        handleLocationInput(data.description, details.geometry.location.lat, details.geometry.location.lng);
+                                    }}
+                                    query={{
+                                        key: 'AIzaSyDTKNiZ9cnqslVZD9GS_1F_Z6K_6DJ9kfw',
+                                        language: 'en',
+                                    }}
+                                    isValid={isValidLocation}
+                                    locationError={false}
+                                    fetchDetails={true}
 
-                            />
-                            </ScrollView>
+                                />
+                                </ScrollView>
                             </View>
-                            </View>
-                        
+                        </View>
+                        <Text style={styles.error}>
+                            {locationError} 
+                        </Text>
                 
 
                     <DateTimePickerModal
@@ -271,8 +265,10 @@ const EventCreationScreen = ({ navigation }) => {
                                 isValid={isValidDate}
                             />
                             </View>
-                           
                     </View>
+                    <Text style={styles.error}>
+                        {dateError} 
+                    </Text>
 
                     <DateTimePickerModal
                         isVisible={isTimePickerVisible}
@@ -292,11 +288,11 @@ const EventCreationScreen = ({ navigation }) => {
                             />
                         </View>
                     </View>
+                    <Text style={styles.error}>
+                        {timeError} 
+                    </Text>
 
                     <EventDescriptionInput placeholder="Event Description" value={description} setValue={setDescription} secureTextEntry={false} inputError={descriptionError} isValid={isValidDescription}/>
-                    {/* <EmptyInputBox inputError={locationError} isValid={isValidLocation} editable={false} />
-                    <EmptyInputBox inputError={dateError} isValid={isValidDate} editable={false} />
-                    <EmptyInputBox inputError={timeError} isValid={isValidTime} editable={false} /> */}
                     <View style={{flexDirection:"row", marginBottom: 0, marginTop: 15 }}>
                         <CustomButton onPress={onSubmitPressed} buttonName="Submit" type="PRIMARY"/>
                     </View>
@@ -335,6 +331,11 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
         alignSelf: 'flex-start',
     },
+    error:{
+        color: "red",
+        marginRight:'auto',
+        paddingHorizontal: '5%',
+    },
     boundingBox:{
         alignSelf: 'flex-start',
         backgroundColor: 'white',
@@ -345,8 +346,6 @@ const styles = StyleSheet.create({
         borderColor: '#e8e8e8',
 
         alignItems: "center",
-        paddingVertical: "1%",
-        marginVertical: "0.15%",
     },
 })
 export default EventCreationScreen;

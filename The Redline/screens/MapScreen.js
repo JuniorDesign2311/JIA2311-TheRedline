@@ -1,11 +1,25 @@
 import React, { useMemo, useRef, useState, useEffect } from 'react';
-import MapView, { PROVIDER_GOOGLE, Marker, Callout } from 'react-native-maps';
+import MapView, { PROVIDER_GOOGLE, Marker, Callout, CalloutSubview } from 'react-native-maps';
 import { StyleSheet, Text, View, ScrollView, TouchableOpacity, Pressable} from 'react-native';
 import BottomSheet from '@gorhom/bottom-sheet';
 import PlusButton from '../components/PlusButton';
 import { db } from '../firebaseConfig';
 import {SearchBar} from "react-native-elements";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
+const LikeButton = () => {
+  const [liked, setLiked] = useState(false);
+
+  return (
+    <Pressable onPress={() => setLiked((isLiked) => !isLiked)}>
+      <MaterialCommunityIcons
+        name={liked ? "heart" : "heart-outline"}
+        size={26}
+        color={liked ? "red" : "black"}
+      />
+    </Pressable>
+  );
+};
 
 const MapScreen = ({navigation, route}) => {
   const sheetRef = useRef(null);
@@ -99,6 +113,7 @@ const MapScreen = ({navigation, route}) => {
                                         "\nDescription: " + data["description"]
                                     } </Text>
                                 </View>
+
                             </Callout>
                         </Marker>
                         )
@@ -144,8 +159,10 @@ const MapScreen = ({navigation, route}) => {
               };
               mapView.current.animateToRegion(eventMarker,2000);
             }}>
-
-              <Text style={styles.eventTitle}>{data["title"]}</Text>
+              <View style={styles.eventHeading}>
+                <Text style={styles.eventTitle}>{data["title"]}</Text>
+                <LikeButton></LikeButton>
+              </View>
               <Text style={styles.events}>Date: {data["date"]}</Text>
               <Text style={styles.events}>Location: {data["location"]}</Text>
             </TouchableOpacity>
@@ -178,7 +195,6 @@ const styles = StyleSheet.create({
   eventTitle: {
     fontWeight: 'bold',
     fontSize: 25,
-    textAlign: 'right'
   },
   eventTitle2: {
     fontWeight: 'bold',
@@ -188,17 +204,20 @@ const styles = StyleSheet.create({
     alignItems: 'left',
     width: '90%',
     marginBottom: 20
-
   },
   eachEvent: {
-    alignItems: 'left',
     borderWidth: 1,
     width: '100%',
     paddingBottom: '2%',
     borderRadius: '20%',
     paddingLeft: '3%',
+    paddingRight: '3%',
     paddingTop: '2%',
     backgroundColor: '#E5E4E2'
+  }, 
+  eventHeading: {
+    flexDirection:'row',
+    justifyContent:'space-between',
   }
 });
 

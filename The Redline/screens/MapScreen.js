@@ -1,6 +1,6 @@
 import React, { useMemo, useRef, useState, useEffect } from 'react';
-import MapView, { PROVIDER_GOOGLE, Marker, Callout } from 'react-native-maps';
-import { StyleSheet, Text, View, ScrollView, TouchableOpacity, Pressable} from 'react-native';
+import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
+import { StyleSheet, Text, View, ScrollView, TouchableOpacity, Dimensions } from 'react-native';
 import BottomSheet from '@gorhom/bottom-sheet';
 import PlusButton from '../components/PlusButton';
 import { db } from '../firebaseConfig';
@@ -13,6 +13,8 @@ const MapScreen = ({navigation, route}) => {
   const [events, setEvents] = useState([]);
   const [searchValue, setSearchValue] = useState("");
 
+  const windowW = Dimensions.get('window').width;
+  const windowH = Dimensions.get('window').height;
 
   const mapView = React.createRef();
   //useEffect makes the function within it only be called only on the first render (the page re-renders if something on the screen changes
@@ -58,6 +60,19 @@ const MapScreen = ({navigation, route}) => {
     return (
       
         <View style={styles.container}>
+            <View style={{ flex: "auto", width: windowW, paddingTop:40 }}>
+                <SearchBar placeholder="Search for an event..."
+                    lightTheme
+                    round
+                    showCancel
+                    inputStyle={{ backgroundColor: '#e6e6e6' }}
+                    containerStyle={{ backgroundColor: 'white', borderWidth: 0, borderRadius: 9 }}
+                    inputContainerStyle={{ backgroundColor: '#e6e6e6', borderWidth: 1 }}
+                    onChangeText={(text) => searchFilter(text)}
+                    value={searchValue}
+                />
+            </View>
+
             <MapView
                 ref={mapView}
                 provider={PROVIDER_GOOGLE}
@@ -74,91 +89,63 @@ const MapScreen = ({navigation, route}) => {
                 mapPadding={{top:0, right:0, left:0, bottom:80}}>   
                 
                 {/*show markers*/}
-                {events.map((data) => {
+                {events.map((data) => {             
                     const eventMarker = {
+                      latitude: data["longitude"],
+                      longitude: data["latitude"],
+                      latitudeDelta: 0.01,
+                      longitudeDelta: 0.01,
+                    };
+                    
+                    return <Marker
+                        title={data["title"]}
+                        description={data["description"]}
+                        coordinate={eventMarker}
+                    />
+                      
+                })}   
+            </MapView>
+
+          <BottomSheet
+            ref={sheetRef}
+            index={1}
+            snapPoints={snapPoints}
+            style={{paddingBottom: 20}}
+          >
+            <View style={{ flexDirection: 'row' }}>
+              <View style={{paddingHorizontal: 0}}>
+                <PlusButton onPress={addEvent} buttonName="+" type="PRIMARY"/>
+              </View>
+            </View>
+
+            <ScrollView>
+              <View style={styles.container}>
+                <View style={styles.allEvents}>
+                  {events.map((data) => (
+                    <>
+                      <Text></Text>
+                      <TouchableOpacity style={[styles.eachEvent]} onPress= {() => {
+                        const eventMarker = {
                         latitude: data["longitude"],
                         longitude: data["latitude"],
                         latitudeDelta: 0.01,
                         longitudeDelta: 0.01,
-                    };
-
-                    return (
-                        <Marker
-                            coordinate={eventMarker}
-                        >
-                            <Callout>
-                                <View style={{ height: "100%", width: 263 }}>
-                                    <Text style={ styles.eventTitle2}>
-                                        {data["title"]}
-                                    </Text>
-                                    <Text> {
-                                        "\nHost: " + data["host"] +
-                                        "\nDate: " + data["date"] +
-                                        "\nTime: " + data["time"] +
-                                        "\nLocation: " + data["location"] +
-                                        "\nDescription: " + data["description"]
-                                    } </Text>
-                                </View>
-                            </Callout>
-                        </Marker>
-                        )
-                  })}
-
-            
-            </MapView>
-
-      <BottomSheet
-        ref={sheetRef}
-        index={1}
-        snapPoints={snapPoints}
-        style={{paddingBottom: 20}}
-      >
-        <View style={{flexDirection:'row'}}> 
-        <View style={{flex: 1}}> 
-          <SearchBar placeholder="Search for an event..."
-          lightTheme
-          round
-          showCancel
-          inputStyle = {{backgroundColor: '#e6e6e6'}}
-          containerStyle= {{backgroundColor: 'white', borderWidth: 0, borderRadius: 9}}
-          inputContainerStyle={{backgroundColor: '#e6e6e6', borderWidth: 1}}
-          onChangeText={(text) => searchFilter(text)}
-          value={searchValue}/>
-          </View>
-         <View style={{paddingHorizontal: 0}}>
-      <PlusButton onPress={addEvent} buttonName="+" type="PRIMARY"/>
-      </View>
-      </View>
-      <ScrollView>
-      <View style={styles.container}>
-          <View style={styles.allEvents}>
-          {events.map((data) => (
-            <>
-            <Text></Text>
-            <TouchableOpacity style={[styles.eachEvent]} onPress= {() => {
-               const eventMarker = {
-                latitude: data["longitude"],
-                longitude: data["latitude"],
-                latitudeDelta: 0.01,
-                longitudeDelta: 0.01,
-              };
-              mapView.current.animateToRegion(eventMarker,2000);
-            }}>
-
-              <Text style={styles.eventTitle}>{data["title"]}</Text>
-              <Text style={styles.events}>Date: {data["date"]}</Text>
-              <Text style={styles.events}>Location: {data["location"]}</Text>
-            </TouchableOpacity>
-            </>
-
-          ))}
-      </View>
-
-      </View>
-        </ScrollView>
-
-      </BottomSheet>
-
+                        };
+                        mapView.current.animateToRegion(eventMarker,2000); 
+                      }}>
+                        <Text style={styles.eventTitle}>{data["title"]}</Text>
+                        <Text style={styles.events}>Host: {data["host"]}</Text>
+                        <Text style={styles.events}>Date: {data["date"]}</Text>
+                        <Text style={styles.events}>Time: {data["time12Hour"]}</Text>
+                        <Text style={styles.events}>Location: {data["location"]}</Text>
+                        <Text style={styles.events}>Description: {data["description"]}</Text>
+                      </TouchableOpacity>
+                    </>
+                  ))}
+                </View>
+              </View>
+            </ScrollView>
+          </BottomSheet>
       </View>
   );
 };
@@ -180,15 +167,10 @@ const styles = StyleSheet.create({
     fontSize: 25,
     textAlign: 'right'
   },
-  eventTitle2: {
-    fontWeight: 'bold',
-    fontSize: 20
-  },
   allEvents: {
     alignItems: 'left',
     width: '90%',
     marginBottom: 20
-
   },
   eachEvent: {
     alignItems: 'left',

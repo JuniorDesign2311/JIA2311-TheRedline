@@ -68,3 +68,18 @@ redesigning our form validation logic.
 ### Need to Fix
 * Search bar doesn't reset correctly
 * Event creation page submit button requires 2 presses
+
+## Version 0.4.0
+
+### New Features
+* 
+
+
+### Bug Fixes
+* 
+
+### Need to Fix
+* Search bar doesn't reset correctly
+* Event creation page submit button requires 2 presses
+* Search bar has gray space above it
+* Profile settings page doesn't sit well on iPhone 10 and higher screens

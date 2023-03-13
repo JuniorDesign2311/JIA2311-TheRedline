@@ -19,11 +19,20 @@ const SettingsScreen = ({navigation, route}) => {
         <KeyboardAvoidingWrapper>
             <View style={GlobalStyles.viewStyle}>
                 <Text>Settings</Text>
+                <CustomButton onPress={onBackPressed} buttonName="Account Settings" type="PRIMARY"/>
                 <CustomButton onPress={onBackPressed} buttonName="Back" type="PRIMARY"/>
                 <CustomButton onPress={onSignOutPressed} buttonName="Sign Out" type="PRIMARY"/>
             </View>
         </KeyboardAvoidingWrapper>
     )
 }
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center'
+    }
+})
 
 export default SettingsScreen

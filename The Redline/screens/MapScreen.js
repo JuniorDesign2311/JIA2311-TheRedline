@@ -1,6 +1,6 @@
 import React, { useMemo, useRef, useState, useEffect } from 'react';
 import MapView, { PROVIDER_GOOGLE, Marker, Callout } from 'react-native-maps';
-import { StyleSheet, Text, View, ScrollView, TouchableOpacity, Pressable} from 'react-native';
+import { StyleSheet, Text, View, ScrollView, Image, TouchableOpacity, Pressable} from 'react-native';
 import BottomSheet from '@gorhom/bottom-sheet';
 import PlusButton from '../components/PlusButton';
 import { db } from '../firebaseConfig';
@@ -126,7 +126,11 @@ const MapScreen = ({navigation, route}) => {
           value={searchValue}/>
           </View>
          <View style={{paddingHorizontal: 0}}>
-      <PlusButton onPress={addEvent} buttonName="+" type="PRIMARY"/>
+      <TouchableOpacity
+        onPress={addEvent}
+        style={{ paddingTop: '9%', alignSelf: 'flex-start', paddingRight: '2%'}}>
+          <Image source={require('../assets/plusbutton.png')} />
+      </TouchableOpacity>
       </View>
       </View>
       <ScrollView>

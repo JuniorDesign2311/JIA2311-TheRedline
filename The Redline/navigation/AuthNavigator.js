@@ -18,6 +18,7 @@ import TermsOfServiceScreen from '../screens/TermsOfServiceScreen';
 import EventCreationScreen from '../screens/EventCreationScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import EventDeletionScreen from '../screens/EventDeletionScreen.js';
+import EditEventsScreen from '../screens/EditEventsScreen.js';
 
 const Stack = createStackNavigator(); //object that includes the Navigator, Screen, and Group
 
@@ -92,6 +93,13 @@ function AuthNavigator() {
                     name="EventDeletion"
                     component={EventDeletionScreen}
                     options={{title: "Event Deletion",
+                    headerShown: false, gestureEnabled: false}}
+                />
+
+                <Stack.Screen
+                    name="EditEvents"
+                    component={EditEventsScreen}
+                    options={{title: "Edit Events",
                     headerShown: false, gestureEnabled: false}}
                 />
                 

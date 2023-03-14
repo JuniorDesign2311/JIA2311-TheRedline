@@ -44,12 +44,6 @@ const ProfileScreen = ({navigation, route}) => {
         navigation.navigate("Settings");
     }
 
-    const onEditPressed = () => {
-        navigation.navigate("EditEvents", {
-            dataId: data["id"]
-        })
-    }
-
     return (
         <View>
             <ScrollView>
@@ -83,23 +77,12 @@ const ProfileScreen = ({navigation, route}) => {
                         <>
                         <TouchableOpacity style={styles.eachEvent} onPress= {() => {
                             navigation.navigate("EventDeletion", {
-                                dataId: data["id"],
-                                eventTitle: data["title"]
+                                dataId: data["id"]
                             })
                         }}>
                             <Text style={styles.eventTitle}>{data["title"]}</Text>
                             <Text style={styles.events}>Host: {data["date"]}</Text>
                             <Text style={styles.events}>Date: {data["location"]}</Text>
-                            <TouchableOpacity
-                        onPress={() => {
-                            navigation.navigate("EditEvents", {
-                                dataId: data["id"]
-                            })
-                        }}
-                        style={{ paddingTop: '9%', alignSelf: 'flex-start', paddingRight: '2%'}}
-                    >
-                        <Image source={require('../assets/settings-icon.png')} />
-                    </TouchableOpacity>
                         </TouchableOpacity>
                         </>
                         })}

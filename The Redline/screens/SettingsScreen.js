@@ -16,13 +16,11 @@ const SettingsScreen = ({navigation, route}) => {
     }
 
     return (
-        <KeyboardAvoidingWrapper>
-            <View style={GlobalStyles.viewStyle}>
-                <Text>Settings</Text>
-                <CustomButton onPress={onBackPressed} buttonName="Back" type="PRIMARY"/>
-                <CustomButton onPress={onSignOutPressed} buttonName="Sign Out" type="PRIMARY"/>
-            </View>
-        </KeyboardAvoidingWrapper>
+        <View style={GlobalStyles.viewStyle}>
+            <Text>Settings</Text>
+            <CustomButton onPress={onBackPressed} buttonName="Back" type="PRIMARY"/>
+            <CustomButton onPress={onSignOutPressed} buttonName="Sign Out" type="PRIMARY"/>
+        </View>
     )
 }
 

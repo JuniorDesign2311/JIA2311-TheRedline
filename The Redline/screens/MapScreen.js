@@ -64,9 +64,9 @@ const MapScreen = ({navigation, route}) => {
     }
   }
 
-  const addEvent = () => {
-    navigation.navigate("EventCreation");
-  }
+  // const addEvent = () => {
+  //   navigation.navigate("EventCreation");
+  // }
 
   
     return (
@@ -141,11 +141,11 @@ const MapScreen = ({navigation, route}) => {
           value={searchValue}/>
           </View>
          <View style={{paddingHorizontal: 0}}>
-      <TouchableOpacity
+      {/* <TouchableOpacity
         onPress={addEvent}
         style={{ paddingTop: '9%', alignSelf: 'flex-start', paddingRight: '2%'}}>
           <Image source={require('../assets/plusbutton.png')} />
-      </TouchableOpacity>
+      </TouchableOpacity> */}
       </View>
       </View>
       <ScrollView>

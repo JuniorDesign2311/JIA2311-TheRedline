@@ -7,18 +7,16 @@ import { SearchBar } from "react-native-elements";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import firebase from "firebase/app";
 
-const LikeButton = () => {
-    const [liked, setLiked] = useState(false);
-
-    return (
-        <Pressable onPress={() => setLiked((isLiked) => !isLiked)}>
-            <MaterialCommunityIcons
-                name={liked ? "heart" : "heart-outline"}
-                size={26}
-                color={liked ? "red" : "black"}
-            />
-        </Pressable>
-    );
+const LikeButton = ({event, likes, setLikes}) => {
+  return (
+    <Pressable onPress={() => likes.includes(event) ? setLikes([...likes.slice(0, likes.indexOf(event)), ...likes.slice(likes.indexOf(event) + 1, likes.length)]) : setLikes(likes => [...likes, event])}>
+      <MaterialCommunityIcons
+        name={likes.includes(event) ? "heart" : "heart-outline"}
+        size={26}
+        color={likes.includes(event) ? "red" : "black"}
+      />
+    </Pressable>
+  );
 };
 
 const MapScreen = ({ navigation, route }) => {
@@ -26,6 +24,7 @@ const MapScreen = ({ navigation, route }) => {
     const snapPoints = useMemo(() => ['10%', '45%', '90%']);
     const [events, setEvents] = useState([]);
     const [searchValue, setSearchValue] = useState("");
+    const [likes, setLikes] = useState([]);
 
     const windowW = Dimensions.get('window').width;
     const windowH = Dimensions.get('window').height;
@@ -34,7 +33,19 @@ const MapScreen = ({ navigation, route }) => {
     //useEffect makes the function within it only be called only on the first render (the page re-renders if something on the screen changes
     //in other words, the state changes.)
     useEffect(() => {
-
+        const user = firebase.auth().currentUser;
+    
+        firebase.firestore().collection("hosts").doc(user.uid).get().then((snapshot) => {
+          if (snapshot.exists) {
+            setLikes(snapshot.data()['favorites']);
+          } else {
+              firebase.firestore().collection("attendees").doc(user.uid).get().then((snapshot) => {
+                if (snapshot.exists) {
+                  setLikes(snapshot.data()['favorites']);
+                }
+              })
+          }
+        })
         //.get() only takes from the database once (whenever useEffect() is called) and the data won't ever be taken again until
         // useEffect() is called again.
         //.onSnapshot() makes it so whenever the database changes, the function will be called and the data will be taken again
@@ -46,6 +57,25 @@ const MapScreen = ({ navigation, route }) => {
             }))
         })
     }, []);
+
+    useEffect(() => {
+      const user = firebase.auth().currentUser;
+      firebase.firestore().collection("hosts").doc(user.uid).get().then((snapshot) => {
+        if (snapshot.exists) {
+          firebase.firestore().collection("hosts").doc(user.uid).update({
+            favorites: likes
+          });
+        } else {
+            firebase.firestore().collection("attendees").doc(user.uid).get().then((snapshot) => {
+              if (snapshot.exists) {
+                firebase.firestore().collection("attendees").doc(user.uid).update({
+                  favorites: likes
+                });
+              }
+            })
+        }
+      })
+    }, [likes])
 
     const searchFilter = (text) => {
         if (text == "") {
@@ -154,7 +184,7 @@ const MapScreen = ({ navigation, route }) => {
                                     }}>
                                         <View style={styles.eventHeading}>
                                             <Text style={styles.eventTitle}>{data["title"]}</Text>
-                                            <LikeButton></LikeButton>
+                                            <LikeButton event={data["id"]} likes={likes} setLikes={setLikes}></LikeButton>
                                         </View>
                                         <Text style={styles.events}>Date: {data["date"]}</Text>
                                         <Text style={styles.events}>Location: {data["location"]}</Text>

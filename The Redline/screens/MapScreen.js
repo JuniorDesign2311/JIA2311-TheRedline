@@ -4,6 +4,9 @@ import { StyleSheet, Text, View, ScrollView, Image, TouchableOpacity, Pressable,
 import BottomSheet from '@gorhom/bottom-sheet';
 import { db } from '../firebaseConfig';
 import { SearchBar } from "react-native-elements";
+import SelectDropdown from 'react-native-select-dropdown'
+import DateTimePickerModal from "react-native-modal-datetime-picker";
+import { getDistance } from 'geolib';
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 const LikeButton = () => {
@@ -20,20 +23,31 @@ const LikeButton = () => {
     );
 };
 
-const MapScreen = ({ navigation, route }) => {
-    const sheetRef = useRef(null);
-    const snapPoints = useMemo(() => ['10%', '45%', '90%']);
-    const [events, setEvents] = useState([]);
-    const [searchValue, setSearchValue] = useState("");
+const MapScreen = ({navigation, route}) => {
+  const sheetRef = useRef(null);
+  const snapPoints = useMemo(() => [ '10%', '45%', '90%' ]);
+  const [events, setEvents] = useState([]);
+  
+  //screen dimensions
+  const windowW = Dimensions.get('window').width;
+  const windowH = Dimensions.get('window').height;
+  
+  const mapView = React.createRef();
+  
+  //filtering variables
+  const filters = ["Clear Filter", "Title", "Location", "Date"]
+  const [searchValue, setSearchValue] = useState("");
+  const [filterType, setFilterType] = useState(0);
+  const locBottomSnap = useMemo(() => [ '80%' ]);
 
-    const windowW = Dimensions.get('window').width;
-    const windowH = Dimensions.get('window').height;
+  const[visible, setVisible] = useState(false);
+  //visibility variables
+  const [locVisibility, setLocVisibility] = useState(false);
+  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 
-    const mapView = React.createRef();
-    //useEffect makes the function within it only be called only on the first render (the page re-renders if something on the screen changes
-    //in other words, the state changes.)
-    useEffect(() => {
-
+  //useEffect makes the function within it only be called only on the first render (the page re-renders if something on the screen changes
+  //in other words, the state changes.)
+  useEffect(() => {
         //.get() only takes from the database once (whenever useEffect() is called) and the data won't ever be taken again until
         // useEffect() is called again.
         //.onSnapshot() makes it so whenever the database changes, the function will be called and the data will be taken again
@@ -46,14 +60,24 @@ const MapScreen = ({ navigation, route }) => {
         })
     }, []);
 
-    const searchFilter = (text) => {
-        if (text == "") {
-            db.collection('events').onSnapshot((querySnapshot) => {
-                setEvents(querySnapshot.docs.map(snapshot => { //querySnapshot.docs gives us an array of a reference to all the documents in the snapshot (not the data)
-                    const data = snapshot.data();  //data object
-                    return data;
+
+  //filters
+
+  //no filter
+    const noSearchFilter = (text) => {
+        setSearchValue("");
+          db.collection('events').onSnapshot((querySnapshot) => {
+              setEvents(querySnapshot.docs.map(snapshot => { //querySnapshot.docs gives us an array of a reference to all the documents in the snapshot (not the data)
+                  const data = snapshot.data();  //data object
+                  return data;
                 }))
             })
+  }
+  
+  //Filtering By Title
+  const searchFilterTitle = (text) => {
+    if (text == "") {
+      noSearchFilter()
             return events;
         } else {
             setSearchValue(text);
@@ -65,6 +89,47 @@ const MapScreen = ({ navigation, route }) => {
         }
     }
 
+  //Filtering By Date
+  const showDatePicker = () => {
+    setDatePickerVisibility(true);
+  };
+  const hideDatePicker = () => {
+    setDatePickerVisibility(false);
+  };
+  const handleConfirm = (input) => {
+    console.log("A date has been picked: ", input); // date will be in format: YYYY-MM-DDTXX:XX:XX.XXXZ
+    searchFilterDate(input.toString().substring(0,15));
+    hideDatePicker();
+  };
+
+  const searchFilterDate = (filterDate) => {
+    if (filterDate === "") {
+      noSearchFilter();
+    } else {
+      setSearchValue(filterDate);
+      setEvents(events.filter((item) => {
+        return new Date(item.date) - new Date(filterDate) >= 0;
+      }))
+    }
+  }
+
+  //Filtering by location
+  const pullUpLocationFilter = () => {
+
+  }
+
+  const searchFilterLocation = (location) => {
+    setEvents(events.filter((event) => {
+      const event_location = {latitude: event.latitude,
+                              longitude: event.longitude}
+      
+      const filtered_location = {latitude: location.geometry.location.lat,
+                                  longitude: location.geomoetry.location.lng}
+      return geolib.getDistance(event_location,filtered_location) <= 5000
+    })) 
+
+  }
+ 
     const addEvent = () => {
         navigation.navigate("EventCreation");
     }
@@ -72,17 +137,59 @@ const MapScreen = ({ navigation, route }) => {
 
     return (
         <View style={styles.container}>
-            <View style={{ flex: "auto", width: windowW, paddingTop: 40 }}>
-                <SearchBar placeholder="Search for an event..."
+            <View style={{ flex: "auto", width: '100%', paddingTop:40, flexDirection: 'row',}}>
+                <View style={{flex: 4}}>
+                  <SearchBar placeholder="Search for an event..."
                     lightTheme
                     round
                     showCancel
                     inputStyle={{ backgroundColor: '#e6e6e6' }}
                     containerStyle={{ backgroundColor: 'white', borderWidth: 0, borderRadius: 9 }}
                     inputContainerStyle={{ backgroundColor: '#e6e6e6', borderWidth: 1 }}
-                    onChangeText={(text) => searchFilter(text)}
+                    onChangeText={(text) => {
+                        searchFilterTitle(text);
+                    }}
                     value={searchValue}
-                />
+                  />
+                </View>
+                
+                <View style={{flex: 1, paddingEnd: '2%', paddingTop: '2%', backgroundColor: 'white', }}>
+                  <SelectDropdown 
+                  data={filters}
+                  onSelect={(selectedItem, index) => {
+                    noSearchFilter();
+                    if (index === 1) {
+                      setFilterType(1);
+                    } else if (index === 3) {
+                      setFilterType(3);
+                      showDatePicker();
+                    } else if (index === 0) {
+                      setFilterType(0);
+                      noSearchFilter();
+                    } else if (index === 2) {
+                      setFilterType(2);
+                      setLocVisibility(true);
+                    }
+                  }}
+                  /> 
+
+                  <DateTimePickerModal
+                        isVisible={isDatePickerVisible}
+                        mode='date'
+                        display='inline'
+                        minimumDate={new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate())}
+                        onConfirm={handleConfirm}
+                        onCancel={hideDatePicker}
+                    />
+                  </View>
+
+                    {/* Bottom sheet for location filter 
+                    <BottomSheet
+                      visible={false}
+                      snapPoints={snapPoints}>
+                    </BottomSheet>
+                */}
+
             </View>
 
             <MapView
@@ -103,31 +210,28 @@ const MapScreen = ({ navigation, route }) => {
                 {/*show markers*/}
                 {events.map((data) => {
                     const eventMarker = {
-                        latitude: data["longitude"],
-                        longitude: data["latitude"],
-                        latitudeDelta: 0.01,
-                        longitudeDelta: 0.01,
+                      latitude: data["longitude"],
+                      longitude: data["latitude"],
+                      latitudeDelta: 0.01,
+                      longitudeDelta: 0.01,
                     };
+                    
+                    return <Marker
+                        title={data["title"]}
+                        description={data["description"]}
+                        coordinate={eventMarker}
+                    />
+                      
+                })}   
 
-                    return (
-                        <Marker coordinate={eventMarker}>
-                            <Callout>
-                                <View style={{ height: "100%", width: 263 }}>
-                                    <Text style={styles.eventTitle2}>
-                                        {data["title"]}
-                                    </Text>
-                                    <Text> {
-                                        "\nHost: " + data["host"] +
-                                        "\nDate: " + data["date"] +
-                                        "\nTime: " + data["time"] +
-                                        "\nLocation: " + data["location"] +
-                                        "\nDescription: " + data["description"]
-                                    } </Text>
-                                </View>
-                            </Callout>
-                        </Marker>
-                     )
-                })}
+          <BottomSheet
+            visible = {!visible}
+            ref={sheetRef}
+            index={1}
+            snapPoints={snapPoints}
+            style={{paddingBottom: 20}}
+          > 
+          </BottomSheet>
             </MapView>
 
 
@@ -139,22 +243,21 @@ const MapScreen = ({ navigation, route }) => {
             >
                 <View style={{ flexDirection: 'row' }}>
                     <View style={{ paddingHorizontal: 0 }}>
-
                         <TouchableOpacity
                             onPress={addEvent}
                             style={{ paddingTop: '9%', alignSelf: 'flex-start', paddingRight: '2%' }}>
                             <Image source={require('../assets/plusbutton.png')} />
                         </TouchableOpacity>
-
                     </View>
                 </View>
-                <ScrollView>
-                    <View style={styles.container}>
-                        <View style={styles.allEvents}>
-                            {events.map((data) => (
-                                <>
-                                    <Text></Text>
-                                    <TouchableOpacity style={[styles.eachEvent]} onPress={() => {
+
+            <ScrollView>
+              <View style={styles.container}>
+                <View style={styles.allEvents}>
+                  {events.map((data) => {
+                    <>
+                      <Text></Text>
+                      <TouchableOpacity style={[styles.eachEvent]} onPress={() => {
                                         const eventMarker = {
                                             latitude: data["longitude"],
                                             longitude: data["latitude"],
@@ -162,59 +265,56 @@ const MapScreen = ({ navigation, route }) => {
                                             longitudeDelta: 0.01,
                                         };
                                         mapView.current.animateToRegion(eventMarker, 2000);
-                                    }}>
-                                        <View style={styles.eventHeading}>
-                                            <Text style={styles.eventTitle}>{data["title"]}</Text>
-                                            <LikeButton></LikeButton>
-                                        </View>
-                                        <Text style={styles.events}>Date: {data["date"]}</Text>
-                                        <Text style={styles.events}>Location: {data["location"]}</Text>
-                                    </TouchableOpacity>
-                                </>
-                            ))}
-                        </View>
-                    </View>
-                </ScrollView>
-            </BottomSheet>
-        </View>
-    );
-};
+                        }}>
+                      <View style={styles.eventHeading}>
+                        <Text style={styles.eventTitle}>{data["title"]}</Text>
+                        <LikeButton></LikeButton>
+                      </View>
+                        <Text style={styles.events}>Date: {data["date"]}</Text>
+                        <Text style={styles.events}>Location: {data["location"]}</Text>
+                      </TouchableOpacity>
+                    </>
+                  })}
+                </View>
+              </View>
+            </ScrollView>
+          </BottomSheet>
+      </View>
+
+)};
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        alignItems: 'center'
-    },
-    map: {
-        width: '100%',
-        height: '100%',
-    },
-    events: {
+  container: {
+    flex: 1,
+    alignItems: 'center'
+  },
+  map: {
+    width: Dimensions.get('window').width,
+    height: Dimensions.get('window').height
+  },
+  events: {
 
-    },
-    eventTitle: {
-        fontWeight: 'bold',
-        fontSize: 25,
-    },
-    allEvents: {
-        alignItems: 'left',
-        width: '90%',
-        marginBottom: 20
-    },
-    eachEvent: {
-        borderWidth: 1,
-        width: '100%',
-        paddingBottom: '2%',
-        borderRadius: '20%',
-        paddingLeft: '3%',
-        paddingRight: '3%',
-        paddingTop: '2%',
-        backgroundColor: '#E5E4E2'
-    },
-    eventHeading: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-    }
+  },
+  eventTitle: {
+    fontWeight: 'bold',
+    fontSize: 25,
+    textAlign: 'right'
+  },
+  allEvents: {
+    alignItems: 'left',
+    width: Dimensions.get('window').width - 40,
+    marginBottom: 20
+  },
+  eachEvent: {
+    alignItems: 'left',
+    borderWidth: 1,
+    width: '100%',
+    paddingBottom: '2%',
+    borderRadius: '20%',
+    paddingLeft: '3%',
+    paddingTop: '2%',
+    backgroundColor: '#E5E4E2'
+  }
 });
 
 export default MapScreen;

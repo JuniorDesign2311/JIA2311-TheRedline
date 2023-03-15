@@ -6,7 +6,7 @@ import { db } from '../firebaseConfig';
 const ProfileScreen = ({navigation, route}) => {
     const [username, setUsername] = useState('');
     const [events, setEvents] = useState([]);
-    const [eventButtonDisabled, setEventButtonDisabled] = useState(false);
+    const [eventButtonEnabled, setEventButtonEnabled] = useState(false);
 
     const user = firebase.auth().currentUser;
 
@@ -16,13 +16,13 @@ const ProfileScreen = ({navigation, route}) => {
             if (snapshot.exists) {
                 const userData = snapshot.data();
                 setUsername(userData["username"].toString());
-                setEventButtonDisabled(false);
+                setEventButtonEnabled(true);
             } else {
                 firebase.firestore().collection("attendees").doc(user.uid).get().then((snapshot) => {
                     if (snapshot.exists) {
                         const userData = snapshot.data();
                         setUsername(userData["username"].toString());
-                        setEventButtonDisabled(true);
+                        setEventButtonEnabled(false);
                     }
                 })
             }
@@ -37,7 +37,7 @@ const ProfileScreen = ({navigation, route}) => {
         })
 
         //console.log(data)
-        console.log("events: " + events)
+        // console.log("events: " + events)
     }, []);
 
     const onSettingsPressed = () => {
@@ -76,12 +76,10 @@ const ProfileScreen = ({navigation, route}) => {
                     <View style={{flexDirection:'row', justifyContent:'space-between'}}>
                         <Text style={{paddingTop: '5%', paddingLeft: '4%', fontWeight: 'bold', fontSize: 20, textAlign: 'center',
                             fontFamily: 'Helvetica Neue'}}>My Listed Events</Text>
-                        {/* <CustomButton style={{paddingTop: '5%'}}
-                            onPress={onShowAllPressed} buttonName="Show All" type="SECONDARY"/> */}
                         <TouchableOpacity
-                            disabled={eventButtonDisabled}
+                            enabled={eventButtonEnabled}
                             onPress={addEvent}
-                            style={ {opacity: eventButtonDisabled ? 0 : 100, alignSelf: 'flex-start', paddingRight: '5%'} }>
+                            style={ {opacity: eventButtonEnabled ? 100 : 0, alignSelf: 'flex-start', paddingRight: '5%'} }>
                             <Image source={require('../assets/plusbutton.png')} />
                         </TouchableOpacity>
                     </View>

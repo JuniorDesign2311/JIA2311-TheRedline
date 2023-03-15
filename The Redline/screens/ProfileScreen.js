@@ -44,6 +44,8 @@ const ProfileScreen = ({navigation, route}) => {
         navigation.navigate("Settings");
     }
 
+
+
     const onEditPressed = () => {
         navigation.navigate("EditEvents", {
             dataId: data["id"]
@@ -53,6 +55,7 @@ const ProfileScreen = ({navigation, route}) => {
     const addEvent = () => {
         navigation.navigate("EventCreation");
     }
+
 
     return (
         <View>

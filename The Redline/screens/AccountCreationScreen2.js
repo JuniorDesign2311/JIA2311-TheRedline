@@ -68,6 +68,7 @@ const AccountCreationScreen2 = ({ navigation, route }) => {
                 state: state,
                 email: email,
                 emailToLowerCase: email.toLowerCase(),
+                favorites: [],
             })
                 .catch((error) => {
                     console.error("Error adding document: ", error);
@@ -82,6 +83,7 @@ const AccountCreationScreen2 = ({ navigation, route }) => {
                 state: state,
                 email: email,
                 emailToLowerCase: email.toLowerCase(),
+                favorites: [],
             })
                 .catch((error) => {
                     console.error("Error adding document: ", error);

@@ -137,17 +137,6 @@ const MapScreen = ({ navigation, route }) => {
                 snapPoints={snapPoints}
                 style={{ paddingBottom: 20 }}
             >
-                <View style={{ flexDirection: 'row' }}>
-                    <View style={{ paddingHorizontal: 0 }}>
-
-                        <TouchableOpacity
-                            onPress={addEvent}
-                            style={{ paddingTop: '9%', alignSelf: 'flex-start', paddingRight: '2%' }}>
-                            <Image source={require('../assets/plusbutton.png')} />
-                        </TouchableOpacity>
-
-                    </View>
-                </View>
                 <ScrollView>
                     <View style={styles.container}>
                         <View style={styles.allEvents}>

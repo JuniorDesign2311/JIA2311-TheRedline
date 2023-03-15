@@ -1,14 +1,12 @@
-import React, {useState, useEffect, useMemo} from 'react'
+import React, {useState, useEffect } from 'react'
 import { StyleSheet, ScrollView, View, Text,  Image, TouchableOpacity} from 'react-native'
-import CustomButton from '../components/CustomButton';
-import KeyboardAvoidingWrapper from '../components/KeyboardAvoidingWrapper';
-import GlobalStyles from '../components/GlobalStyles';
 import firebase from "firebase/app";
 import { db } from '../firebaseConfig';
 
 const ProfileScreen = ({navigation, route}) => {
     const [username, setUsername] = useState('');
     const [events, setEvents] = useState([]);
+    const [eventButtonEnabled, setEventButtonEnabled] = useState(false);
 
     const user = firebase.auth().currentUser;
 
@@ -17,12 +15,14 @@ const ProfileScreen = ({navigation, route}) => {
             console.log(snapshot.data());
             if (snapshot.exists) {
                 const userData = snapshot.data();
-                setUsername(userData["username"].toString())
+                setUsername(userData["username"].toString());
+                setEventButtonEnabled(true);
             } else {
                 firebase.firestore().collection("attendees").doc(user.uid).get().then((snapshot) => {
                     if (snapshot.exists) {
                         const userData = snapshot.data();
-                        setUsername(userData["username"].toString())
+                        setUsername(userData["username"].toString());
+                        setEventButtonEnabled(false);
                     }
                 })
             }
@@ -37,7 +37,7 @@ const ProfileScreen = ({navigation, route}) => {
         })
 
         //console.log(data)
-        console.log("events: " + events)
+        // console.log("events: " + events)
     }, []);
 
     const onSettingsPressed = () => {
@@ -50,57 +50,65 @@ const ProfileScreen = ({navigation, route}) => {
         })
     }
 
+    const addEvent = () => {
+        navigation.navigate("EventCreation");
+    }
+
     return (
         <View>
             <ScrollView>
-            <View>
-                <View style={{flexDirection:'row', justifyContent:'space-between'}}> 
-                    <Text style={{paddingTop: '10%', paddingLeft: '2%', fontWeight: 'bold', fontSize: 35, textAlign: 'left',
-                        fontFamily: 'Helvetica Neue'}}> {username} </Text>
-                    <TouchableOpacity
-                        onPress={onSettingsPressed}
-                        style={{ paddingTop: '9%', alignSelf: 'flex-start', paddingRight: '2%'}}
-                    >
+                <View>
+                    <View style={{flexDirection:'row', justifyContent:'space-between'}}> 
+                        <Text style={{paddingTop: '10%', paddingLeft: '2%', fontWeight: 'bold', fontSize: 35, textAlign: 'left',
+                            fontFamily: 'Helvetica Neue'}}> {username} </Text>
+                        <TouchableOpacity
+                            onPress={onSettingsPressed}
+                            style={{ paddingTop: '9%', alignSelf: 'flex-start', paddingRight: '2%'}}
+                        >
                         <Image source={require('../assets/settings-icon.png')} />
-                    </TouchableOpacity>
-                </View>
+                        </TouchableOpacity>
+                    </View>
 
-                <Image 
-                    style={{alignSelf: 'center'}}
-                    source={require('../assets/account-icon.png')} />
-                
-                <View style={{flexDirection:'row', justifyContent:'space-between'}}>
-                    <Text style={{paddingTop: '4%', paddingLeft: '4%', fontWeight: 'bold', fontSize: 20, textAlign: 'center',
-                        fontFamily: 'Helvetica Neue'}}>My Listed Events</Text>
-                    {/* <CustomButton style={{paddingTop: '5%'}}
-                        onPress={onShowAllPressed} buttonName="Show All" type="SECONDARY"/> */}
+                    <Image 
+                        style={{alignSelf: 'center'}}
+                        source={require('../assets/account-icon.png')} />
+                    
+                    <View style={{flexDirection:'row', justifyContent:'space-between'}}>
+                        <Text style={{paddingTop: '5%', paddingLeft: '4%', fontWeight: 'bold', fontSize: 20, textAlign: 'center',
+                            fontFamily: 'Helvetica Neue'}}>My Listed Events</Text>
+                        <TouchableOpacity
+                            enabled={eventButtonEnabled}
+                            onPress={addEvent}
+                            style={ {opacity: eventButtonEnabled ? 100 : 0, alignSelf: 'flex-start', paddingRight: '5%'} }>
+                            <Image source={require('../assets/plusbutton.png')} />
+                        </TouchableOpacity>
+                    </View>
                 </View>
-            </View>
                 <View style={styles.container}>
                     <View style={styles.allEvents}>
-                    {events.map((data) => {
-                        return (data["host"] === username) &&
-                        <>
-                        <TouchableOpacity style={styles.eachEvent} onPress= {() => {
-                            navigation.navigate("EventDeletion", {
-                                dataId: data["id"],
-                                eventTitle: data["title"]
-                            })
-                        }}>
-                            <Text style={styles.eventTitle}>{data["title"]}</Text>
-                            <Text style={styles.events}>Host: {data["date"]}</Text>
-                            <Text style={styles.events}>Date: {data["location"]}</Text>
-                            <TouchableOpacity
-                        onPress={() => {
-                            navigation.navigate("EditEvents", {
-                                dataId: data["id"]
-                            })
-                        }}
-                        style={{ paddingTop: '9%', alignSelf: 'flex-start', paddingRight: '2%'}}
-                    >
-                        <Image source={require('../assets/settings-icon.png')} />
-                    </TouchableOpacity>
-                        </TouchableOpacity>
+                        {events.map((data) => {
+                            return (data["host"] === username) &&
+                            <>
+                            <TouchableOpacity style={styles.eachEvent} onPress= {() => {
+                                navigation.navigate("EventDeletion", {
+                                    dataId: data["id"],
+                                    eventTitle: data["title"]
+                                })
+                            }}>
+                                <Text style={styles.eventTitle}>{data["title"]}</Text>
+                                <Text style={styles.events}>Host: {data["date"]}</Text>
+                                <Text style={styles.events}>Date: {data["location"]}</Text>
+                                <TouchableOpacity
+                                    onPress={() => {
+                                        navigation.navigate("EditEvents", {
+                                            dataId: data["id"]
+                                        })
+                                    }}
+                                    style={{ paddingTop: '9%', alignSelf: 'flex-start', paddingRight: '2%'}}
+                                >
+                                    <Image source={require('../assets/settings-icon.png')} />
+                                </TouchableOpacity>
+                            </TouchableOpacity>
                         </>
                         })}
                     </View>

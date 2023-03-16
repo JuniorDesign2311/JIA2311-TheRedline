@@ -7,6 +7,7 @@ const ProfileScreen = ({navigation, route}) => {
     const [username, setUsername] = useState('');
     const [events, setEvents] = useState([]);
     const [eventButtonEnabled, setEventButtonEnabled] = useState(false);
+    const [likes, setLikes] = useState([]);
 
     const user = firebase.auth().currentUser;
 
@@ -16,12 +17,14 @@ const ProfileScreen = ({navigation, route}) => {
             if (snapshot.exists) {
                 const userData = snapshot.data();
                 setUsername(userData["username"].toString());
+                setLikes(snapshot.data()['favorites']);
                 setEventButtonEnabled(true);
             } else {
                 firebase.firestore().collection("attendees").doc(user.uid).get().then((snapshot) => {
                     if (snapshot.exists) {
                         const userData = snapshot.data();
                         setUsername(userData["username"].toString());
+                        setLikes(snapshot.data()['favorites']);
                         setEventButtonEnabled(false);
                     }
                 })
@@ -38,7 +41,7 @@ const ProfileScreen = ({navigation, route}) => {
 
         //console.log(data)
         // console.log("events: " + events)
-    }, []);
+    }, [likes]);
 
     const onSettingsPressed = () => {
         navigation.navigate("Settings");
@@ -113,6 +116,27 @@ const ProfileScreen = ({navigation, route}) => {
                                 </TouchableOpacity>
                             </TouchableOpacity>
                         </>
+                        })}
+                    </View>
+                </View>
+                
+                <View style={{flexDirection:'row', justifyContent:'space-between'}}>
+                    <Text style={{paddingTop: '5%', paddingLeft: '4%', fontWeight: 'bold', fontSize: 20, textAlign: 'center',
+                        fontFamily: 'Helvetica Neue'}}>My Favorite Events</Text>
+                </View>
+                <View style={styles.container}>
+                    <View style={styles.allEvents}>
+                        {events.map((data) => {
+                            if (likes.includes(data["id"])) {
+                                return (data) &&
+                                <>
+                                    <View style={styles.eachEvent}>
+                                        <Text style={styles.eventTitle}>{data["title"]}</Text>
+                                        <Text style={styles.events}>Host: {data["date"]}</Text>
+                                        <Text style={styles.events}>Date: {data["location"]}</Text>
+                                    </View>
+                                </>
+                            }
                         })}
                     </View>
                 </View>

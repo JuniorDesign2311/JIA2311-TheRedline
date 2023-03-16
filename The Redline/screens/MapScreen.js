@@ -6,6 +6,9 @@ import { db } from '../firebaseConfig';
 import { SearchBar } from "react-native-elements";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import firebase from "firebase/app";
+import SelectDropdown from 'react-native-select-dropdown';
+import DateTimePickerModal from "react-native-modal-datetime-picker";
+import { getDistance } from 'geolib';
 
 const LikeButton = ({event, likes, setLikes}) => {
   return (
@@ -23,13 +26,28 @@ const MapScreen = ({ navigation, route }) => {
     const sheetRef = useRef(null);
     const snapPoints = useMemo(() => ['10%', '45%', '90%']);
     const [events, setEvents] = useState([]);
-    const [searchValue, setSearchValue] = useState("");
     const [likes, setLikes] = useState([]);
 
+    //screen dimensions
     const windowW = Dimensions.get('window').width;
     const windowH = Dimensions.get('window').height;
 
     const mapView = React.createRef();
+
+    //filtering variables
+    const filters = ["Clear Filter", "Location", "Date"]
+    const [searchValue, setSearchValue] = useState("");
+    const [filterType, setFilterType] = useState(0);
+    const locBottomSnap = useMemo(() => [ '80%' ]);
+  
+    
+    //visibility variables
+    const [locVisibility, setLocVisibility] = useState(false);
+    const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+
+    
+
+    
     //useEffect makes the function within it only be called only on the first render (the page re-renders if something on the screen changes
     //in other words, the state changes.)
     useEffect(() => {
@@ -77,25 +95,75 @@ const MapScreen = ({ navigation, route }) => {
       })
     }, [likes])
 
-    const searchFilter = (text) => {
-        if (text == "") {
-            db.collection('events').onSnapshot((querySnapshot) => {
-                setEvents(querySnapshot.docs.map(snapshot => { //querySnapshot.docs gives us an array of a reference to all the documents in the snapshot (not the data)
-                    const data = snapshot.data();  //data object
-                    return data;
-                }))
-            })
-            return events;
-        } else {
-            setSearchValue(text);
-            setEvents(events.filter((item) => {
-                const item_data = `${item.title.toUpperCase()})`;
-                const text_data = text.toUpperCase();
-                return item_data.indexOf(text_data) > -1;
-            }))
-        }
-    }
+    //filters
 
+    //no filter
+  const noSearchFilter = (text) => {
+    setSearchValue("");
+      db.collection('events').onSnapshot((querySnapshot) => {
+          setEvents(querySnapshot.docs.map(snapshot => { //querySnapshot.docs gives us an array of a reference to all the documents in the snapshot (not the data)
+              const data = snapshot.data();  //data object
+              return data;
+            }))
+        })
+}
+
+//Filtering By Title
+const searchFilterTitle = (text) => {
+if (text == "") {
+  noSearchFilter()
+        return events;
+    } else {
+        setSearchValue(text);
+        setEvents(events.filter((item) => {
+            const item_data = `${item.title.toUpperCase()})`;
+            const text_data = text.toUpperCase();
+            return item_data.indexOf(text_data) > -1;
+        }))
+    }
+}
+
+//Filtering By Date
+const showDatePicker = () => {
+setDatePickerVisibility(true);
+};
+const hideDatePicker = () => {
+setDatePickerVisibility(false);
+};
+const handleConfirm = (input) => {
+console.log("A date has been picked: ", input); // date will be in format: YYYY-MM-DDTXX:XX:XX.XXXZ
+searchFilterDate(input.toString().substring(0,15));
+hideDatePicker();
+};
+
+const searchFilterDate = (filterDate) => {
+if (filterDate === "") {
+  noSearchFilter();
+} else {
+  setEvents(events.filter((item) => {
+    return new Date(item.date) - new Date(filterDate) >= 0;
+  }))
+}
+}
+
+//Filtering by location
+const pullUpLocationFilter = () => {
+
+}
+
+const searchFilterLocation = (location) => {
+setEvents(events.filter((event) => {
+  const event_location = {latitude: event.latitude,
+                          longitude: event.longitude}
+  
+  const filtered_location = {latitude: location.geometry.location.lat,
+                              longitude: location.geomoetry.location.lng}
+  return geolib.getDistance(event_location,filtered_location) <= 5000
+})) 
+
+}
+
+    
     const addEvent = () => {
         navigation.navigate("EventCreation");
     }
@@ -103,17 +171,57 @@ const MapScreen = ({ navigation, route }) => {
 
     return (
         <View style={styles.container}>
-            <View style={{ flex: "auto", width: windowW, paddingTop: 40 }}>
-                <SearchBar placeholder="Search for an event..."
-                    lightTheme
-                    round
-                    showCancel
-                    inputStyle={{ backgroundColor: '#e6e6e6' }}
-                    containerStyle={{ backgroundColor: 'white', borderWidth: 0, borderRadius: 9 }}
-                    inputContainerStyle={{ backgroundColor: '#e6e6e6', borderWidth: 1 }}
-                    onChangeText={(text) => searchFilter(text)}
-                    value={searchValue}
-                />
+            <View style={{ flex: "auto", width: windowW, paddingTop: 40, flexDirection: 'row',}}>
+                <View style={{flex: 4}}>
+                    <SearchBar placeholder="Search for an event..."
+                        lightTheme
+                        round
+                        showCancel
+                        inputStyle={{ backgroundColor: '#e6e6e6' }}
+                        containerStyle={{ backgroundColor: 'white', borderWidth: 0, borderRadius: 9 }}
+                        inputContainerStyle={{ backgroundColor: '#e6e6e6', borderWidth: 1 }}
+                        onChangeText={(text) => {
+                        searchFilterTitle(text);
+                        }}
+                        value={searchValue}
+                    />
+                </View>
+                
+                <View style={{flex: 1, paddingEnd: '2%', paddingTop: '2%', backgroundColor: 'white', }}>
+                    <SelectDropdown 
+                    data={filters}
+                    onSelect={(selectedItem, index) => {
+                    noSearchFilter();
+                    if (index === 2) {
+                      setFilterType(2);
+                      showDatePicker();
+                    } else if (index === 0) {
+                      setFilterType(0);
+                      noSearchFilter();
+                    } else if (index === 1) {
+                      setFilterType(1);
+                      setLocVisibility(true);
+                    }
+                  }}
+                  /> 
+
+                  <DateTimePickerModal
+                        isVisible={isDatePickerVisible}
+                        mode='date'
+                        display='inline'
+                        minimumDate={new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate())}
+                        onConfirm={handleConfirm}
+                        onCancel={hideDatePicker}
+                    />
+                </View>
+
+                    {/* Bottom sheet for location filter 
+                    <BottomSheet
+                      visible={false}
+                      snapPoints={snapPoints}>
+                    </BottomSheet>
+                */}
+
             </View>
 
             <MapView

@@ -95,27 +95,26 @@ const ProfileScreen = ({navigation, route}) => {
                         {events.map((data) => {
                             return (data["host"] === username) &&
                             <>
-                            <TouchableOpacity style={styles.eachEvent} onPress= {() => {
-                                navigation.navigate("EventDeletion", {
-                                    dataId: data["id"],
-                                    eventTitle: data["title"]
-                                })
-                            }}>
-                                <Text style={styles.eventTitle}>{data["title"]}</Text>
-                                <Text style={styles.events}>Host: {data["date"]}</Text>
-                                <Text style={styles.events}>Date: {data["location"]}</Text>
-                                <TouchableOpacity
-                                    onPress={() => {
-                                        navigation.navigate("EditEvents", {
-                                            dataId: data["id"]
-                                        })
-                                    }}
-                                    style={{ paddingTop: '9%', alignSelf: 'flex-start', paddingRight: '2%'}}
-                                >
-                                    <Image source={require('../assets/settings-icon.png')} />
-                                </TouchableOpacity>
-                            </TouchableOpacity>
-                        </>
+                            <View style={styles.eachEvent}>
+                                <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+                                    <TouchableOpacity
+                                        onPress={() => {
+                                            navigation.navigate("EditEvents", {
+                                                dataId: data["id"]
+                                            })
+                                        }}
+                                        style={{paddingTop: '2%'}}
+                                    >
+                                        <View>
+                                            <Text style={styles.eventTitle}>{data["title"]}</Text>
+                                            <Text style={styles.events}>Host: {data["date"]}</Text>
+                                            <Text style={styles.events}>Date: {data["location"]}</Text>
+                                        </View>
+                                        {/* <Image source={require('../assets/settings-icon.png')} /> */}
+                                    </TouchableOpacity>
+                                </View> 
+                            </View>
+                            </>
                         })}
                     </View>
                 </View>
@@ -160,7 +159,7 @@ const styles = StyleSheet.create({
     eventTitle: {
       fontWeight: 'bold',
       fontSize: 25,
-      textAlign: 'right'
+      textAlign: 'left'
     },
     eventTitle2: {
       fontWeight: 'bold',

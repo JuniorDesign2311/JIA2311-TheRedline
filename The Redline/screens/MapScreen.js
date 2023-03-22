@@ -32,6 +32,7 @@ const MapScreen = ({ navigation, route }) => {
   const snapPoints = useMemo(() => ['10%', '45%', '90%']);
   const [events, setEvents] = useState([]);
   const [likes, setLikes] = useState([]);
+  const [databaseEvents, setDatabaseEvents] = useState([]);
 
   //screen dimensions
   const windowW = Dimensions.get('window').width;
@@ -71,11 +72,13 @@ const MapScreen = ({ navigation, route }) => {
     // useEffect() is called again.
     //.onSnapshot() makes it so whenever the database changes, the function will be called and the data will be taken again
     db.collection('events').onSnapshot((querySnapshot) => {
-      setEvents(querySnapshot.docs.map(snapshot => { //querySnapshot.docs gives us an array of a reference to all the documents in the snapshot (not the data)
+      setDatabaseEvents(querySnapshot.docs.map(snapshot => { //querySnapshot.docs gives us an array of a reference to all the documents in the snapshot (not the data)
         const data = snapshot.data();  //data object
         data['id'] = snapshot.id;   //adding an id to the data object
         return data;
       }))
+     
+    setEvents(databaseEvents);
     })
   }, []);
 
@@ -103,12 +106,15 @@ const MapScreen = ({ navigation, route }) => {
   //no filter
   const noSearchFilter = (text) => {
     setSearchValue("");
+    setEvents(databaseEvents);
+    /*
     db.collection('events').onSnapshot((querySnapshot) => {
       setEvents(querySnapshot.docs.map(snapshot => { //querySnapshot.docs gives us an array of a reference to all the documents in the snapshot (not the data)
         const data = snapshot.data();  //data object
         return data;
       }))
     })
+    */
   }
 
   //Filtering By Title
@@ -187,8 +193,6 @@ const MapScreen = ({ navigation, route }) => {
       latitude: route.params.lat,
       longitude: route.params.long
     }
-    console.log(route.params.lat, route.params.long)
-    
 
     setEvents(events.filter((event) => {
       const event_location = {

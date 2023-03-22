@@ -13,7 +13,6 @@ const ProfileScreen = ({navigation, route}) => {
 
     useEffect(() => {
         firebase.firestore().collection("hosts").doc(user.uid).get().then((snapshot) => {
-            console.log(snapshot.data());
             if (snapshot.exists) {
                 const userData = snapshot.data();
                 setUsername(userData["username"].toString());

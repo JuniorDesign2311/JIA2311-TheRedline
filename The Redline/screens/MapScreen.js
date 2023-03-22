@@ -27,6 +27,8 @@ const LikeButton = ({ event, likes, setLikes }) => {
 
 const MapScreen = ({ navigation, route }) => {
   const sheetRef = useRef(null);
+  const locationSheetRef = useRef(null);
+
   const snapPoints = useMemo(() => ['10%', '45%', '90%']);
   const [events, setEvents] = useState([]);
   const [likes, setLikes] = useState([]);
@@ -148,8 +150,8 @@ const MapScreen = ({ navigation, route }) => {
   }
 
   //Filtering by location
-  const locationSheetRef = useRef(null);
 
+ 
   const openLocationSheet = () => {
     locationSheetRef.current.snapToIndex(0);
   }
@@ -159,6 +161,10 @@ const MapScreen = ({ navigation, route }) => {
     filterLocationBasedOnCurrent(locationFilterDistance)
   }
 
+  const onCancelLocation = () => {
+    closeLocationSheet();
+    noSearchFilter();
+  }
   const searchFilterLocation = (location) => {
     setEvents(events.filter((event) => {
       const event_location = {
@@ -185,14 +191,10 @@ const MapScreen = ({ navigation, route }) => {
     
 
     setEvents(events.filter((event) => {
-      console.log(event)
       const event_location = {
         latitude: event.latitude,
         longitude: event.longitude
       }
-      //console.log(event.location)
-      //console.log(geolib.getDistance(event_location, current_location)/1609);
-      //console.log(event.latitude, event.longitude)
       return geolib.getDistance(event_location, current_location)/1609 <= distance
 
     }))
@@ -358,11 +360,18 @@ const MapScreen = ({ navigation, route }) => {
          
           </View>
           
-          <View style={{paddingTop: "30%"}}>
+          <View style={{paddingTop: "20%"}}>
             <Button
             title = 'Save'
             color='blue'
             onPress={closeLocationSheet}/>
+          </View>
+
+          <View style={{paddingTop: "0%"}}>
+            <Button
+            title = 'Cancel'
+            color='blue'
+            onPress={onCancelLocation}/>
           </View>
             
         </View>

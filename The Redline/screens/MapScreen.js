@@ -312,8 +312,8 @@ const MapScreen = ({ navigation, route }) => {
                   <Text></Text>
                   <TouchableOpacity style={[styles.eachEvent]} onPress={() => {
                     const eventMarker = {
-                      latitude: data["longitude"],
-                      longitude: data["latitude"],
+                      longitude: data["longitude"],
+                      latitude: data["latitude"],
                       latitudeDelta: 0.01,
                       longitudeDelta: 0.01,
                     };

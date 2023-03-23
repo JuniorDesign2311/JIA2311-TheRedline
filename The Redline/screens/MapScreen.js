@@ -8,10 +8,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import firebase from "firebase/app";
 import SelectDropdown from 'react-native-select-dropdown';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
-import { geolib } from 'geolib';
 import {Slider} from '@miblanchard/react-native-slider';
-import { RollOutLeft } from 'react-native-reanimated';
-
 
 const LikeButton = ({ event, likes, setLikes }) => {
   return (
@@ -77,8 +74,12 @@ const MapScreen = ({ navigation, route }) => {
         data['id'] = snapshot.id;   //adding an id to the data object
         return data;
       }))
-     
-    setEvents(databaseEvents);
+
+      setEvents(querySnapshot.docs.map(snapshot => { //querySnapshot.docs gives us an array of a reference to all the documents in the snapshot (not the data)
+        const data = snapshot.data();  //data object
+        data['id'] = snapshot.id;   //adding an id to the data object
+        return data;
+      }))
     })
   }, []);
 
@@ -107,14 +108,6 @@ const MapScreen = ({ navigation, route }) => {
   const noSearchFilter = (text) => {
     setSearchValue("");
     setEvents(databaseEvents);
-    /*
-    db.collection('events').onSnapshot((querySnapshot) => {
-      setEvents(querySnapshot.docs.map(snapshot => { //querySnapshot.docs gives us an array of a reference to all the documents in the snapshot (not the data)
-        const data = snapshot.data();  //data object
-        return data;
-      }))
-    })
-    */
   }
 
   //Filtering By Title

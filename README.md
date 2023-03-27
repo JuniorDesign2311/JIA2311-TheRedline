@@ -72,8 +72,12 @@ redesigning our form validation logic.
 ## Version 0.4.0
 
 ### New Features
-* 
-
+* Filtering by location, title, date
+* Make delete button and cancel button on profile page change color
+* Implement a confirmation pop-up for deleting events
+* Ability to edit events
+* Favoriting events that links to profile page
+* Account settings
 
 ### Bug Fixes
 * When the address is too long, it pushes the heart off the touchable opacity -- fix this by displaying a substringi of the address

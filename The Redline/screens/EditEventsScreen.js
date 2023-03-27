@@ -229,6 +229,16 @@ const EditEventsScreen = ({ route, navigation }) => {
         setLocation(description);
     }
 
+    const onDeleteEventPressed = () => {
+        firebase.firestore().collection('events').doc(dataId)
+            .delete()
+            .then(() => {
+            console.log('Event deleted!');
+        });
+
+        navigation.navigate("Profile")
+    }
+
     // UI Components
     return (
         <KeyboardAvoidingWrapper>
@@ -316,7 +326,8 @@ const EditEventsScreen = ({ route, navigation }) => {
                     </Text>
 
                     <EventDescriptionInput placeholder="Event Description" value={description} setValue={setDescription} secureTextEntry={false} inputError={descriptionError} isValid={isValidDescription}/>
-                    <View style={{flexDirection:"row", marginBottom: 0, marginTop: 15 }}>
+                    <View style={{marginBottom: 0, marginTop: 15, alignItems: 'center'}}>
+                        <CustomButton onPress={onDeleteEventPressed} buttonName="Delete Event" type="PRIMARY"/>
                         <CustomButton onPress={onSubmitPressed} buttonName="Submit" type="PRIMARY"/>
                     </View>
                     <TouchableOpacity onPress={onCancelPressed}>

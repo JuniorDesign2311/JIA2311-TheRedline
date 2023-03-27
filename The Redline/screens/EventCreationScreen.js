@@ -235,7 +235,7 @@ const EventCreationScreen = ({ navigation }) => {
                                 placeholder={ location }
                                 onPress={(data, details = null) => {
                                     //console.log(data, details);
-                                    handleLocationInput(data.description, details.geometry.location.lat, details.geometry.location.lng);
+                                    handleLocationInput(data.description, details.geometry.location.lng, details.geometry.location.lat);
                                 }}
                                 query={{
                                     key: 'AIzaSyDTKNiZ9cnqslVZD9GS_1F_Z6K_6DJ9kfw',

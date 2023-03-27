@@ -76,7 +76,8 @@ redesigning our form validation logic.
 
 
 ### Bug Fixes
-* 
+* When the address is too long, it pushes the heart off the touchable opacity -- fix this by displaying a substringi of the address
+* When the title is too long, it pushes the heart off the touchable opacity -- put a word limit on title length
 
 ### Need to Fix
 * Search bar doesn't reset correctly

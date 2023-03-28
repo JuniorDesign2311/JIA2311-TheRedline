@@ -26,7 +26,7 @@ const MapScreen = ({ navigation, route }) => {
   const sheetRef = useRef(null);
   const locationSheetRef = useRef(null);
 
-  const snapPoints = useMemo(() => ['10%', '45%', '89%']);
+  const snapPoints = useMemo(() => ['10%', '45%', '83%']);
   const [events, setEvents] = useState([]);
   const [likes, setLikes] = useState([]);
   const [databaseEvents, setDatabaseEvents] = useState([]);

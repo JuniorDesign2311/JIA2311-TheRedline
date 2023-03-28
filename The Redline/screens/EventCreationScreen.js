@@ -93,6 +93,10 @@ const EventCreationScreen = ({ navigation }) => {
             noError = false;
             setTitleError('Title Cannot Contain Special Characters');
             setIsValidTitle(false);
+        } else if (title.length > 40) {
+            noError = false;
+            setTitleError('Title Exceeds Character Limit');
+            setIsValidTitle(false);
         } else {
             console.log("no title error");
             setTitleNavigationCheck(true);

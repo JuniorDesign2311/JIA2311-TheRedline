@@ -114,6 +114,10 @@ const EditEventsScreen = ({ route, navigation }) => {
             noError = false;
             setTitleError('Title Cannot Contain Special Characters');
             setIsValidTitle(false);
+        } else if (title.length > 40) {
+            noError = false;
+            setTitleError('Title Exceeds Character Limit');
+            setIsValidTitle(false);
         } else {
             setTitleNavigationCheck(true);
             setTitleError('');
@@ -326,9 +330,11 @@ const EditEventsScreen = ({ route, navigation }) => {
                     </Text>
 
                     <EventDescriptionInput placeholder="Event Description" value={description} setValue={setDescription} secureTextEntry={false} inputError={descriptionError} isValid={isValidDescription}/>
-                    <View style={{marginBottom: 0, marginTop: 15, alignItems: 'center'}}>
-                        <CustomButton onPress={onDeleteEventPressed} buttonName="Delete Event" type="PRIMARY"/>
+                    <View style={{flexDirection:"row", marginBottom: 0, marginTop: 15 }}>
                         <CustomButton onPress={onSubmitPressed} buttonName="Submit" type="PRIMARY"/>
+                    </View>
+                    <View style={{flexDirection:"row", marginBottom: 0, marginTop: 0 }}>
+                        <CustomButton onPress={onDeleteEventPressed} buttonName="Delete Event" type="PRIMARY"/>
                     </View>
                     <TouchableOpacity onPress={onCancelPressed}>
                         <Text style = {GlobalStyles.blueText} iconName="account-outline"> Cancel </Text>

@@ -38,12 +38,6 @@ const EditEventsScreen = ({ route, navigation }) => {
     const [isValidDate, setIsValidDate] = useState(true);
     const [isValidTime, setIsValidTime] = useState(true);
     const [isValidDescription, setIsValidDescription] = useState(true);
-    // Variables to allow event creation
-    const [titleNavigationCheck, setTitleNavigationCheck] = useState(false);
-    const [locationNavigationCheck, setLocationNavigationCheck] = useState(false);
-    const [dateNavigationCheck, setDateNavigationCheck] = useState(false);
-    const [timeNavigationCheck, setTimeNavigationCheck] = useState(false);
-    const [descriptionNavigationCheck, setDescriptionNavigationCheck] = useState(false);
 
     //User Data
     const user = firebase.auth().currentUser;
@@ -119,7 +113,6 @@ const EditEventsScreen = ({ route, navigation }) => {
             setTitleError('Title Exceeds Character Limit');
             setIsValidTitle(false);
         } else {
-            setTitleNavigationCheck(true);
             setTitleError('');
             setIsValidTitle(true);
         }
@@ -129,7 +122,6 @@ const EditEventsScreen = ({ route, navigation }) => {
             setLocationError('Location Field is Empty');
             setIsValidLocation(false);
         } else {
-            setLocationNavigationCheck(true);
             setLocationError('');
             setIsValidLocation(true);
         }
@@ -139,7 +131,6 @@ const EditEventsScreen = ({ route, navigation }) => {
             setDateError('Date Field is Empty');
             setIsValidDate(false);
         } else {
-            setDateNavigationCheck(true);
             setDateError('');
             setIsValidDate(true);
         }
@@ -149,7 +140,6 @@ const EditEventsScreen = ({ route, navigation }) => {
             setTimeError('Time Field is Empty');
             setIsValidTime(false);
         } else {
-            setTimeNavigationCheck(true);
             setTimeError('');
             setIsValidTime(true);
         }
@@ -160,12 +150,11 @@ const EditEventsScreen = ({ route, navigation }) => {
             setDescriptionError('Description Field is Empty');
             setIsValidDescription(false);
         } else {
-            setDescriptionNavigationCheck(true);
             setDescriptionError('');
             setIsValidDescription(true);
         }
 
-        if (titleNavigationCheck && locationNavigationCheck && dateNavigationCheck && timeNavigationCheck && descriptionNavigationCheck) {
+        if (noError) {
             updateEvent();
             navigation.navigate("BottomTabs")
         }

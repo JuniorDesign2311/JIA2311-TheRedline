@@ -90,20 +90,19 @@ function AuthNavigator() {
                 />
 
                 <Stack.Screen
-                    name="EventDeletion"
-                    component={EventDeletionScreen}
-                    options={{title: "Event Deletion",
-                    headerShown: false, gestureEnabled: false}}
-                />
-
-                <Stack.Screen
                     name="EditEvents"
                     component={EditEventsScreen}
                     options={{title: "Edit Events",
                     headerShown: false, gestureEnabled: false}}
                 />
+
+                <Stack.Screen
+                    name="EventDeletion"
+                    component={EventDeletionScreen}
+                    options={{title: "Event Deletion",
+                    headerShown: false, gestureEnabled: false}}
+                />
                 
-        
             </Stack.Navigator>
         </KeyboardAvoidingView>
   );

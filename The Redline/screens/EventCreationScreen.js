@@ -36,12 +36,6 @@ const EventCreationScreen = ({ navigation }) => {
     const [isValidDate, setIsValidDate] = useState(true);
     const [isValidTime, setIsValidTime] = useState(true);
     const [isValidDescription, setIsValidDescription] = useState(true);
-    // Variables to allow event creation
-    const [titleNavigationCheck, setTitleNavigationCheck] = useState(false);
-    const [locationNavigationCheck, setLocationNavigationCheck] = useState(false);
-    const [dateNavigationCheck, setDateNavigationCheck] = useState(false);
-    const [timeNavigationCheck, setTimeNavigationCheck] = useState(false);
-    const [descriptionNavigationCheck, setDescriptionNavigationCheck] = useState(false);
 
     //User Data
     const user = firebase.auth().currentUser;
@@ -99,7 +93,6 @@ const EventCreationScreen = ({ navigation }) => {
             setIsValidTitle(false);
         } else {
             console.log("no title error");
-            setTitleNavigationCheck(true);
             setTitleError('');
             setIsValidTitle(true);
         }
@@ -111,7 +104,6 @@ const EventCreationScreen = ({ navigation }) => {
             setIsValidLocation(false);
         } else {
             console.log("No Loc Error");
-            setLocationNavigationCheck(true);
             setLocationError('');
             setIsValidLocation(true);
         }
@@ -123,7 +115,6 @@ const EventCreationScreen = ({ navigation }) => {
             setIsValidDate(false);
         } else {
             console.log("No Date Error");
-            setDateNavigationCheck(true);
             setDateError('');
             setIsValidDate(true);
         }
@@ -135,7 +126,6 @@ const EventCreationScreen = ({ navigation }) => {
             setIsValidTime(false);
         } else {
             console.log("No Time Error");
-            setTimeNavigationCheck(true);
             setTimeError('');
             setIsValidTime(true);
         }
@@ -146,12 +136,11 @@ const EventCreationScreen = ({ navigation }) => {
             setDescriptionError('Description Field is Empty');
             setIsValidDescription(false);
         } else {
-            setDescriptionNavigationCheck(true);
             setDescriptionError('');
             setIsValidDescription(true);
         }
 
-        if (titleNavigationCheck && locationNavigationCheck && dateNavigationCheck && timeNavigationCheck && descriptionNavigationCheck) {
+        if (noError) {
             handleEventLogging();
             navigation.navigate("BottomTabs")
         }

@@ -214,7 +214,6 @@ const AccountCreationScreen = ({ navigation }) => {
     // Method to handle Continue button click
     const onContinuePressed = () => {
         validateInput()
-        
     }
 
     // Method to handle Cancel button click

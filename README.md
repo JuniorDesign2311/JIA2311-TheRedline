@@ -62,8 +62,8 @@ redesigning our form validation logic.
 
 ### Bug Fixes
 * Corrected error handling in event creation page
-* Users aren't able to scroll the entirety of the profile page
-* Search bar wouldn't allow you to delete the last letter
+* Users weren't able to scroll the entirety of the profile page
+* Search bar wouldn't allow user to delete the last letter
 
 ### Known Issues
 * Search bar doesn't reset correctly

@@ -282,7 +282,7 @@ const MapScreen = ({ navigation, route }) => {
               <Marker
                 key={i}
                 coordinate={eventMarker}
-                ref={i === 0 || selectedMarker === i ? markerRef : null}
+                ref={selectedMarker === i ? markerRef : null}
                 pinColor={selectedMarker === null || selectedMarker === i ? 'gold' : 'tomato'}
                 onPress={(e) => {
                     e.stopPropagation()

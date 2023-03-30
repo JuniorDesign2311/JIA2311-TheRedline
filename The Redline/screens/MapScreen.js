@@ -328,8 +328,6 @@ const MapScreen = ({ navigation, route }) => {
                       latitudeDelta: 0.01,
                       longitudeDelta: 0.01,
                     };
-                    setSelectedMarker(i);
-                    markerRef.current.showCallout();
                     mapView.current.animateToRegion(eventMarker, 2000);
                   }}>
                     <View style={styles.eventHeading}>

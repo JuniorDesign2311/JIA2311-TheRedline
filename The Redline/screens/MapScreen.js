@@ -30,12 +30,14 @@ const MapScreen = ({ navigation, route }) => {
   const [events, setEvents] = useState([]);
   const [likes, setLikes] = useState([]);
   const [databaseEvents, setDatabaseEvents] = useState([]);
+  const [selectedMarker, setSelectedMarker] = useState([-1]);
 
   //screen dimensions
   const windowW = Dimensions.get('window').width;
   const windowH = Dimensions.get('window').height;
 
   const mapView = React.createRef();
+  const markerRef = useRef(React.createRef);
 
   //filtering variables
   const filters = ["Clear Filter", "Location", "Date"]
@@ -263,10 +265,12 @@ const MapScreen = ({ navigation, route }) => {
         showsUserLocation={route.params.trackLocation}
         followsUserLocation={route.params.trackLocation}
         showsMyLocationButton={true}
-        mapPadding={{ top: 0, right: 0, left: 0, bottom: 190 }}>
+        mapPadding={{ top: 0, right: 0, left: 0, bottom: 190 }}
+        onPress={() => setSelectedMarker(-1)}
+      >
 
         {/*show markers*/}
-        {events.map((data) => {
+        {events.map((data, i) => {
           const eventMarker = {
             longitude: data["longitude"],
             latitude: data["latitude"],
@@ -275,7 +279,17 @@ const MapScreen = ({ navigation, route }) => {
           };
 
           return (
-            <Marker coordinate={eventMarker}>
+              <Marker
+                key={i}
+                coordinate={eventMarker}
+                ref={selectedMarker === i ? markerRef : null}
+                pinColor={selectedMarker === null || selectedMarker === i ? 'gold' : 'tomato'}
+                onPress={(e) => {
+                    e.stopPropagation()
+                    setSelectedMarker(i)
+                  }
+                }
+              >
               <Callout>
                 <View style={{ height: "100%", width: 263 }}>
                   <Text style={styles.eventTitle2}>
@@ -304,7 +318,7 @@ const MapScreen = ({ navigation, route }) => {
         <ScrollView>
           <View style={styles.container}>
             <View style={styles.allEvents}>
-              {events.map((data) => (
+              {events.map((data, i) => (
                 <>
                   <Text></Text>
                   <TouchableOpacity style={[styles.eachEvent]} onPress={() => {

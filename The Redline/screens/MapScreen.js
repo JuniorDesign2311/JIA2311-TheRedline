@@ -101,7 +101,6 @@ const MapScreen = ({ navigation, route }) => {
       }
     })
   }, [likes])
-
   //filters
 
   //no filter
@@ -314,14 +313,14 @@ const MapScreen = ({ navigation, route }) => {
                       latitudeDelta: 0.01,
                       longitudeDelta: 0.01,
                     };
-                    mapView.current.animateToRegion(eventMarker, 2000);
-                  }}>
+                      mapView.current.animateToRegion(eventMarker, 2000);
+                    }}>
                     <View style={styles.eventHeading}>
-                      <Text style={styles.eventTitle}>{data["title"]}</Text>
-                      <LikeButton event={data["id"]} likes={likes} setLikes={setLikes}></LikeButton>
+                    <Text style={styles.eventTitle}>{data["title"]}</Text>
+                    <LikeButton event={data["id"]} likes={likes} setLikes={setLikes}></LikeButton>
                     </View>
                     <Text style={styles.events}>Date: {data["date"]}</Text>
-                    <Text style={styles.events}>Location: {data["location"]}</Text>
+                    <Text style={styles.events}>Location: { data["location"].toString().substring(0, 30) + " ..." }</Text>
                   </TouchableOpacity>
                 </>
               ))}

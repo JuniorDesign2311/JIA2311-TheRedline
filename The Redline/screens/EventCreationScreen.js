@@ -207,7 +207,7 @@ const EventCreationScreen = ({ navigation }) => {
     const handleLocationInput = (description, longitude, latitude) => {
         setLongitude(longitude)
         setLatitude(latitude)
-        setLocation(description);
+        setLocation(description.toString());
     }
 
     // UI Components
@@ -225,10 +225,11 @@ const EventCreationScreen = ({ navigation }) => {
 
                         <ScrollView horizontal={true} nestedScrollEnabled={true} keyboardShouldPersistTaps='handled' contentContainerStyle={{ flexGrow: 1 }}>
                             <GooglePlacesAutocomplete
-                                placeholder={ location }
+                                placeholder={ location.substring(0, 30) + "..." }
                                 onPress={(data, details = null) => {
                                     //console.log(data, details);
                                     handleLocationInput(data.description, details.geometry.location.lng, details.geometry.location.lat);
+                                    console.log(data.description);
                                 }}
                                 query={{
                                     key: 'AIzaSyDTKNiZ9cnqslVZD9GS_1F_Z6K_6DJ9kfw',

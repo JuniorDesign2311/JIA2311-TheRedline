@@ -157,12 +157,12 @@ const styles = StyleSheet.create({
     },
     eventTitle: {
       fontWeight: 'bold',
-      fontSize: 25,
+      fontSize: 18,
       textAlign: 'left'
     },
     eventTitle2: {
       fontWeight: 'bold',
-      fontSize: 20
+      fontSize: 18
     },
     allEvents: {
       alignItems: 'left',

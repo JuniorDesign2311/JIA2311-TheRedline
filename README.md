@@ -62,10 +62,10 @@ redesigning our form validation logic.
 
 ### Bug Fixes
 * Corrected error handling in event creation page
-* Users aren't able to scroll the entirety of the profile page
-* Search bar wouldn't allow you to delete the last letter
+* Users weren't able to scroll the entirety of the profile page
+* Search bar wouldn't allow user to delete the last letter
 
-### Need to Fix
+### Known Issues
 * Search bar doesn't reset correctly
 * Event creation page submit button requires 2 presses
 
@@ -80,10 +80,10 @@ redesigning our form validation logic.
 * Account settings
 
 ### Bug Fixes
-* When the title is too long, it pushes the heart off the touchable opacity -- put a word limit on title length
-* Too many callbacks on profile page
+* When the title is too long, it pushes the heart off the touchable opacity -- put a character limit on title length
+* Event creation page submit button required 2 presses
+* Search bar had gray space above it
 
-### Need to Fix
-* Event creation page submit button requires 2 presses
-* Search bar has gray space above it
+### Known Issues
+* There are too many callbacks on profile page
 * Profile settings page doesn't sit well on iPhone 10 and higher screens

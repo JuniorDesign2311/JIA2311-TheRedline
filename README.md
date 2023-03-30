@@ -80,7 +80,6 @@ redesigning our form validation logic.
 * Account settings
 
 ### Bug Fixes
-* When the address is too long, it pushes the heart off the touchable opacity -- fix this by displaying a substring of the address
 * When the title is too long, it pushes the heart off the touchable opacity -- put a word limit on title length
 * Too many callbacks on profile page
 

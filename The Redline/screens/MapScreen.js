@@ -30,12 +30,14 @@ const MapScreen = ({ navigation, route }) => {
   const [events, setEvents] = useState([]);
   const [likes, setLikes] = useState([]);
   const [databaseEvents, setDatabaseEvents] = useState([]);
+  const [activeMarkerRef, setActiveMarkerRef] = useState([null]);
 
   //screen dimensions
   const windowW = Dimensions.get('window').width;
   const windowH = Dimensions.get('window').height;
 
   const mapView = React.createRef();
+  const markerRef = useRef();
 
   //filtering variables
   const filters = ["Clear Filter", "Location", "Date"]
@@ -263,7 +265,9 @@ const MapScreen = ({ navigation, route }) => {
         showsUserLocation={route.params.trackLocation}
         followsUserLocation={route.params.trackLocation}
         showsMyLocationButton={true}
-        mapPadding={{ top: 0, right: 0, left: 0, bottom: 190 }}>
+        mapPadding={{ top: 0, right: 0, left: 0, bottom: 190 }}
+        onPress={() => setActiveMarkerRef(markerRef)}
+      >
 
         {/*show markers*/}
         {events.map((data) => {
@@ -275,7 +279,16 @@ const MapScreen = ({ navigation, route }) => {
           };
 
           return (
-            <Marker coordinate={eventMarker}>
+              <Marker
+                coordinate={eventMarker}
+                ref={markerRef}
+                pinColor={activeMarkerRef == null ? 'gold' : 'tomato'}
+                onPress={(e) => {
+                    e.stopPropagation();
+                    setActiveMarkerRef(null)
+                  }
+                }
+              >
               <Callout>
                 <View style={{ height: "100%", width: 263 }}>
                   <Text style={styles.eventTitle2}>

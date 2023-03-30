@@ -407,7 +407,7 @@ const styles = StyleSheet.create({
   },
   eventTitle: {
     fontWeight: 'bold',
-    fontSize: 20,
+    fontSize: 18,
   },
   allEvents: {
     alignItems: 'left',

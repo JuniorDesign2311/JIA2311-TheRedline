@@ -30,14 +30,14 @@ const MapScreen = ({ navigation, route }) => {
   const [events, setEvents] = useState([]);
   const [likes, setLikes] = useState([]);
   const [databaseEvents, setDatabaseEvents] = useState([]);
-  const [activeMarkerRef, setActiveMarkerRef] = useState([null]);
+  const [selectedMarker, setSelectedMarker] = useState([-1]);
 
   //screen dimensions
   const windowW = Dimensions.get('window').width;
   const windowH = Dimensions.get('window').height;
 
   const mapView = React.createRef();
-  const markerRef = useRef();
+  const markerRef = useRef(React.createRef);
 
   //filtering variables
   const filters = ["Clear Filter", "Location", "Date"]
@@ -266,11 +266,11 @@ const MapScreen = ({ navigation, route }) => {
         followsUserLocation={route.params.trackLocation}
         showsMyLocationButton={true}
         mapPadding={{ top: 0, right: 0, left: 0, bottom: 190 }}
-        onPress={() => setActiveMarkerRef(markerRef)}
+        onPress={() => setSelectedMarker(-1)}
       >
 
         {/*show markers*/}
-        {events.map((data) => {
+        {events.map((data, i) => {
           const eventMarker = {
             longitude: data["longitude"],
             latitude: data["latitude"],
@@ -280,12 +280,13 @@ const MapScreen = ({ navigation, route }) => {
 
           return (
               <Marker
+                key={i}
                 coordinate={eventMarker}
-                ref={markerRef}
-                pinColor={activeMarkerRef == null ? 'gold' : 'tomato'}
+                ref={i === 0 || selectedMarker === i ? markerRef : null}
+                pinColor={selectedMarker === null || selectedMarker === i ? 'gold' : 'tomato'}
                 onPress={(e) => {
-                    e.stopPropagation();
-                    setActiveMarkerRef(null)
+                    e.stopPropagation()
+                    setSelectedMarker(i)
                   }
                 }
               >
@@ -317,7 +318,7 @@ const MapScreen = ({ navigation, route }) => {
         <ScrollView>
           <View style={styles.container}>
             <View style={styles.allEvents}>
-              {events.map((data) => (
+              {events.map((data, i) => (
                 <>
                   <Text></Text>
                   <TouchableOpacity style={[styles.eachEvent]} onPress={() => {
@@ -327,6 +328,8 @@ const MapScreen = ({ navigation, route }) => {
                       latitudeDelta: 0.01,
                       longitudeDelta: 0.01,
                     };
+                    setSelectedMarker(i);
+                    markerRef.current.showCallout();
                     mapView.current.animateToRegion(eventMarker, 2000);
                   }}>
                     <View style={styles.eventHeading}>

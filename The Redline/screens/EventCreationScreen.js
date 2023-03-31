@@ -86,12 +86,7 @@ const EventCreationScreen = ({ navigation }) => {
             noError = false;
             setTitleError('Title Field is Empty');
             setIsValidTitle(false);
-        } else if (title.indexOf('&') >= 0 || title.indexOf('=') >= 0 || title.indexOf('_') >= 0 || title.indexOf("'") >= 0 || title.indexOf('-') >= 0 || title.indexOf('%') >= 0 || title.indexOf('$') >= 0
-                    || title.indexOf('+') >= 0 || title.indexOf(',') >= 0 || title.indexOf('<') >= 0 || title.indexOf('>') >= 0 || title.indexOf('~') >= 0 || title.indexOf('"') >= 0 || title.indexOf('.') >= 0) {
-            noError = false;
-            setTitleError('Title Cannot Contain Special Characters');
-            setIsValidTitle(false);
-        } else {
+        }  else {
             setTitleNavigationCheck(true);
             setTitleError('');
             setIsValidTitle(true);

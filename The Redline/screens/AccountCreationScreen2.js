@@ -171,7 +171,6 @@ const AccountCreationScreen2 = ({ navigation, route }) => {
     const onCreateAccountPressed = () => {
         Keyboard.dismiss();
         if (!validateInputs()) {
-            console.log("Error creating account")
         } else {
             createUser();
         }

@@ -37,9 +37,6 @@ const ProfileScreen = ({navigation, route}) => {
                 return data;
             }))
         })
-
-        //console.log(data)
-        // console.log("events: " + events)
     }, [likes]);
 
     const onSettingsPressed = () => {

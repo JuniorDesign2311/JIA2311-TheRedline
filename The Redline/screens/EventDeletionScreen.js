@@ -21,12 +21,6 @@ const EventDeletionScreen = ({ route, navigation }) => {
     }
 
     const onDeleteEventPressed = () => {
-        
-//     firebase.firestore().collection('events').doc(dataId)
-//          .delete()
-//          .then(() => {
-//              console.log('Event deleted!');
-//    });
         navigation.navigate("Profile")
     }
 

@@ -50,7 +50,6 @@ const EventCreationScreen = ({ navigation }) => {
             if (snapshot.exists) {
                 const userData = snapshot.data();
                 userData["username"].toString();
-                console.log(userData["username"].toString());
                 db.collection("events").doc(eventID).set({
                     title: title,
                     location: location,
@@ -66,7 +65,6 @@ const EventCreationScreen = ({ navigation }) => {
                         console.error("Error adding document: ", error);
                     });
             } else {
-            console.log("User does not exist");
             }
         })
     }
@@ -87,40 +85,33 @@ const EventCreationScreen = ({ navigation }) => {
             setTitleError('Title Exceeds Character Limit');
             setIsValidTitle(false);
         } else {
-            console.log("no title error");
             setTitleError('');
             setIsValidTitle(true);
         }
 
         // Location Validation
         if (location === "Search for a location") {
-            console.log("LocError2");
             setLocationError('Location Field is Empty');
             setIsValidLocation(false);
         } else {
-            console.log("No Loc Error");
             setLocationError('');
             setIsValidLocation(true);
         }
 
         // Date Validation
         if (date === "Select a date") {
-            console.log("DateError2");
             setDateError('Date Field is Empty');
             setIsValidDate(false);
         } else {
-            console.log("No Date Error");
             setDateError('');
             setIsValidDate(true);
         }
 
         // Time Validation
         if (time === "Select a time") {
-            console.log("TimeError2");
             setTimeError('Time Field is Empty');
             setIsValidTime(false);
         } else {
-            console.log("No Time Error");
             setTimeError('');
             setIsValidTime(true);
         }
@@ -159,7 +150,6 @@ const EventCreationScreen = ({ navigation }) => {
         setDatePickerVisibility(false);
     };
     const handleConfirm = (input) => {
-        console.warn("A date has been picked: ", input); // date will be in format: YYYY-MM-DDTXX:XX:XX.XXXZ
         setDate(input.toString().substring(0, 15));
         hideDatePicker();
     };
@@ -172,8 +162,6 @@ const EventCreationScreen = ({ navigation }) => {
         setTimePickerVisibility(false);
     };
     const handleTimeConfirm = (timeInput) => {
-        console.warn("A time has been picked: ", timeInput); // time will be in format: XXXX-XX-XXTHH:MM:XX.XXXZ
-
         var convertTime = timeInput.toString().substring(16, 18) + timeInput.toString().substring(19, 21);
         convertTime = parseInt(convertTime);
         if (convertTime < 10) { // ------------------------------- 12:00AM - 12:09AM
@@ -222,7 +210,6 @@ const EventCreationScreen = ({ navigation }) => {
                             <GooglePlacesAutocomplete
                                 placeholder={ location }
                                 onPress={(data, details = null) => {
-                                    //console.log(data, details);
                                     handleLocationInput(data.description, details.geometry.location.lng, details.geometry.location.lat);
                                 }}
                                 query={{

@@ -73,8 +73,8 @@ const EventCreationScreen = ({ navigation }) => {
 
     // Method that validates the inputs within each of the fields
     const validateInput = () => {
-        // Error Handling
 
+        // Error Handling
         var noError = true;
 
         // Title Validation
@@ -100,6 +100,7 @@ const EventCreationScreen = ({ navigation }) => {
         // Location Validation
         if (location === "Search for a location") {
             console.log("LocError2");
+            noError = false;
             setLocationError('Location Field is Empty');
             setIsValidLocation(false);
         } else {
@@ -111,6 +112,7 @@ const EventCreationScreen = ({ navigation }) => {
         // Date Validation
         if (date === "Select a date") {
             console.log("DateError2");
+            noError = false;
             setDateError('Date Field is Empty');
             setIsValidDate(false);
         } else {
@@ -122,6 +124,7 @@ const EventCreationScreen = ({ navigation }) => {
         // Time Validation
         if (time === "Select a time") {
             console.log("TimeError2");
+            noError = false;
             setTimeError('Time Field is Empty');
             setIsValidTime(false);
         } else {

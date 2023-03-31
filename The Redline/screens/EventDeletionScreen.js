@@ -15,18 +15,18 @@ const EventDeletionScreen = ({ route, navigation }) => {
     const { dataId } = route.params;
 
     const onBackPressed = () => {
-        navigation.navigate("BottomTabs", {
-            screen: 'Profile'
-        });
+        navigation.navigate("EditEvents", {
+            dataId: dataId
+        })
     }
 
     const onDeleteEventPressed = () => {
         
-    firebase.firestore().collection('events').doc(dataId)
-         .delete()
-         .then(() => {
-             console.log('Event deleted!');
-   });
+//     firebase.firestore().collection('events').doc(dataId)
+//          .delete()
+//          .then(() => {
+//              console.log('Event deleted!');
+//    });
         navigation.navigate("Profile")
     }
 

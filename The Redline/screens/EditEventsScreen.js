@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react'
-import { Dimensions, Button, View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native'
+import { Dimensions, Button, View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert } from 'react-native'
 import CustomInput from '../components/CustomInput';
 import CustomButton from '../components/CustomButton';
 import EventDescriptionInput from '../components/EventDescriptionInput';
@@ -38,12 +38,8 @@ const EditEventsScreen = ({ route, navigation }) => {
     const [isValidDate, setIsValidDate] = useState(true);
     const [isValidTime, setIsValidTime] = useState(true);
     const [isValidDescription, setIsValidDescription] = useState(true);
-    // Variables to allow event creation
-    const [titleNavigationCheck, setTitleNavigationCheck] = useState(false);
-    const [locationNavigationCheck, setLocationNavigationCheck] = useState(false);
-    const [dateNavigationCheck, setDateNavigationCheck] = useState(false);
-    const [timeNavigationCheck, setTimeNavigationCheck] = useState(false);
-    const [descriptionNavigationCheck, setDescriptionNavigationCheck] = useState(false);
+
+    const [showBox, setShowBox] = useState(true);
 
     //User Data
     const user = firebase.auth().currentUser;
@@ -119,7 +115,6 @@ const EditEventsScreen = ({ route, navigation }) => {
             setTitleError('Title Exceeds Character Limit');
             setIsValidTitle(false);
         } else {
-            setTitleNavigationCheck(true);
             setTitleError('');
             setIsValidTitle(true);
         }
@@ -129,7 +124,6 @@ const EditEventsScreen = ({ route, navigation }) => {
             setLocationError('Location Field is Empty');
             setIsValidLocation(false);
         } else {
-            setLocationNavigationCheck(true);
             setLocationError('');
             setIsValidLocation(true);
         }
@@ -139,7 +133,6 @@ const EditEventsScreen = ({ route, navigation }) => {
             setDateError('Date Field is Empty');
             setIsValidDate(false);
         } else {
-            setDateNavigationCheck(true);
             setDateError('');
             setIsValidDate(true);
         }
@@ -149,7 +142,6 @@ const EditEventsScreen = ({ route, navigation }) => {
             setTimeError('Time Field is Empty');
             setIsValidTime(false);
         } else {
-            setTimeNavigationCheck(true);
             setTimeError('');
             setIsValidTime(true);
         }
@@ -160,12 +152,11 @@ const EditEventsScreen = ({ route, navigation }) => {
             setDescriptionError('Description Field is Empty');
             setIsValidDescription(false);
         } else {
-            setDescriptionNavigationCheck(true);
             setDescriptionError('');
             setIsValidDescription(true);
         }
 
-        if (titleNavigationCheck && locationNavigationCheck && dateNavigationCheck && timeNavigationCheck && descriptionNavigationCheck) {
+        if (noError) {
             updateEvent();
             navigation.navigate("BottomTabs")
         }
@@ -234,13 +225,32 @@ const EditEventsScreen = ({ route, navigation }) => {
     }
 
     const onDeleteEventPressed = () => {
-        firebase.firestore().collection('events').doc(dataId)
-            .delete()
-            .then(() => {
-            console.log('Event deleted!');
-        });
 
-        navigation.navigate("Profile")
+        return Alert.alert(
+            "Are your sure?",
+            "Are you sure you want to delete your event?",
+            [
+              // The "Yes" button
+              {
+                text: "Yes",
+                onPress: () => {
+                    setShowBox(false);
+                    firebase.firestore().collection('events').doc(dataId)
+                        .delete()
+                        .then(() => {
+                        console.log('Event deleted!');
+                    });
+
+                    navigation.navigate("Profile")
+                },
+              },
+              // The "No" button
+              // Does nothing but dismiss the dialog when tapped
+              {
+                text: "No",
+              },
+            ]
+          );
     }
 
     // UI Components
@@ -334,7 +344,7 @@ const EditEventsScreen = ({ route, navigation }) => {
                         <CustomButton onPress={onSubmitPressed} buttonName="Submit" type="PRIMARY"/>
                     </View>
                     <View style={{flexDirection:"row", marginBottom: 0, marginTop: 0 }}>
-                        <CustomButton onPress={onDeleteEventPressed} buttonName="Delete Event" type="PRIMARY"/>
+                        <CustomButton onPress={onDeleteEventPressed} buttonName="Delete Event" type="RED"/>
                     </View>
                     <TouchableOpacity onPress={onCancelPressed}>
                         <Text style = {GlobalStyles.blueText} iconName="account-outline"> Cancel </Text>

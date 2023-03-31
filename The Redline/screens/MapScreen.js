@@ -26,16 +26,18 @@ const MapScreen = ({ navigation, route }) => {
   const sheetRef = useRef(null);
   const locationSheetRef = useRef(null);
 
-  const snapPoints = useMemo(() => ['10%', '45%', '90%']);
+  const snapPoints = useMemo(() => ['10%', '45%', '83%']);
   const [events, setEvents] = useState([]);
   const [likes, setLikes] = useState([]);
   const [databaseEvents, setDatabaseEvents] = useState([]);
+  const [selectedMarker, setSelectedMarker] = useState([-1]);
 
   //screen dimensions
   const windowW = Dimensions.get('window').width;
   const windowH = Dimensions.get('window').height;
 
   const mapView = React.createRef();
+  const markerRef = useRef(React.createRef);
 
   //filtering variables
   const filters = ["Clear Filter", "Location", "Date"]
@@ -205,15 +207,15 @@ const MapScreen = ({ navigation, route }) => {
 
   return (
     <View style={styles.container}>
-      <View style={{ flex: "auto", width: windowW, paddingTop: 40, flexDirection: 'row', }}>
+      <View style={{ flex: "auto", width: windowW, paddingTop: windowH * 0.05, flexDirection: 'row' }}>
         <View style={{ flex: 4 }}>
           <SearchBar placeholder="Search for an event..."
             lightTheme
             round
             showCancel
             inputStyle={{ backgroundColor: '#e6e6e6' }}
-            containerStyle={{ backgroundColor: 'white', borderWidth: 0, borderRadius: 9 }}
-            inputContainerStyle={{ backgroundColor: '#e6e6e6', borderWidth: 1 }}
+            containerStyle={{ backgroundColor: 'white', borderTopColor: 'transparent', borderBottomColor: 'transparent' }}
+            inputContainerStyle={{ backgroundColor: '#e6e6e6', height: windowH * 0.04 }}
             onChangeText={(text) => {
               searchFilterTitle(text);
             }}
@@ -221,7 +223,7 @@ const MapScreen = ({ navigation, route }) => {
           />
         </View>
 
-        <View style={{ flex: 1, paddingEnd: '2%', paddingTop: '2%', backgroundColor: 'white', }}>
+        <View style={{ flex: 1, paddingEnd: '2%', paddingTop: '0%', backgroundColor: 'white', }}>
           <SelectDropdown
             data={filters}
             onSelect={(selectedItem, index) => {
@@ -263,10 +265,12 @@ const MapScreen = ({ navigation, route }) => {
         showsUserLocation={route.params.trackLocation}
         followsUserLocation={route.params.trackLocation}
         showsMyLocationButton={true}
-        mapPadding={{ top: 0, right: 0, left: 0, bottom: 190 }}>
+        mapPadding={{ top: 0, right: 0, left: 0, bottom: 190 }}
+        onPress={() => setSelectedMarker(-1)}
+      >
 
         {/*show markers*/}
-        {events.map((data) => {
+        {events.map((data, i) => {
           const eventMarker = {
             longitude: data["longitude"],
             latitude: data["latitude"],
@@ -275,7 +279,17 @@ const MapScreen = ({ navigation, route }) => {
           };
 
           return (
-            <Marker coordinate={eventMarker}>
+              <Marker
+                key={i}
+                coordinate={eventMarker}
+                ref={selectedMarker === i ? markerRef : null}
+                pinColor={selectedMarker === null || selectedMarker === i ? 'gold' : 'tomato'}
+                onPress={(e) => {
+                    e.stopPropagation()
+                    setSelectedMarker(i)
+                  }
+                }
+              >
               <Callout>
                 <View style={{ height: "100%", width: 263 }}>
                   <Text style={styles.eventTitle2}>
@@ -304,7 +318,7 @@ const MapScreen = ({ navigation, route }) => {
         <ScrollView>
           <View style={styles.container}>
             <View style={styles.allEvents}>
-              {events.map((data) => (
+              {events.map((data, i) => (
                 <>
                   <Text></Text>
                   <TouchableOpacity style={[styles.eachEvent]} onPress={() => {
@@ -347,13 +361,13 @@ const MapScreen = ({ navigation, route }) => {
 
           <View style={styles.locationScroll}>
            
-              <Slider
-                maximumValue = {50}
-                value={locationFilterDistance}
-                onValueChange={value => setLocationFilterDistance(value)}
-                />
+            <Slider
+            maximumValue = {50}
+            value={locationFilterDistance}
+            onValueChange={value => setLocationFilterDistance(value)}
+            />
               
-              <Text> {locationFilterDistance} miles </Text>
+            <Text> {locationFilterDistance} miles </Text>
          
           </View>
           
@@ -381,7 +395,8 @@ const MapScreen = ({ navigation, route }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center'
+    alignItems: 'center',
+    backgroundColor: '#FFFFFF'
   },
   map: {
     width: '100%',
@@ -392,7 +407,7 @@ const styles = StyleSheet.create({
   },
   eventTitle: {
     fontWeight: 'bold',
-    fontSize: 25,
+    fontSize: 18,
   },
   allEvents: {
     alignItems: 'left',

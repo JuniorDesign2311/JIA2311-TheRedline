@@ -106,8 +106,8 @@ const ProfileScreen = ({navigation, route}) => {
                                     >
                                         <View>
                                             <Text style={styles.eventTitle}>{data["title"]}</Text>
-                                            <Text style={styles.events}>Host: {data["date"]}</Text>
-                                            <Text style={styles.events}>Date: {data["location"]}</Text>
+                                            <Text style={styles.events}>Date: {data["date"]}</Text>
+                                            <Text style={styles.events}>Location: {data["location"]}</Text>
                                         </View>
                                         {/* <Image source={require('../assets/settings-icon.png')} /> */}
                                     </TouchableOpacity>
@@ -130,8 +130,8 @@ const ProfileScreen = ({navigation, route}) => {
                                 <>
                                     <View style={styles.eachEvent}>
                                         <Text style={styles.eventTitle}>{data["title"]}</Text>
-                                        <Text style={styles.events}>Host: {data["date"]}</Text>
-                                        <Text style={styles.events}>Date: {data["location"]}</Text>
+                                        <Text style={styles.events}>Date: {data["date"]}</Text>
+                                        <Text style={styles.events}>Location: {data["location"]}</Text>
                                     </View>
                                 </>
                             }
@@ -157,12 +157,12 @@ const styles = StyleSheet.create({
     },
     eventTitle: {
       fontWeight: 'bold',
-      fontSize: 25,
+      fontSize: 18,
       textAlign: 'left'
     },
     eventTitle2: {
       fontWeight: 'bold',
-      fontSize: 20
+      fontSize: 18
     },
     allEvents: {
       alignItems: 'left',

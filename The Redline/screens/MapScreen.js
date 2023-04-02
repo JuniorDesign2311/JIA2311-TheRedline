@@ -135,7 +135,6 @@ const MapScreen = ({ navigation, route }) => {
     setDatePickerVisibility(false);
   };
   const handleConfirm = (input) => {
-    console.log("A date has been picked: ", input); // date will be in format: YYYY-MM-DDTXX:XX:XX.XXXZ
     searchFilterDate(input.toString().substring(0, 15));
     hideDatePicker();
   };

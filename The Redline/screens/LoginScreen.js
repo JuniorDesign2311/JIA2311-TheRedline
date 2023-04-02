@@ -94,7 +94,6 @@ const LoginScreen = ({navigation, route}) => {
                 getPermissions();
             })
             .catch(error => {
-                console.warn(error.message);
                 if (!loginSuccessful) {
                     setLoginError("Invalid credentials")
                 }

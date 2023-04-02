@@ -50,7 +50,6 @@ const EditEventsScreen = ({ route, navigation }) => {
     //Event Query
     useEffect(() => {
         firebase.firestore().collection("events").doc(dataId).get().then((snapshot) => {
-            console.log(snapshot.data());
             if (snapshot.exists) {
                 const eventData = snapshot.data();
                 setTitle(eventData["title"].toString())
@@ -238,7 +237,6 @@ const EditEventsScreen = ({ route, navigation }) => {
                     firebase.firestore().collection('events').doc(dataId)
                         .delete()
                         .then(() => {
-                        console.log('Event deleted!');
                     });
 
                     navigation.navigate("Profile")

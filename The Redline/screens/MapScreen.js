@@ -30,7 +30,7 @@ const MapScreen = ({ navigation, route }) => {
   const sheetRef = useRef(null);
   const locationSheetRef = useRef(null);
 
-  const snapPoints = useMemo(() => ['25%', '45%', '90%']);
+  const snapPoints = useMemo(() => ['18%', '45%', '90%']);
   const [events, setEvents] = useState([]);
   const [likes, setLikes] = useState([]);
   const [databaseEvents, setDatabaseEvents] = useState([]);
@@ -264,7 +264,7 @@ const MapScreen = ({ navigation, route }) => {
         showsUserLocation={route.params.trackLocation}
         followsUserLocation={route.params.trackLocation}
         showsMyLocationButton={true}
-        mapPadding={{ top: 0, right: 0, left: 0, bottom: windowH * 0.37 }}
+        mapPadding={{ top: 0, right: 0, left: 0, bottom: windowH * 0.3 }}
         onPress={() => setSelectedMarker(-1)}
       >
 

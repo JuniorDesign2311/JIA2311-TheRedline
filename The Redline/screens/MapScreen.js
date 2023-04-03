@@ -264,7 +264,7 @@ const MapScreen = ({ navigation, route }) => {
         showsUserLocation={route.params.trackLocation}
         followsUserLocation={route.params.trackLocation}
         showsMyLocationButton={true}
-        mapPadding={{ top: 0, right: 0, left: 0, bottom: 260 }}
+        mapPadding={{ top: 0, right: 0, left: 0, bottom: windowH * 0.37 }}
         onPress={() => setSelectedMarker(-1)}
       >
 

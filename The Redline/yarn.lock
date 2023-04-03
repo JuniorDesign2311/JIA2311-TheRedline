@@ -8838,6 +8838,11 @@
   "resolved" "https://registry.npmjs.org/json-stable-stringify-without-jsonify/-/json-stable-stringify-without-jsonify-1.0.1.tgz"
   "version" "1.0.1"
 
+"json-storage-formatter@>=1.0.5":
+  "integrity" "sha512-lhv/sfJo+C6aKNq6TmhtU2SEhkwbNr5yPSWwjbHS1arhIWUYZoZO3fSaGGt7VtEfdmVn3KLO3N0tVEYXmbv8vA=="
+  "resolved" "https://registry.npmjs.org/json-storage-formatter/-/json-storage-formatter-1.0.6.tgz"
+  "version" "1.0.6"
+
 "json5@^0.5.1":
   "integrity" "sha512-4xrs1aW+6N5DalkqSVA8fxh458CXvR99WU8WLKmq4v8eWAL86Xo3BVqyd3SkA9wEVjCMqyvvRRkshAdOnBp5rw=="
   "resolved" "https://registry.npmjs.org/json5/-/json5-0.5.1.tgz"
@@ -11436,6 +11441,11 @@
     "invariant" "^2.2.4"
     "lodash" "^4.17.21"
     "prop-types" "^15.7.2"
+
+"react-native-global-state-hooks@^2.1.22":
+  "integrity" "sha512-fYjouERagndAnTHn5CKMynzeHU2zPeHmgh3ZVQY+k3jcV7Vh33ObyMUMrXrxZ1KIXUh9pMomGezrSGPdGnnunw=="
+  "resolved" "https://registry.npmjs.org/react-native-global-state-hooks/-/react-native-global-state-hooks-2.1.22.tgz"
+  "version" "2.1.22"
 
 "react-native-google-places-autocomplete@^2.5.1":
   "integrity" "sha512-2FZZomogB18mLSC/N39UcpiVoJn/fFIpud1M2KZMom/pJhSMgfqV4qLjHuzaDyYIl7KBz/zpGDcbYgmtvvpkHQ=="

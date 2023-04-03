@@ -9,6 +9,7 @@ import firebase from "firebase/app";
 import SelectDropdown from 'react-native-select-dropdown';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import {Slider} from '@miblanchard/react-native-slider';
+import {useLikesGlobal} from '../global_variables/GlobalVariables'
 
 const LikeButton = ({ event, likes, setLikes }) => {
   return (
@@ -28,9 +29,10 @@ const MapScreen = ({ navigation, route }) => {
 
   const snapPoints = useMemo(() => ['10%', '45%', '83%']);
   const [events, setEvents] = useState([]);
-  const [likes, setLikes] = useState([]);
   const [databaseEvents, setDatabaseEvents] = useState([]);
   const [selectedMarker, setSelectedMarker] = useState([-1]);
+
+  const [likes, setLikes] = useLikesGlobal();
 
   //screen dimensions
   const windowW = Dimensions.get('window').width;

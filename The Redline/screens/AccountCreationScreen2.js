@@ -1,5 +1,5 @@
 import React, {useState, useRef, useMemo} from 'react'
-import { View, Text, StyleSheet, Keyboard, TouchableOpacity } from 'react-native'
+import { View, Text, Keyboard, TouchableOpacity } from 'react-native'
 import CustomInput from '../components/CustomInput';
 import CustomButton from '../components/CustomButton';
 import AttendeeHostButtons from '../components/AttendeeHostButtons';

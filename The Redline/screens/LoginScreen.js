@@ -1,6 +1,6 @@
 import React, {useState, useRef, useMemo, useEffect} from 'react';
 import {Alert} from 'react-native';
-import { View, Text, TouchableOpacity, Keyboard, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, Keyboard } from 'react-native';
 import CustomInput from '../components/CustomInput';
 import CustomButton from '../components/CustomButton';
 import { auth } from '../firebaseConfig';

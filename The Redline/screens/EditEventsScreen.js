@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react'
-import { Dimensions, Button, View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert } from 'react-native'
+import { Button, View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert } from 'react-native'
 import CustomInput from '../components/CustomInput';
 import CustomButton from '../components/CustomButton';
 import EventDescriptionInput from '../components/EventDescriptionInput';

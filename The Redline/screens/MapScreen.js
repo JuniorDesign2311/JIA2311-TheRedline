@@ -1,6 +1,6 @@
 import React, { useMemo, useRef, useState, useEffect } from 'react';
 import MapView, { PROVIDER_GOOGLE, Marker, Callout } from 'react-native-maps';
-import { StyleSheet, Text, View, ScrollView, Image, TouchableOpacity, Pressable, Dimensions, Button } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, TouchableOpacity, Pressable, Dimensions, Button } from 'react-native';
 import BottomSheet from '@gorhom/bottom-sheet';
 import { db } from '../firebaseConfig';
 import { SearchBar } from "react-native-elements";
@@ -26,7 +26,7 @@ const MapScreen = ({ navigation, route }) => {
   const sheetRef = useRef(null);
   const locationSheetRef = useRef(null);
 
-  const snapPoints = useMemo(() => ['10%', '45%', '83%']);
+  const snapPoints = useMemo(() => ['10%', '45%', '88%']);
   const [events, setEvents] = useState([]);
   const [likes, setLikes] = useState([]);
   const [databaseEvents, setDatabaseEvents] = useState([]);
@@ -40,7 +40,7 @@ const MapScreen = ({ navigation, route }) => {
   const markerRef = useRef(React.createRef);
 
   //filtering variables
-  const filters = ["Clear Filter", "Location", "Date"]
+  const filters = ["Clear Filter", "Location", "Date"];
   const [searchValue, setSearchValue] = useState("");
   const [filterType, setFilterType] = useState(0);
   const [locBottomSnap, setLocBottomSnap] = useState(['50%']);

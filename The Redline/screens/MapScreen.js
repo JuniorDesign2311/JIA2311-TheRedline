@@ -197,12 +197,6 @@ const MapScreen = ({ navigation, route }) => {
     }))
   };
 
-
-  const addEvent = () => {
-    navigation.navigate("EventCreation");
-  }
-
-
   return (
     <View style={styles.container}>
       <View style={{ flex: "auto", width: windowW, paddingTop: 40, flexDirection: 'row', }}>

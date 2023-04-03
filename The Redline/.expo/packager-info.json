@@ -1,6 +1,6 @@
 {
-  "expoServerPort": 19008,
-  "packagerPort": 19008,
+  "expoServerPort": null,
+  "packagerPort": null,
   "packagerPid": null,
   "expoServerNgrokUrl": null,
   "packagerNgrokUrl": null,

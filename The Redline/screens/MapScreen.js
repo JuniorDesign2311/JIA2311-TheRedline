@@ -22,19 +22,19 @@ const LikeButton = ({ event, likes, setLikes }) => {
   );
 };
 
+//screen dimensions
+const windowW = Dimensions.get('window').width;
+const windowH = Dimensions.get('window').height;
+
 const MapScreen = ({ navigation, route }) => {
   const sheetRef = useRef(null);
   const locationSheetRef = useRef(null);
 
-  const snapPoints = useMemo(() => ['10%', '45%', '83%']);
+  const snapPoints = useMemo(() => ['25%', '45%', '90%']);
   const [events, setEvents] = useState([]);
   const [likes, setLikes] = useState([]);
   const [databaseEvents, setDatabaseEvents] = useState([]);
   const [selectedMarker, setSelectedMarker] = useState([-1]);
-
-  //screen dimensions
-  const windowW = Dimensions.get('window').width;
-  const windowH = Dimensions.get('window').height;
 
   const mapView = React.createRef();
   const markerRef = useRef(React.createRef);
@@ -264,7 +264,7 @@ const MapScreen = ({ navigation, route }) => {
         showsUserLocation={route.params.trackLocation}
         followsUserLocation={route.params.trackLocation}
         showsMyLocationButton={true}
-        mapPadding={{ top: 0, right: 0, left: 0, bottom: 190 }}
+        mapPadding={{ top: 0, right: 0, left: 0, bottom: 260 }}
         onPress={() => setSelectedMarker(-1)}
       >
 
@@ -397,7 +397,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    backgroundColor: '#FFFFFF'
+    backgroundColor: '#FFFFFF',
+    minHeight: Math.round(windowH)
   },
   map: {
     width: '100%',

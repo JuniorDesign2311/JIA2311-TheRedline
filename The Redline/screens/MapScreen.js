@@ -23,10 +23,9 @@ const LikeButton = ({ event, likes, setLikes }) => {
 };
 
 const MapScreen = ({ navigation, route }) => {
-  const sheetRef = useRef(null);
   const locationSheetRef = useRef(null);
 
-  const snapPoints = useMemo(() => ['10%', '45%', '88%']);
+  const snapPoints = useMemo(() => ['10%', '45%', '85%']);
   const [events, setEvents] = useState([]);
   const [likes, setLikes] = useState([]);
   const [databaseEvents, setDatabaseEvents] = useState([]);
@@ -43,7 +42,7 @@ const MapScreen = ({ navigation, route }) => {
   const filters = ["Clear Filter", "Location", "Date"];
   const [searchValue, setSearchValue] = useState("");
   const [filterType, setFilterType] = useState(0);
-  const [locBottomSnap, setLocBottomSnap] = useState(['50%']);
+  const locBottomSnap = '50%';
   const [locationFilterDistance, setLocationFilterDistance] = useState(0);
 
   //visibility variables
@@ -83,6 +82,7 @@ const MapScreen = ({ navigation, route }) => {
         return data;
       }))
     })
+
   }, []);
 
   useEffect(() => {
@@ -206,20 +206,20 @@ const MapScreen = ({ navigation, route }) => {
 
   return (
     <View style={styles.container}>
-      <View style={{ flex: "auto", width: windowW, paddingTop: windowH * 0.05, flexDirection: 'row' }}>
+      <View style={{ flex: "auto", width: windowW, height: windowH * 0.15, paddingTop: windowH * 0.05, paddingTop: windowH * 0.05, flexDirection: 'row' }}>
         <View style={{ flex: 4 }}>
-          <SearchBar placeholder="Search for an event..."
-            lightTheme
-            round
-            showCancel
-            inputStyle={{ backgroundColor: '#e6e6e6' }}
-            containerStyle={{ backgroundColor: 'white', borderTopColor: 'transparent', borderBottomColor: 'transparent' }}
-            inputContainerStyle={{ backgroundColor: '#e6e6e6', height: windowH * 0.04 }}
-            onChangeText={(text) => {
-              searchFilterTitle(text);
-            }}
-            value={searchValue}
-          />
+            <SearchBar placeholder="Search for an event..."
+              lightTheme
+              round
+              showCancel
+              inputStyle={{ backgroundColor: '#e6e6e6' }}
+              containerStyle={{ backgroundColor: 'white', borderTopColor: 'transparent', borderBottomColor: 'transparent' }}
+              inputContainerStyle={{ backgroundColor: '#e6e6e6', height: windowH * 0.04 }}
+              onChangeText={(text) => {
+                searchFilterTitle(text);
+              }}
+              value={searchValue}
+            />
         </View>
 
         <View style={{ flex: 1, paddingEnd: '2%', paddingTop: '0%', backgroundColor: 'white', }}>
@@ -309,9 +309,8 @@ const MapScreen = ({ navigation, route }) => {
       </MapView>
 
       <BottomSheet
-        ref={sheetRef}
         index={1}
-        snapPoints={snapPoints}
+        snapPoints= { snapPoints }
         style={{ paddingBottom: 20 }}
       >
         <ScrollView>

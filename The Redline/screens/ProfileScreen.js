@@ -52,7 +52,9 @@ const ProfileScreen = ({navigation, route}) => {
     }
 
     const addEvent = () => {
-        navigation.navigate("EventCreation");
+        if (eventButtonEnabled) {
+            navigation.navigate("EventCreation");
+        }
     }
 
 
@@ -80,8 +82,10 @@ const ProfileScreen = ({navigation, route}) => {
                             fontFamily: 'Helvetica Neue'}}>My Listed Events</Text>
                         <TouchableOpacity
                             enabled={eventButtonEnabled}
-                            onPress={addEvent}
-                            style={ {opacity: eventButtonEnabled ? 100 : 0, alignSelf: 'flex-start', paddingRight: '5%'} }>
+                            delayPressIn={0.3}
+                            activeOpacity={eventButtonEnabled ? 50 : 0}
+                            style={ {opacity: eventButtonEnabled ? 100 : 0, alignSelf: 'flex-start', paddingRight: '5%'} }
+                            onPress={addEvent}>
                             <Image source={require('../assets/plusbutton.png')} />
                         </TouchableOpacity>
                     </View>

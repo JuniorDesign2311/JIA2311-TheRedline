@@ -20,7 +20,7 @@ allowing users to favorite and post their own events.
 * Event creation page submit button required 2 presses
 * Search bar had gray space above it
 
-### Known Issues
+### Issues
 * There are too many callbacks on profile page
 * Profile settings page doesn't sit well on iPhone 10 and higher screens
 
@@ -43,7 +43,7 @@ allowing users to favorite and post their own events.
 * Users weren't able to scroll the entirety of the profile page
 * Search bar wouldn't allow user to delete the last letter
 
-### Known Issues
+### Issues
 * Search bar doesn't reset correctly
 * Event creation page submit button requires 2 presses
 

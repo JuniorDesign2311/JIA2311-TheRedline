@@ -2,12 +2,13 @@ import React, {useState, useEffect } from 'react'
 import { StyleSheet, ScrollView, View, Text,  Image, TouchableOpacity} from 'react-native'
 import firebase from "firebase/app";
 import { db } from '../firebaseConfig';
+import { useLikeGlobal } from '../components/GobalVariable';
 
 const ProfileScreen = ({navigation, route}) => {
     const [username, setUsername] = useState('');
     const [events, setEvents] = useState([]);
     const [eventButtonEnabled, setEventButtonEnabled] = useState(false);
-    const [likes, setLikes] = useState([]);
+    const [likes, setLikes] = useLikeGlobal([]);
 
     const user = firebase.auth().currentUser;
 

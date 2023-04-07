@@ -30,13 +30,15 @@ const ProfileScreen = ({navigation, route}) => {
             }
         })
 
-        db.collection('events').onSnapshot((querySnapshot) => {
-            setEvents(querySnapshot.docs.map(snapshot => { //querySnapshot.docs gives us an array of a reference to all the documents in the snapshot (not the data)
-                const data = snapshot.data();  //data object
-                data['id'] = snapshot.id;   //adding an id to the data object
-                return data;
-            }))
-        })
+        if (eventButtonEnabled) {
+            db.collection('events').onSnapshot((querySnapshot) => {
+                setEvents(querySnapshot.docs.map(snapshot => { //querySnapshot.docs gives us an array of a reference to all the documents in the snapshot (not the data)
+                    const data = snapshot.data();  //data object
+                    data['id'] = snapshot.id;   //adding an id to the data object
+                    return data;
+                }))
+            })
+        }
     }, [likes]);
 
     const onSettingsPressed = () => {
@@ -78,8 +80,8 @@ const ProfileScreen = ({navigation, route}) => {
                         source={require('../assets/account-icon.png')} />
                     
                     <View style={{flexDirection:'row', justifyContent:'space-between'}}>
-                        <Text style={{paddingTop: '5%', paddingLeft: '4%', fontWeight: 'bold', fontSize: 20, textAlign: 'center',
-                            fontFamily: 'Helvetica Neue'}}>My Listed Events</Text>
+                        <Text style={{opacity: eventButtonEnabled ? 100 : 0, paddingTop: eventButtonEnabled ? '5%' : '0%', paddingLeft: eventButtonEnabled ? '4%' : '0%', fontWeight: 'bold', 
+                            fontSize: eventButtonEnabled ? 20 : 0, textAlign: 'center', fontFamily: 'Helvetica Neue'}}>My Listed Events</Text>
                         <TouchableOpacity
                             enabled={eventButtonEnabled}
                             delayPressIn={0.3}

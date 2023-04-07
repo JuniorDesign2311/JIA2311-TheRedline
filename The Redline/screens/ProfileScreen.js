@@ -30,15 +30,13 @@ const ProfileScreen = ({navigation, route}) => {
             }
         })
 
-        if (eventButtonEnabled) {
-            db.collection('events').onSnapshot((querySnapshot) => {
-                setEvents(querySnapshot.docs.map(snapshot => { //querySnapshot.docs gives us an array of a reference to all the documents in the snapshot (not the data)
-                    const data = snapshot.data();  //data object
-                    data['id'] = snapshot.id;   //adding an id to the data object
-                    return data;
-                }))
-            })
-        }
+        db.collection('events').onSnapshot((querySnapshot) => {
+            setEvents(querySnapshot.docs.map(snapshot => { //querySnapshot.docs gives us an array of a reference to all the documents in the snapshot (not the data)
+                const data = snapshot.data();  //data object
+                data['id'] = snapshot.id;   //adding an id to the data object
+                return data;
+            }))
+        })
     }, [likes]);
 
     const onSettingsPressed = () => {

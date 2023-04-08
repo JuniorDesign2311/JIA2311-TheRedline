@@ -226,7 +226,7 @@ const EditEventsScreen = ({ route, navigation }) => {
     const onDeleteEventPressed = () => {
 
         return Alert.alert(
-            "Are your sure?",
+            "Are you sure?",
             "Are you sure you want to delete your event?",
             [
               // The "Yes" button

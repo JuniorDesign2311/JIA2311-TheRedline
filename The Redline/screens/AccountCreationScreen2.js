@@ -4,7 +4,6 @@ import CustomInput from '../components/CustomInput';
 import CustomButton from '../components/CustomButton';
 import AttendeeHostButtons from '../components/AttendeeHostButtons';
 import HostButton from '../components/HostButton';
-import States from '../components/States';
 import { auth } from '../firebaseConfig';
 import firebase from "firebase/app";
 import "firebase/firestore";
@@ -16,7 +15,6 @@ const AccountCreationScreen2 = ({ navigation, route }) => {
     /* useState returns the original value argument that's passed in and a function that returns the changed value */
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
-    const [state, setState] = useState('');
     const [attendeeClicked, setAttendeeClicked] = useState(false);
     const [hostClicked, setHostClicked] = useState(false);
     const sheetRef = useRef(null);
@@ -29,12 +27,10 @@ const AccountCreationScreen2 = ({ navigation, route }) => {
     // Form Validation Handling
     const [firstNameError, setFirstNameError] = useState('');
     const [lastNameError, setLastNameError] = useState('');
-    const [stateError, setStateError] = useState('');
     const [attendeeHostError, setAttendeeHostError] = useState('');
     // Error variables for input fields
     const [isValidFirstName, setIsValidFirstName] = useState(true);
     const [isValidLastName, setIsValidLastName] = useState(true);
-    const [hasStateError, setHasStateError] = useState(false);
     const [hasAttendeeHostError, setHasAttendeeHostError] = useState(false);
 
 
@@ -65,7 +61,6 @@ const AccountCreationScreen2 = ({ navigation, route }) => {
                 phoneNumber: phoneNumber,
                 username: username,
                 usernameToLowerCase: username.toLowerCase(),
-                state: state,
                 email: email,
                 emailToLowerCase: email.toLowerCase(),
                 favorites: [],
@@ -80,7 +75,6 @@ const AccountCreationScreen2 = ({ navigation, route }) => {
                 phoneNumber: phoneNumber,
                 username: username,
                 usernameToLowerCase: username.toLowerCase(),
-                state: state,
                 email: email,
                 emailToLowerCase: email.toLowerCase(),
                 favorites: [],
@@ -143,16 +137,6 @@ const AccountCreationScreen2 = ({ navigation, route }) => {
             setIsValidLastName(true);
         }
 
-        // State Validation
-        if (!state) {
-            noError = false;
-            setStateError('Please Select a State')
-            setHasStateError(true);
-        } else {
-            setStateError('');
-            setHasStateError(false);
-        }
-
         // User Type Validation
         if (attendeeClicked === false && hostClicked === false) {
             noError = false;
@@ -195,8 +179,6 @@ const AccountCreationScreen2 = ({ navigation, route }) => {
                     <View style={GlobalStyles.sheet}>
                         <CustomInput placeholder="First Name" value={firstName} setValue={setFirstName} secureTextEntry={false} inputError={firstNameError} isValid={isValidFirstName}/>
                         <CustomInput placeholder="Last Name" value={lastName} setValue={setLastName} secureTextEntry={false} inputError={lastNameError} isValid={isValidLastName}/>
-                        <States state={state} setState={setState} hasError={hasStateError}/>
-                        <Text style={{color: "red"}}> {stateError} </Text>
 
                         <View style={{ flexDirection: "row" }}>
                             <AttendeeHostButtons onPress={onAttendeePressed} buttonClicked={attendeeClicked} buttonName="Attendee" inputError={AttendeeHostButtons} hasError={hasAttendeeHostError}/>

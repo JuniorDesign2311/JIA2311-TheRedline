@@ -78,8 +78,8 @@ const ProfileScreen = ({navigation, route}) => {
                         source={require('../assets/account-icon.png')} />
                     
                     <View style={{flexDirection:'row', justifyContent:'space-between'}}>
-                        <Text style={{paddingTop: '5%', paddingLeft: '4%', fontWeight: 'bold', fontSize: 20, textAlign: 'center',
-                            fontFamily: 'Helvetica Neue'}}>My Listed Events</Text>
+                        <Text style={{opacity: eventButtonEnabled ? 100 : 0, paddingTop: eventButtonEnabled ? '5%' : '0%', paddingLeft: eventButtonEnabled ? '4%' : '0%', fontWeight: 'bold', 
+                            fontSize: eventButtonEnabled ? 20 : 0, textAlign: 'center', fontFamily: 'Helvetica Neue'}}>My Listed Events</Text>
                         <TouchableOpacity
                             enabled={eventButtonEnabled}
                             delayPressIn={0.3}

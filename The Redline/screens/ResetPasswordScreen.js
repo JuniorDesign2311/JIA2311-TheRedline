@@ -43,7 +43,7 @@ const LoginScreen = ({navigation}) => {
         .then(userCredential => {
             navigation.navigate("Login");
         })
-        .catch(error => console.warn(error.message))
+        .catch(error => console.error(error.message))
       }
 
 

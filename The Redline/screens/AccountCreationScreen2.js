@@ -53,7 +53,7 @@ const AccountCreationScreen2 = ({ navigation, route }) => {
                 username1: username
             })
         })
-        .catch(error => console.warn(error.message))
+        .catch(error => console.error(error.message))
     }
 
     // Method that writes the user's inputted data into The Redline's Firebase Firestore

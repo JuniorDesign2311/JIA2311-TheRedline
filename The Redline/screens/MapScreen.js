@@ -20,7 +20,7 @@ const LikeButton = ({ event, likes, setLikes }) => {
       />
     </Pressable>
   );
-};
+};  
 
 //screen dimensions
 const windowW = Dimensions.get('window').width;
@@ -198,11 +198,18 @@ const MapScreen = ({ navigation, route }) => {
     }))
   };
 
-
   const addEvent = () => {
     navigation.navigate("EventCreation");
   }
 
+  const noEventMatch = () => {
+    if (events.length == 0) {
+      return <View style={styles.noEventsToDisplayContainer}>
+              <Text style={styles.noEventsToDisplay}>No Events To Display</Text>
+              <Text>Please try resetting the filter or create an event.</Text>
+            </View>;
+    }
+  }
 
   return (
     <View style={styles.container}>
@@ -317,6 +324,7 @@ const MapScreen = ({ navigation, route }) => {
         <ScrollView>
           <View style={styles.container}>
             <View style={styles.allEvents}>
+              {noEventMatch()}
               {events.map((data, i) => (
                 <>
                   <Text></Text>
@@ -435,8 +443,15 @@ const styles = StyleSheet.create({
     color: 'red',
     paddingLeft: '20%',
     paddingTop: '3%'
-  }
-
+  },
+  noEventsToDisplayContainer: {
+    alignItems: 'center',
+    paddingLeft: '6%',
+  },
+  noEventsToDisplay: {
+    fontWeight: 'bold',
+    fontSize: 18,
+  },
 });
 
 export default MapScreen;

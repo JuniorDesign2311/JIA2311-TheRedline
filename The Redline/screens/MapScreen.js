@@ -20,7 +20,7 @@ const LikeButton = ({ event, likes, setLikes }) => {
       />
     </Pressable>
   );
-};
+};  
 
 //screen dimensions
 const windowW = Dimensions.get('window').width;
@@ -198,11 +198,51 @@ const MapScreen = ({ navigation, route }) => {
     }))
   };
 
-
   const addEvent = () => {
     navigation.navigate("EventCreation");
   }
 
+  const noEventMatch = () => {
+    if (events.length == 0) {
+      return <View style={styles.noEventsToDisplayContainer}>
+              <Text style={styles.noEventsToDisplay}>No Events To Display</Text>
+              <Text>Please try resetting the filter or create an event.</Text>
+            </View>;
+    } else {
+      return (
+        <ScrollView>
+          <View style={styles.container}>
+            <View style={styles.allEvents}>
+              
+              {events.map((data, i) => (
+                <>
+                  <Text></Text>
+                  <TouchableOpacity style={[styles.eachEvent]} onPress={() => {
+                    const eventMarker = {
+                      longitude: data["longitude"],
+                      latitude: data["latitude"],
+                      latitudeDelta: 0.01,
+                      longitudeDelta: 0.01,
+                    };
+                    setSelectedMarker(i);
+                    //markerRef.current.showCallout();
+                    mapView.current.animateToRegion(eventMarker, 2000);
+                  }}>
+                    <View style={styles.eventHeading}>
+                      <Text style={styles.eventTitle}>{data["title"]}</Text>
+                      <LikeButton event={data["id"]} likes={likes} setLikes={setLikes}></LikeButton>
+                    </View>
+                    <Text style={styles.events}>Date: {data["date"]}</Text>
+                    <Text style={styles.events}>Location: {data["location"]}</Text>
+                  </TouchableOpacity>
+                </>
+              ))}
+            </View>
+          </View>
+        </ScrollView>
+      )
+    }
+  }
 
   return (
     <View style={styles.container}>
@@ -314,35 +354,8 @@ const MapScreen = ({ navigation, route }) => {
         snapPoints={snapPoints}
         style={{ paddingBottom: 20 }}
       >
-        <ScrollView>
-          <View style={styles.container}>
-            <View style={styles.allEvents}>
-              {events.map((data, i) => (
-                <>
-                  <Text></Text>
-                  <TouchableOpacity style={[styles.eachEvent]} onPress={() => {
-                    const eventMarker = {
-                      longitude: data["longitude"],
-                      latitude: data["latitude"],
-                      latitudeDelta: 0.01,
-                      longitudeDelta: 0.01,
-                    };
-                    setSelectedMarker(i);
-                    //markerRef.current.showCallout();
-                    mapView.current.animateToRegion(eventMarker, 2000);
-                  }}>
-                    <View style={styles.eventHeading}>
-                      <Text style={styles.eventTitle}>{data["title"]}</Text>
-                      <LikeButton event={data["id"]} likes={likes} setLikes={setLikes}></LikeButton>
-                    </View>
-                    <Text style={styles.events}>Date: {data["date"]}</Text>
-                    <Text style={styles.events}>Location: {data["location"]}</Text>
-                  </TouchableOpacity>
-                </>
-              ))}
-            </View>
-          </View>
-        </ScrollView>
+        {noEventMatch()}
+        
       </BottomSheet>
 
       {/* Bottom sheet for location filter */}
@@ -435,8 +448,14 @@ const styles = StyleSheet.create({
     color: 'red',
     paddingLeft: '20%',
     paddingTop: '3%'
-  }
-
+  },
+  noEventsToDisplayContainer: {
+    alignItems: 'center',
+  },
+  noEventsToDisplay: {
+    fontWeight: 'bold',
+    fontSize: 18,
+  },
 });
 
 export default MapScreen;

@@ -3,11 +3,14 @@ import { StyleSheet, ScrollView, View, Text,  Image, TouchableOpacity} from 'rea
 import firebase from "firebase/app";
 import { db } from '../firebaseConfig';
 
+import {useGlobalState } from "../global_variables/GlobalVariables"
+
 const ProfileScreen = ({navigation, route}) => {
     const [username, setUsername] = useState('');
     const [events, setEvents] = useState([]);
     const [eventButtonEnabled, setEventButtonEnabled] = useState(false);
-    const [likes, setLikes] = useState([]);
+    
+    const [likes] = useGlobalState("likes");
 
     const user = firebase.auth().currentUser;
 
@@ -16,14 +19,12 @@ const ProfileScreen = ({navigation, route}) => {
             if (snapshot.exists) {
                 const userData = snapshot.data();
                 setUsername(userData["username"].toString());
-                setLikes(snapshot.data()['favorites']);
                 setEventButtonEnabled(true);
             } else {
                 firebase.firestore().collection("attendees").doc(user.uid).get().then((snapshot) => {
                     if (snapshot.exists) {
                         const userData = snapshot.data();
                         setUsername(userData["username"].toString());
-                        setLikes(snapshot.data()['favorites']);
                         setEventButtonEnabled(false);
                     }
                 })
@@ -37,7 +38,7 @@ const ProfileScreen = ({navigation, route}) => {
                 return data;
             }))
         })
-    }, [likes]);
+    }, []);
 
     const onSettingsPressed = () => {
         navigation.navigate("Settings");

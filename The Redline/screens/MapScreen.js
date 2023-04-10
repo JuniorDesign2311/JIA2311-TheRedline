@@ -10,9 +10,11 @@ import SelectDropdown from 'react-native-select-dropdown';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import {Slider} from '@miblanchard/react-native-slider';
 
+import { setGlobalState, useGlobalState } from "../global_variables/GlobalVariables"
+
 const LikeButton = ({ event, likes, setLikes }) => {
   return (
-    <Pressable onPress={() => likes.includes(event) ? setLikes([...likes.slice(0, likes.indexOf(event)), ...likes.slice(likes.indexOf(event) + 1, likes.length)]) : setLikes(likes => [...likes, event])}>
+    <Pressable onPress={() => likes.includes(event) ? setGlobalState("likes", ([...likes.slice(0, likes.indexOf(event)), ...likes.slice(likes.indexOf(event) + 1, likes.length)])) : setGlobalState("likes", (likes => [...likes, event]))}>
       <MaterialCommunityIcons
         name={likes.includes(event) ? "heart" : "heart-outline"}
         size={26}
@@ -32,7 +34,7 @@ const MapScreen = ({ navigation, route }) => {
 
   const snapPoints = useMemo(() => ['18%', '45%', '90%']);
   const [events, setEvents] = useState([]);
-  const [likes, setLikes] = useState([]);
+  
   const [databaseEvents, setDatabaseEvents] = useState([]);
   const [selectedMarker, setSelectedMarker] = useState([-1]);
 
@@ -50,6 +52,8 @@ const MapScreen = ({ navigation, route }) => {
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 
   const geolib = require('geolib');
+
+  const [likes] = useGlobalState("likes");
   
   //useEffect makes the function within it only be called only on the first render (the page re-renders if something on the screen changes
   //in other words, the state changes.)
@@ -58,11 +62,11 @@ const MapScreen = ({ navigation, route }) => {
 
     firebase.firestore().collection("hosts").doc(user.uid).get().then((snapshot) => {
       if (snapshot.exists) {
-        setLikes(snapshot.data()['favorites']);
+        setGlobalState("likes", snapshot.data()['favorites']);
       } else {
         firebase.firestore().collection("attendees").doc(user.uid).get().then((snapshot) => {
           if (snapshot.exists) {
-            setLikes(snapshot.data()['favorites']);
+            setGlobalState("likes", snapshot.data()['favorites']);
           }
         })
       }
@@ -230,7 +234,7 @@ const MapScreen = ({ navigation, route }) => {
                   }}>
                     <View style={styles.eventHeading}>
                       <Text style={styles.eventTitle}>{data["title"]}</Text>
-                      <LikeButton event={data["id"]} likes={likes} setLikes={setLikes}></LikeButton>
+                      <LikeButton event={data["id"]} likes={likes}></LikeButton>
                     </View>
                     <Text style={styles.events}>Date: {data["date"]}</Text>
                     <Text style={styles.events}>Location: {data["location"]}</Text>

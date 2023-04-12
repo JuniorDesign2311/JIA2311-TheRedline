@@ -169,29 +169,14 @@ const MapScreen = ({ navigation, route }) => {
     closeLocationSheet();
     noSearchFilter();
   }
-  const searchFilterLocation = (location) => {
-    setEvents(events.filter((event) => {
-      const event_location = {
-        latitude: event.latitude,
-        longitude: event.longitude
-      }
-
-      const filtered_location = {
-        latitude: location.geometry.location.lat,
-        longitude: location.geomoetry.location.lng
-      }
   
-
-      return geolib.getDistance(event_location, filtered_location)/1609 <= 5000
-    }))
-  }
 
   const filterLocationBasedOnCurrent = (distance) => {
     const current_location = {
       latitude: route.params.lat,
       longitude: route.params.long
     }
-
+    mapView.current.animateToRegion({latitude: current_location['latitude'], longitude: current_location['longitude'], latitudeDelta: distance, longitudeDelta: distance})
     setEvents(events.filter((event) => {
       const event_location = {
         latitude: event.latitude,
@@ -202,8 +187,39 @@ const MapScreen = ({ navigation, route }) => {
     }))
   };
 
-  const addEvent = () => {
-    navigation.navigate("EventCreation");
+  const displayEvents = () => {
+    return (
+      <ScrollView>
+        <View style={styles.container}>
+          <View style={styles.allEvents}>
+            
+            {events.map((data, i) => (
+              <>
+                <Text></Text>
+                <TouchableOpacity style={[styles.eachEvent]} onPress={() => {
+                  const eventMarker = {
+                    longitude: data["longitude"],
+                    latitude: data["latitude"],
+                    latitudeDelta: 0.01,
+                    longitudeDelta: 0.01,
+                  };
+                  setSelectedMarker(i);
+                  //markerRef.current.showCallout();
+                  mapView.current.animateToRegion(eventMarker, 2000);
+                }}>
+                  <View style={styles.eventHeading}>
+                    <Text style={styles.eventTitle}>{data["title"]}</Text>
+                    <LikeButton event={data["id"]} likes={likes}></LikeButton>
+                  </View>
+                  <Text style={styles.events}>Date: {data["date"]}</Text>
+                  <Text style={styles.events}>Location: {data["location"]}</Text>
+                </TouchableOpacity>
+              </>
+            ))}
+          </View>
+        </View>
+      </ScrollView>
+    )
   }
 
   const noEventMatch = () => {
@@ -213,40 +229,11 @@ const MapScreen = ({ navigation, route }) => {
               <Text>Please try resetting the filter or create an event.</Text>
             </View>;
     } else {
-      return (
-        <ScrollView>
-          <View style={styles.container}>
-            <View style={styles.allEvents}>
-              
-              {events.map((data, i) => (
-                <>
-                  <Text></Text>
-                  <TouchableOpacity style={[styles.eachEvent]} onPress={() => {
-                    const eventMarker = {
-                      longitude: data["longitude"],
-                      latitude: data["latitude"],
-                      latitudeDelta: 0.01,
-                      longitudeDelta: 0.01,
-                    };
-                    setSelectedMarker(i);
-                    //markerRef.current.showCallout();
-                    mapView.current.animateToRegion(eventMarker, 2000);
-                  }}>
-                    <View style={styles.eventHeading}>
-                      <Text style={styles.eventTitle}>{data["title"]}</Text>
-                      <LikeButton event={data["id"]} likes={likes}></LikeButton>
-                    </View>
-                    <Text style={styles.events}>Date: {data["date"]}</Text>
-                    <Text style={styles.events}>Location: {data["location"]}</Text>
-                  </TouchableOpacity>
-                </>
-              ))}
-            </View>
-          </View>
-        </ScrollView>
-      )
+      displayEvents();
     }
   }
+
+  
 
   return (
     <View style={styles.container}>

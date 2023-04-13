@@ -10,6 +10,7 @@ import KeyboardAvoidingWrapper from '../components/KeyboardAvoidingWrapper';
 import GlobalStyles from '../components/GlobalStyles';
 import { GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
+import { Dropdown } from 'react-native-element-dropdown';
 
 const EventCreationScreen = ({ navigation }) => {
     /* useState returns the original value argument that's passed in and a function that returns the changed value */
@@ -20,9 +21,18 @@ const EventCreationScreen = ({ navigation }) => {
     const [isTimePickerVisible, setTimePickerVisibility] = useState(false);
     const [time, setTime] = useState('Select a time'); // 12-hour time. What the user sees
     const [time24Hour, setTime24Hour] = useState(''); // 24-hour time. For backend use
+    const [repeats, setRepeats] = useState('');
     const [description, setDescription] = useState('');
     const [longitude, setLongitude] = useState('');
     const [latitude, setLatitude] = useState('');
+
+    const repeatOptions = [
+        { label: 'Does not repeat', value: '1' },
+        { label: 'Daily', value: '2' },
+        { label: 'Weekly', value: '3' },
+        { label: 'Monthly', value: '4' },
+        { label: 'Yearly', value: '5' },
+    ];
 
     // Form Validation Handling
     const [titleError, setTitleError] = useState('');
@@ -58,6 +68,7 @@ const EventCreationScreen = ({ navigation }) => {
                     date: date,
                     time: time,
                     time24Hour: time24Hour,
+                    repeats: repeats,
                     description: description,
                     host: userData["username"].toString(),
                 })
@@ -221,9 +232,9 @@ const EventCreationScreen = ({ navigation }) => {
                                 fetchDetails={true}
 
                             />
-                            </ScrollView>
-                            </View>
-                            </View>
+                        </ScrollView>
+                        </View>
+                        </View>
                         
                 
 
@@ -268,10 +279,24 @@ const EventCreationScreen = ({ navigation }) => {
                         </View>
                     </View>
 
+                    <Text style={styles.dateTimeText}>Repeats</Text>
+                    <View style={styles.fieldContainter}>
+                        <View style={[styles.boundingBox, {borderColor: isValidTime ? '#e8e8e8': 'red'}]}>
+                            <Dropdown
+                                style={{width: '100%', paddingHorizontal: '3%'}}
+                                data={repeatOptions}
+                                placeholder={repeats}
+                                labelField="label"
+                                valueField="value"
+                                value={repeats}
+                                onChange = { item => {
+                                    setRepeats(item.label);
+                                }}
+                            />
+                        </View>
+                    </View>
+
                     <EventDescriptionInput placeholder="Event Description" value={description} setValue={setDescription} secureTextEntry={false} inputError={descriptionError} isValid={isValidDescription}/>
-                    {/* <EmptyInputBox inputError={locationError} isValid={isValidLocation} editable={false} />
-                    <EmptyInputBox inputError={dateError} isValid={isValidDate} editable={false} />
-                    <EmptyInputBox inputError={timeError} isValid={isValidTime} editable={false} /> */}
                     <View style={{flexDirection:"row", marginBottom: 0, marginTop: 15 }}>
                         <CustomButton onPress={onSubmitPressed} buttonName="Submit" type="PRIMARY"/>
                     </View>

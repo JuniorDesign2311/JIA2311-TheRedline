@@ -10,6 +10,7 @@ import KeyboardAvoidingWrapper from '../components/KeyboardAvoidingWrapper';
 import GlobalStyles from '../components/GlobalStyles';
 import { GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
+import { Dropdown } from 'react-native-element-dropdown';
 
 const EditEventsScreen = ({ route, navigation }) => {
     const { dataId } = route.params;
@@ -22,9 +23,18 @@ const EditEventsScreen = ({ route, navigation }) => {
     const [isTimePickerVisible, setTimePickerVisibility] = useState(false);
     const [time, setTime] = useState('Select a time'); // 12-hour time. What the user sees
     const [time24Hour, setTime24Hour] = useState(''); // 24-hour time. For backend use
+    const [repeats, setRepeats] = useState('');
     const [description, setDescription] = useState('');
     const [longitude, setLongitude] = useState('');
     const [latitude, setLatitude] = useState('');
+
+    const repeatOptions = [
+        { label: 'Does not repeat', value: '1' },
+        { label: 'Daily', value: '2' },
+        { label: 'Weekly', value: '3' },
+        { label: 'Monthly', value: '4' },
+        { label: 'Yearly', value: '5' },
+    ];
 
     // Form Validation Handling
     const [titleError, setTitleError] = useState('');
@@ -60,7 +70,7 @@ const EditEventsScreen = ({ route, navigation }) => {
                 setTime24Hour(eventData["time24Hour"].toString())
                 setLatitude(eventData["latitude"])
                 setLongitude(eventData["longitude"])
-                set
+                setRepeats(eventData["repeats"])
             } else {
             }
         })
@@ -82,6 +92,7 @@ const EditEventsScreen = ({ route, navigation }) => {
                     date: date,
                     time: time,
                     time24Hour: time24Hour,
+                    repeats: repeats,
                     description: description,
                     host: userData["username"].toString(),
                 })
@@ -336,6 +347,23 @@ const EditEventsScreen = ({ route, navigation }) => {
                     <Text style={styles.error}>
                         {timeError} 
                     </Text>
+
+                    <Text style={styles.dateTimeText}>Repeats</Text>
+                    <View style={styles.fieldContainter}>
+                        <View style={[styles.boundingBox, {borderColor: isValidTime ? '#e8e8e8': 'red'}]}>
+                            <Dropdown
+                                style={{width: '100%', paddingHorizontal: '3%'}}
+                                data={repeatOptions}
+                                placeholder={repeats}
+                                labelField="label"
+                                valueField="value"
+                                value={repeats}
+                                onChange = { item => {
+                                    setRepeats(item.label);
+                                }}
+                            />
+                        </View>
+                    </View>
 
                     <EventDescriptionInput placeholder="Event Description" value={description} setValue={setDescription} secureTextEntry={false} inputError={descriptionError} isValid={isValidDescription}/>
                     <View style={{flexDirection:"row", marginBottom: 0, marginTop: 15 }}>

@@ -54,6 +54,23 @@ const MapScreen = ({ navigation, route }) => {
   const geolib = require('geolib');
 
   const [likes] = useGlobalState("likes");
+
+  //calculations
+  function degreesToRadians(angle) {
+    return angle * (Math.PI / 180);
+  }
+
+  function milesToKM(miles) {
+    return miles * 1.60934;
+  }
+  
+  function kMToLatitudes(km) {
+    return km / 110.574;
+  }
+  
+  function kMToLongitudes(km, atLatitude) {
+    return km * 0.0089831 / Math.cos(degreesToRadians(atLatitude));
+  }
   
   //useEffect makes the function within it only be called only on the first render (the page re-renders if something on the screen changes
   //in other words, the state changes.)
@@ -169,22 +186,7 @@ const MapScreen = ({ navigation, route }) => {
     closeLocationSheet();
     noSearchFilter();
   }
-  const searchFilterLocation = (location) => {
-    setEvents(events.filter((event) => {
-      const event_location = {
-        latitude: event.latitude,
-        longitude: event.longitude
-      }
-
-      const filtered_location = {
-        latitude: location.geometry.location.lat,
-        longitude: location.geomoetry.location.lng
-      }
   
-
-      return geolib.getDistance(event_location, filtered_location)/1609 <= 5000
-    }))
-  }
 
   const filterLocationBasedOnCurrent = (distance) => {
     const current_location = {
@@ -192,18 +194,53 @@ const MapScreen = ({ navigation, route }) => {
       longitude: route.params.long
     }
 
+    const longDelta = kMToLongitudes(milesToKM(distance), current_location['latitude']) + 0.05
+    const latDelta = kMToLatitudes(milesToKM(distance), current_location['longitude']) + 0.06
+
+    mapView.current.animateToRegion({latitude: current_location['latitude'], longitude: current_location['longitude'], latitudeDelta: latDelta, longitudeDelta: longDelta})
     setEvents(events.filter((event) => {
       const event_location = {
         latitude: event.latitude,
         longitude: event.longitude
       }
-      return geolib.getDistance(event_location, current_location)/1609 <= distance
+      return geolib.getDistance(event_location, current_location)/1609.34 <= distance
 
     }))
   };
 
-  const addEvent = () => {
-    navigation.navigate("EventCreation");
+  const displayEvents = () => {
+    return (
+      <ScrollView>
+        <View style={styles.container}>
+          <View style={styles.allEvents}>
+            
+            {events.map((data, i) => (
+              <>
+                <Text></Text>
+                <TouchableOpacity style={[styles.eachEvent]} onPress={() => {
+                  const eventMarker = {
+                    longitude: data["longitude"],
+                    latitude: data["latitude"],
+                    latitudeDelta: 0.01,
+                    longitudeDelta: 0.01,
+                  };
+                  setSelectedMarker(i);
+                  //markerRef.current.showCallout();
+                  mapView.current.animateToRegion(eventMarker, 2000);
+                }}>
+                  <View style={styles.eventHeading}>
+                    <Text style={styles.eventTitle}>{data["title"]}</Text>
+                    <LikeButton event={data["id"]} likes={likes}></LikeButton>
+                  </View>
+                  <Text style={styles.events}>Date: {data["date"]}</Text>
+                  <Text style={styles.events}>Location: {data["location"]}</Text>
+                </TouchableOpacity>
+              </>
+            ))}
+          </View>
+        </View>
+      </ScrollView>
+    )
   }
 
   const noEventMatch = () => {
@@ -213,40 +250,11 @@ const MapScreen = ({ navigation, route }) => {
               <Text>Please try resetting the filter or create an event.</Text>
             </View>;
     } else {
-      return (
-        <ScrollView>
-          <View style={styles.container}>
-            <View style={styles.allEvents}>
-              
-              {events.map((data, i) => (
-                <>
-                  <Text></Text>
-                  <TouchableOpacity style={[styles.eachEvent]} onPress={() => {
-                    const eventMarker = {
-                      longitude: data["longitude"],
-                      latitude: data["latitude"],
-                      latitudeDelta: 0.01,
-                      longitudeDelta: 0.01,
-                    };
-                    setSelectedMarker(i);
-                    //markerRef.current.showCallout();
-                    mapView.current.animateToRegion(eventMarker, 2000);
-                  }}>
-                    <View style={styles.eventHeading}>
-                      <Text style={styles.eventTitle}>{data["title"]}</Text>
-                      <LikeButton event={data["id"]} likes={likes}></LikeButton>
-                    </View>
-                    <Text style={styles.events}>Date: {data["date"]}</Text>
-                    <Text style={styles.events}>Location: {data["location"]}</Text>
-                  </TouchableOpacity>
-                </>
-              ))}
-            </View>
-          </View>
-        </ScrollView>
-      )
+      return displayEvents();
     }
   }
+
+  
 
   return (
     <View style={styles.container}>

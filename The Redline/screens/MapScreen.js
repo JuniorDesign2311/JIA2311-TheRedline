@@ -54,6 +54,23 @@ const MapScreen = ({ navigation, route }) => {
   const geolib = require('geolib');
 
   const [likes] = useGlobalState("likes");
+
+  //calculations
+  function degreesToRadians(angle) {
+    return angle * (Math.PI / 180);
+  }
+
+  function milesToKM(miles) {
+    return miles * 1.60934;
+  }
+  
+  function kMToLatitudes(km) {
+    return km / 110.574;
+  }
+  
+  function kMToLongitudes(km, atLatitude) {
+    return km * 0.0089831 / Math.cos(degreesToRadians(atLatitude));
+  }
   
   //useEffect makes the function within it only be called only on the first render (the page re-renders if something on the screen changes
   //in other words, the state changes.)
@@ -176,13 +193,17 @@ const MapScreen = ({ navigation, route }) => {
       latitude: route.params.lat,
       longitude: route.params.long
     }
-    mapView.current.animateToRegion({latitude: current_location['latitude'], longitude: current_location['longitude'], latitudeDelta: distance, longitudeDelta: distance})
+
+    const longDelta = kMToLongitudes(milesToKM(distance), current_location['latitude']) + 0.05
+    const latDelta = kMToLatitudes(milesToKM(distance), current_location['longitude']) + 0.06
+
+    mapView.current.animateToRegion({latitude: current_location['latitude'], longitude: current_location['longitude'], latitudeDelta: latDelta, longitudeDelta: longDelta})
     setEvents(events.filter((event) => {
       const event_location = {
         latitude: event.latitude,
         longitude: event.longitude
       }
-      return geolib.getDistance(event_location, current_location)/1609 <= distance
+      return geolib.getDistance(event_location, current_location)/1609.34 <= distance
 
     }))
   };
@@ -229,7 +250,7 @@ const MapScreen = ({ navigation, route }) => {
               <Text>Please try resetting the filter or create an event.</Text>
             </View>;
     } else {
-      displayEvents();
+      return displayEvents();
     }
   }
 

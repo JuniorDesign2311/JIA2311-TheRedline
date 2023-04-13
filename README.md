@@ -53,14 +53,14 @@ Windows
 
 ## BUILD 
 * Open “The Redline” folder on VS Code 
-* Open VS Code terminal and type ` npm install ` 
+* Open VS Code terminal and type `npm install` 
 * The App is now ready to run 
 
 ## RUNNING THE APP 
 * To run the application, there are multiple commands that may be run: 
-    * ` expo start ` 
-    * ` npm run start ` 
-    * ` npm start ` 
+    * `expo start` 
+    * `npm run start` 
+    * `npm start` 
 * With any of those commands, a QR code will be generated in the terminal and can be scanned with the camera app on iOS or the Expo Go app on Android (press “Scan QR Code in the “Home” tab of Expo Go app) 
 * If you don’t want to emulate on your phone, you may also emulate on your laptop: 
     * “a” to load up Android emulator 
@@ -72,7 +72,7 @@ Windows
 ## TROUBLESHOOTING 
 * When pulling from the recent merge, sometimes you must run the app twice for it to build.  
 * Sometimes watchmen needs to be updated.  
-* If ` npm start`, expo start, or `npm run` start isn't working, check to see if you are in the "The Redline" folder. 
+* If `npm start`, expo start, or `npm run` start isn't working, check to see if you are in the "The Redline" folder. 
 
 ## COMMON ERRORS AND SOLUTIONS: 
 * The expected package.json path: `/Users/<username>/Desktop/Github Projects/JIA2311-TheRedline/package.json` does not exist 

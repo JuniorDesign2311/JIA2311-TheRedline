@@ -391,6 +391,7 @@ const MapScreen = ({ navigation, route }) => {
             maximumValue = {50}
             value={locationFilterDistance}
             onValueChange={value => setLocationFilterDistance(value)}
+            step = {1}
             />
               
             <Text> {locationFilterDistance} miles </Text>

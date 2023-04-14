@@ -82,6 +82,9 @@ Windows
         * Make sure both devices are using the same internet connection 
         * Update expo-cli and @expo/ngrok 
         * To run the app, try using ‘expo-cli start –tunnel’ in the terminal 
+* Android Emulator not loading
+    * Stop the Expo Go server with “Ctrl+C”
+    * Reload the server and start up the Android App again
 
 ------------
 

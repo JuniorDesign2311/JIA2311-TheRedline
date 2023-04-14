@@ -18,6 +18,7 @@ const LoginScreen = ({navigation, route}) => {
     const [hasValidEmail, setHasValidEmail] = useState(true);
     const [hasValidPassword, setHasValidPassword] = useState(true);
     const [loginError, setLoginError] = useState(false);
+    const [location, setLocation] = useState("");
     var loginSuccessful;
 
     const focus = useIsFocused();
@@ -122,18 +123,22 @@ const LoginScreen = ({navigation, route}) => {
         getLocation();
     };
 
-    const getLocation = async() => {
-        let currentLocation = await Location.getCurrentPositionAsync({
-            accuracy: Location.Accuracy.Low,
-        });
-        longitude = currentLocation.coords.longitude;
-        latitude = currentLocation.coords.latitude;
+    const getLocation = async () => {
+        console.log("hi")
+        Location.getCurrentPositionAsync({})    // no options
+            .then(location => {
+                setLocation(location);
+            }).catch(error => {
+                console.log("Location not found");
+            });
+        console.log("hello")
+        console.log(location + "yo")
 
         navigation.navigate("BottomTabs", {
             screen: 'Map',
             params: {
-                long: longitude, 
-                lat: latitude,
+                long: -122.43,
+                lat: 37.77,
                 trackLocation: true,
             }
         });

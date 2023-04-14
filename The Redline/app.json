@@ -29,7 +29,10 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
-      "package": "com.autoindustryportal.test"
+      "package": "com.autoindustryportal.test",
+      "config": {
+        "googleMaps": { "apiKey": "AIzaSyCblwwxwkBWAEpZL1Bn7vbjDNF88mKUCrs" }
+      }
     },
     "web": {
       "favicon": "./assets/favicon.png"

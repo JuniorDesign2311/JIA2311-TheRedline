@@ -42,25 +42,30 @@ const ExpandableComponent = ({data, onClickFunction, likes, setSelectedMarker, i
   return (
     <View>
       {/*Header of the Expandable List Item*/}
-      <TouchableOpacity
-        activeOpacity={0.8}
-        onPress={onClickFunction}
-        style={styles.header}>
-          <View style={styles.eventHeading}>
-              <Text style={styles.eventTitle}>{data["title"]}</Text>
-              <LikeButton event={data["id"]} likes={likes}></LikeButton>
-          </View>
-            <Text style={styles.events}>Date: {data["date"]}</Text>
-            <Text style={styles.events}>Location: {data["location"]}</Text>
-      </TouchableOpacity>
+      <View style={styles.expandableHeader}>
+        <TouchableOpacity
+          activeOpacity={0.8}
+          onPress={onClickFunction}
+          >
+            <View style={styles.eventHeading}>
+                <Text style={styles.eventTitle}>{data["title"]}</Text>
+                <LikeButton event={data["id"]} likes={likes}></LikeButton>
+            </View>
+            <View>
+              <Text style={styles.events}>Date: {data["date"]} </Text>
+              <Text style={styles.events}>Location: {data["location"]}</Text>
+            </View>
+        </TouchableOpacity>
+      </View>
       <View
-        style={{
+        style={
+          [styles.expandableBottom, {
           height: layoutHeight,
-          overflow: 'hidden',
-        }}>
+          overflow: 'hidden'}]
+        }>
         {/*Content under the header of the Expandable List Item*/}
           <TouchableOpacity
-            style={[styles.header]} onPress={() => {
+            onPress={() => {
               const eventMarker = {
                 longitude: data["longitude"],
                 latitude: data["latitude"],
@@ -71,12 +76,11 @@ const ExpandableComponent = ({data, onClickFunction, likes, setSelectedMarker, i
               //markerRef.current.showCallout();
               mapView.current.animateToRegion(eventMarker, 2000);
             }}>
-            <View style={{ height: "100%", width: 263 }}>
-                <Text> {
-                  "Host: " + data["host"] +
-                  "\nTime: " + data["time"] +
-                  "\nDescription: " + data["description"]
-                } </Text>
+            <View style={{ height: "100%"}}>
+                <Text style={styles.events}>Host: {data["host"]} </Text>
+                <Text style={styles.events}>Time: {data["time"]} </Text>
+                <Text style={styles.events}>Repeats: {data["repeats"]} </Text>
+                <Text style={styles.events}>Description: {data["description"]} </Text>
             </View>
           </TouchableOpacity>
       </View>
@@ -292,7 +296,17 @@ const MapScreen = ({ navigation, route }) => {
               <>
                 <Text></Text>
                   <ExpandableComponent
-                  data = {data} onClickFunction = {() => {expandEvents(i)}}
+                  data = {data} onClickFunction = {() => {
+                    const eventMarker = {
+                      longitude: data["longitude"],
+                      latitude: data["latitude"],
+                      latitudeDelta: 0.01,
+                      longitudeDelta: 0.01,
+                    };
+                    setSelectedMarker(i);
+
+                    mapView.current.animateToRegion(eventMarker, 2000);
+                    expandEvents(i)}}
                   likes = {likes}
                   setSelectedMarker={setSelectedMarker}
                   i = {i}>
@@ -493,31 +507,22 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
   },
-  events: {
-
-  },
   eventTitle: {
     fontWeight: 'bold',
     fontSize: 18,
   },
   allEvents: {
-    alignItems: 'left',
-    width: '90%',
-    marginBottom: 20
-  },
-  eachEvent: {
-    borderWidth: 1,
+    // alignItems: 'left',
+    paddingLeft: '2%',
+    paddingRight: '2%',
     width: '100%',
-    paddingBottom: '2%',
-    borderRadius: '20%',
-    paddingLeft: '3%',
-    paddingRight: '3%',
-    paddingTop: '2%',
-    backgroundColor: '#E5E4E2'
+    marginBottom: 20,
+    backgroundColor: 'white'
   },
   eventHeading: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    backgroundColor: '#E5E4E2'
   },
   locationScroll: {
     width: '80%',
@@ -532,6 +537,27 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 18,
   },
+  expandableHeader: {
+    backgroundColor: '#E5E4E2',
+    width: '100%',
+    paddingBottom: '2%',
+    paddingLeft: '3%',
+    paddingRight: '3%',
+    paddingTop: '2%',
+    borderTopLeftRadius: 15, 
+    borderTopRightRadius: 15,
+    flexDirection: 'col',
+  },
+  expandableBottom: {
+    backgroundColor: '#E5E4E2',
+    width: '100%',
+    paddingBottom: '2%',
+    paddingLeft: '3%',
+    paddingRight: '3%',
+    borderBottomLeftRadius: 15, 
+    borderBottomRightRadius: 15,
+    flexDirection: 'col',
+  }
 });
 
 export default MapScreen;

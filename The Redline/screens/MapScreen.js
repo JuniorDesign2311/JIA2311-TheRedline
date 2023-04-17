@@ -27,7 +27,7 @@ const LikeButton = ({ event, likes, setLikes }) => {
 };  
 
 //Expandable Component
-const ExpandableComponent = ({ data, onClickFunction, likes}) => {
+const ExpandableComponent = ({data, onClickFunction, likes, setSelectedMarker}) => {
   //Custom Component for the Expandable List
   const [layoutHeight, setLayoutHeight] = useState(0);
 
@@ -46,7 +46,12 @@ const ExpandableComponent = ({ data, onClickFunction, likes}) => {
         activeOpacity={0.8}
         onPress={onClickFunction}
         style={styles.header}>
-        <Text style={styles.headerText}> {data["title"]} + "\n" + data["date"] + "\n" + data["location"] </Text>
+          <View style={styles.eventHeading}>
+              <Text style={styles.eventTitle}>{data["title"]}</Text>
+              <LikeButton event={data["id"]} likes={likes}></LikeButton>
+          </View>
+            <Text style={styles.events}>Date: {data["date"]}</Text>
+            <Text style={styles.events}>Location: {data["location"]}</Text>
       </TouchableOpacity>
       <View
         style={{
@@ -62,12 +67,11 @@ const ExpandableComponent = ({ data, onClickFunction, likes}) => {
                 latitudeDelta: 0.01,
                 longitudeDelta: 0.01,
               };
-              setSelectedMarker(i);
+              //setSelectedMarker(i);
               //markerRef.current.showCallout();
               mapView.current.animateToRegion(eventMarker, 2000);
             }}>
             <View style={{ height: "100%", width: 263 }}>
-                <LikeButton event={data["id"]} likes={likes}></LikeButton>
                 <Text> {
                   "Host: " + data["host"] +
                   "\nTime: " + data["time"] +
@@ -92,9 +96,10 @@ const MapScreen = ({ navigation, route }) => {
   const [events, setEvents] = useState([]);
   
   const [databaseEvents, setDatabaseEvents] = useState([]);
-  const [selectedMarker, setSelectedMarker] = useState([-1]);
 
   const markerRef = useRef(React.createRef);
+  const [selectedMarker, setSelectedMarker] = useState([-1]);
+
 
   //filtering variables
   const filters = ["Clear Filter", "Location", "Date"]
@@ -243,7 +248,17 @@ const MapScreen = ({ navigation, route }) => {
   }
 
   //bottomsheet methods
-  const expandEvents = () => {
+  const expandEvents = (placeIndex) => {
+    const new_events = [...events];
+
+    events.map((value, index) => {
+      if (placeIndex === index) {
+        new_events[placeIndex]["isExpanded"] = !events[placeIndex]["isExpanded"]
+      }
+    })
+    
+    setEvents(new_events)
+    console.log(events);
 
   }
   
@@ -278,8 +293,9 @@ const MapScreen = ({ navigation, route }) => {
               <>
                 <Text></Text>
                   <ExpandableComponent
-                  data = {data} onClickFunction = {expandEvents}
-                  likes = {likes}>
+                  data = {data} onClickFunction = {() => {expandEvents(i)}}
+                  likes = {likes}
+                  setSelectedMarker={setSelectedMarker}>
                   </ExpandableComponent>
                 
               </>

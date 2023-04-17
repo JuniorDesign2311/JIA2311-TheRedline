@@ -27,13 +27,13 @@ const LikeButton = ({ event, likes, setLikes }) => {
 };  
 
 //Expandable Component
-const ExpandableComponent = ({data, onClickFunction, likes, setSelectedMarker}) => {
+const ExpandableComponent = ({data, onClickFunction, likes, setSelectedMarker, i}) => {
   //Custom Component for the Expandable List
   const [layoutHeight, setLayoutHeight] = useState(0);
 
   useEffect(() => {
     if (data.isExpanded) {
-      setLayoutHeight(null);
+      setLayoutHeight(100);
     } else {
       setLayoutHeight(0);
     }
@@ -60,14 +60,14 @@ const ExpandableComponent = ({data, onClickFunction, likes, setSelectedMarker}) 
         }}>
         {/*Content under the header of the Expandable List Item*/}
           <TouchableOpacity
-            style={[styles.eachEvent]} onPress={() => {
+            style={[styles.header]} onPress={() => {
               const eventMarker = {
                 longitude: data["longitude"],
                 latitude: data["latitude"],
                 latitudeDelta: 0.01,
                 longitudeDelta: 0.01,
               };
-              //setSelectedMarker(i);
+              setSelectedMarker(i);
               //markerRef.current.showCallout();
               mapView.current.animateToRegion(eventMarker, 2000);
             }}>
@@ -258,7 +258,6 @@ const MapScreen = ({ navigation, route }) => {
     })
     
     setEvents(new_events)
-    console.log(events);
 
   }
   
@@ -295,7 +294,8 @@ const MapScreen = ({ navigation, route }) => {
                   <ExpandableComponent
                   data = {data} onClickFunction = {() => {expandEvents(i)}}
                   likes = {likes}
-                  setSelectedMarker={setSelectedMarker}>
+                  setSelectedMarker={setSelectedMarker}
+                  i = {i}>
                   </ExpandableComponent>
                 
               </>

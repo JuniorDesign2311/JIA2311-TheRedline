@@ -9,9 +9,11 @@ import firebase from "firebase/app";
 import SelectDropdown from 'react-native-select-dropdown';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import {Slider} from '@miblanchard/react-native-slider';
-
 import { setGlobalState, useGlobalState } from "../global_variables/GlobalVariables"
 
+const mapView = React.createRef();
+
+//Like Button
 const LikeButton = ({ event, likes, setLikes }) => {
   return (
     <Pressable onPress={() => likes.includes(event) ? setGlobalState("likes", ([...likes.slice(0, likes.indexOf(event)), ...likes.slice(likes.indexOf(event) + 1, likes.length)])) : setGlobalState("likes", (likes => [...likes, event]))}>
@@ -23,6 +25,60 @@ const LikeButton = ({ event, likes, setLikes }) => {
     </Pressable>
   );
 };  
+
+//Expandable Component
+const ExpandableComponent = ({ data, onClickFunction, likes}) => {
+  //Custom Component for the Expandable List
+  const [layoutHeight, setLayoutHeight] = useState(0);
+
+  useEffect(() => {
+    if (data.isExpanded) {
+      setLayoutHeight(null);
+    } else {
+      setLayoutHeight(0);
+    }
+  }, [data.isExpanded]);
+
+  return (
+    <View>
+      {/*Header of the Expandable List Item*/}
+      <TouchableOpacity
+        activeOpacity={0.8}
+        onPress={onClickFunction}
+        style={styles.header}>
+        <Text style={styles.headerText}> {data["title"]} + "\n" + data["date"] + "\n" + data["location"] </Text>
+      </TouchableOpacity>
+      <View
+        style={{
+          height: layoutHeight,
+          overflow: 'hidden',
+        }}>
+        {/*Content under the header of the Expandable List Item*/}
+          <TouchableOpacity
+            style={[styles.eachEvent]} onPress={() => {
+              const eventMarker = {
+                longitude: data["longitude"],
+                latitude: data["latitude"],
+                latitudeDelta: 0.01,
+                longitudeDelta: 0.01,
+              };
+              setSelectedMarker(i);
+              //markerRef.current.showCallout();
+              mapView.current.animateToRegion(eventMarker, 2000);
+            }}>
+            <View style={{ height: "100%", width: 263 }}>
+                <LikeButton event={data["id"]} likes={likes}></LikeButton>
+                <Text> {
+                  "Host: " + data["host"] +
+                  "\nTime: " + data["time"] +
+                  "\nDescription: " + data["description"]
+                } </Text>
+            </View>
+          </TouchableOpacity>
+      </View>
+    </View>
+  );
+};
 
 //screen dimensions
 const windowW = Dimensions.get('window').width;
@@ -38,7 +94,6 @@ const MapScreen = ({ navigation, route }) => {
   const [databaseEvents, setDatabaseEvents] = useState([]);
   const [selectedMarker, setSelectedMarker] = useState([-1]);
 
-  const mapView = React.createRef();
   const markerRef = useRef(React.createRef);
 
   //filtering variables
@@ -186,6 +241,11 @@ const MapScreen = ({ navigation, route }) => {
     closeLocationSheet();
     noSearchFilter();
   }
+
+  //bottomsheet methods
+  const expandEvents = () => {
+
+  }
   
 
   const filterLocationBasedOnCurrent = (distance) => {
@@ -217,24 +277,11 @@ const MapScreen = ({ navigation, route }) => {
             {events.map((data, i) => (
               <>
                 <Text></Text>
-                <TouchableOpacity style={[styles.eachEvent]} onPress={() => {
-                  const eventMarker = {
-                    longitude: data["longitude"],
-                    latitude: data["latitude"],
-                    latitudeDelta: 0.01,
-                    longitudeDelta: 0.01,
-                  };
-                  setSelectedMarker(i);
-                  //markerRef.current.showCallout();
-                  mapView.current.animateToRegion(eventMarker, 2000);
-                }}>
-                  <View style={styles.eventHeading}>
-                    <Text style={styles.eventTitle}>{data["title"]}</Text>
-                    <LikeButton event={data["id"]} likes={likes}></LikeButton>
-                  </View>
-                  <Text style={styles.events}>Date: {data["date"]}</Text>
-                  <Text style={styles.events}>Location: {data["location"]}</Text>
-                </TouchableOpacity>
+                  <ExpandableComponent
+                  data = {data} onClickFunction = {expandEvents}
+                  likes = {likes}>
+                  </ExpandableComponent>
+                
               </>
             ))}
           </View>

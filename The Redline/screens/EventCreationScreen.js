@@ -61,6 +61,7 @@ const EventCreationScreen = ({ navigation }) => {
                 const userData = snapshot.data();
                 userData["username"].toString();
                 db.collection("events").doc(eventID).set({
+                    isExpanded: false,
                     title: title,
                     location: location,
                     longitude: longitude,

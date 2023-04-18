@@ -15,9 +15,15 @@ const SettingsScreen = ({navigation, route}) => {
         navigation.navigate("Login");
     }
 
+    const onIconChangePressed = () => {
+        navigation.navigate("IconSelection");  
+    }
+
     return (
         <View style={GlobalStyles.viewStyle}>
-            <Text>Settings</Text>
+            <Text style={{fontWeight: 'bold', fontSize: 35, textAlign: 'center',
+                            fontFamily: 'Helvetica Neue'}}>Settings</Text>
+            <CustomButton onPress={onIconChangePressed} buttonName="Change Icon" type="PRIMARY"/>
             <CustomButton onPress={onBackPressed} buttonName="Back" type="PRIMARY"/>
             <CustomButton onPress={onSignOutPressed} buttonName="Sign Out" type="PRIMARY"/>
         </View>

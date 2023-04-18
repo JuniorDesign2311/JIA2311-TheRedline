@@ -19,6 +19,7 @@ import EventCreationScreen from '../screens/EventCreationScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import EventDeletionScreen from '../screens/EventDeletionScreen.js';
 import EditEventsScreen from '../screens/EditEventsScreen.js';
+import IconSelectionScreen from '../screens/IconSelectionScreen.js';
 
 const Stack = createStackNavigator(); //object that includes the Navigator, Screen, and Group
 
@@ -91,6 +92,13 @@ function AuthNavigator() {
                     options={{title: "Settings",
                     headerShown: false, gestureEnabled: false}}
                 />
+
+                <Stack.Screen
+                    name="IconSelection"
+                    component={IconSelectionScreen}
+                    options={{title: "Icon Selection",
+                    headerShown: false, gestureEnabled: false}}
+                />          
 
                 <Stack.Screen
                     name="EditEvents"

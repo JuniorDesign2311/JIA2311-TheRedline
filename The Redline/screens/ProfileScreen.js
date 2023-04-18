@@ -11,8 +11,16 @@ const ProfileScreen = ({navigation, route}) => {
     const [eventButtonEnabled, setEventButtonEnabled] = useState(false);
     
     const [likes] = useGlobalState("likes");
+    const iconPath = useGlobalState("iconPath")[0]; //profile picture icon
 
     const user = firebase.auth().currentUser;
+
+    const images = {
+        default: require('../assets/account-icon.png'),
+        monopoly: require('../assets/monopoly_car.png'),
+        spongebob: require('../assets/spongebob_car.png'),
+        batman: require('../assets/batmobile_car.png')
+    }
 
     useEffect(() => {
         firebase.firestore().collection("hosts").doc(user.uid).get().then((snapshot) => {
@@ -44,14 +52,6 @@ const ProfileScreen = ({navigation, route}) => {
         navigation.navigate("Settings");
     }
 
-
-
-    const onEditPressed = () => {
-        navigation.navigate("EditEvents", {
-            dataId: data["id"]
-        })
-    }
-
     const addEvent = () => {
         if (eventButtonEnabled) {
             navigation.navigate("EventCreation");
@@ -73,10 +73,10 @@ const ProfileScreen = ({navigation, route}) => {
                         <Image source={require('../assets/settings-icon.png')} />
                         </TouchableOpacity>
                     </View>
-
+                    
                     <Image 
                         style={{alignSelf: 'center'}}
-                        source={require('../assets/account-icon.png')} />
+                        source={images[iconPath]} />
                     
                     <View style={{flexDirection:'row', justifyContent:'space-between'}}>
                         <Text style={{opacity: eventButtonEnabled ? 100 : 0, paddingTop: eventButtonEnabled ? '5%' : '0%', paddingLeft: eventButtonEnabled ? '4%' : '0%', fontWeight: 'bold', 

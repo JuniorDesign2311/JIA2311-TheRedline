@@ -1,9 +1,11 @@
 # The Redline 🚗
 There is currently no centralized place for vintage car enthusiasts to connect with the greater car community. Our application is an all-in-one platform that will aggregate car show events and meetups, allowing users to favorite and post their own events. 
 
-# Release Notes version The Redline 1.0 
+# Release Notes
 
-## NEW FEATURES 
+## version 1.0 
+
+### NEW FEATURES 
 * Location Permission Services for Users 
 * Event Search Bar with Filters for Event Title, Date, and Proximity  
 * Event Creation with Google Places Autocomplete, Date Picker, and Time Picker 
@@ -11,14 +13,16 @@ There is currently no centralized place for vintage car enthusiasts to connect w
 * Interactive Event Markers with Pop-up on Google Maps API 
 * Favoriting System for Events
 
-## BUG FIXES 
+### BUG FIXES 
 * Fixed an error where our account system would create an account but not continue to the application’s landing page due to an error with our error handling. 
 * Fixed distortion of the screen size on the map screen whenever a user logged in with their phone’s keyboard still active. 
 * Fixed a bug for the submit button on the event creation that required 2 presses 
 * Fixed Firebase Authentication/Writing error in which it would create the account before continuing to step 2. This was an issue as users were allowed to go back to change their email address, phone number, etc. and thus not allowing them to reuse their information previously chosen. 
 
-## KNOWN ISSUES 
+### KNOWN ISSUES 
 *  TBD
+
+------------
 
 # Install Guide The Redline 1.0 
 

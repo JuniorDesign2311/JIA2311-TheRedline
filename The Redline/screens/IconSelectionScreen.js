@@ -1,44 +1,50 @@
-import React, {useState, useRef, useMemo} from 'react'
-import { View, Text,  Image, StyleSheet, TouchableOpacity} from 'react-native'
+import React from 'react'
+import { View, Text,  Image, TouchableOpacity} from 'react-native'
 import CustomButton from '../components/CustomButton';
-import KeyboardAvoidingWrapper from '../components/KeyboardAvoidingWrapper';
 import GlobalStyles from '../components/GlobalStyles';
 import { ScrollView } from 'react-native-gesture-handler';
+import {setGlobalState, useGlobalState } from "../global_variables/GlobalVariables"
 
-const IconSelectionScreen = ({navigation, route}) => {    
+const IconSelectionScreen = ({navigation, route}) => {   
+     
+    const iconPath = useGlobalState("iconPath")[0];
+    
     const iconMonopolyPressed = () => {
-
+        setGlobalState("iconPath", "monopoly");
         navigation.navigate("BottomTabs", {
             screen: 'Profile',
             params: {
-                iconPath: 'monopoly',
+                iconPath: iconPath,
             }
         });
     } 
 
     const iconSpongeBobPressed = () => {
+        setGlobalState("iconPath", "spongebob");
         navigation.navigate("BottomTabs", {
             screen: 'Profile',
             params: {
-                iconPath: 'spongebob',
+                iconPath: iconPath,
             }
         });
     } 
 
     const iconBatmanPressed = () => {
+        setGlobalState("iconPath", "batman");
         navigation.navigate("BottomTabs", {
             screen: 'Profile',
             params: {
-                iconPath: 'batman',
+                iconPath: iconPath,
             }
         });
     } 
 
     const iconDefaultPressed = () => {
+        setGlobalState("iconPath", "default");
         navigation.navigate("BottomTabs", {
             screen: 'Profile',
             params: {
-                iconPath: 'default',
+                iconPath: iconPath,
             }
         });
     } 

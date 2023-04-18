@@ -11,6 +11,7 @@ const ProfileScreen = ({navigation, route}) => {
     const [eventButtonEnabled, setEventButtonEnabled] = useState(false);
     
     const [likes] = useGlobalState("likes");
+    const iconPath = useGlobalState("iconPath")[0]; //profile picture icon
 
     const user = firebase.auth().currentUser;
 
@@ -20,11 +21,6 @@ const ProfileScreen = ({navigation, route}) => {
         spongebob: require('../assets/spongebob_car.png'),
         batman: require('../assets/batmobile_car.png')
     }
-
-   
-    
-    const [profileImage, setProfileImage] = useState(route.params.iconPath)
-    
 
     useEffect(() => {
         firebase.firestore().collection("hosts").doc(user.uid).get().then((snapshot) => {
@@ -80,7 +76,7 @@ const ProfileScreen = ({navigation, route}) => {
                     
                     <Image 
                         style={{alignSelf: 'center'}}
-                        source={images[profileImage]} />
+                        source={images[iconPath]} />
                     
                     <View style={{flexDirection:'row', justifyContent:'space-between'}}>
                         <Text style={{opacity: eventButtonEnabled ? 100 : 0, paddingTop: eventButtonEnabled ? '5%' : '0%', paddingLeft: eventButtonEnabled ? '4%' : '0%', fontWeight: 'bold', 

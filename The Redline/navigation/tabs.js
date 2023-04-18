@@ -38,7 +38,7 @@ const Tabs = () => {
         })}>
 
             <Tab.Screen name={mapName} component={MapScreen} options={{headerShown: false}}/>
-            <Tab.Screen initialParams = {{iconPath: "default"}} name={profileName} component={ProfileScreen} options={{headerShown: false}}/>
+            <Tab.Screen name={profileName} component={ProfileScreen} options={{headerShown: false}}/>
         </Tab.Navigator>
 
     );

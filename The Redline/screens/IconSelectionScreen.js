@@ -18,19 +18,28 @@ const IconSelectionScreen = ({navigation, route}) => {
 
     const iconSpongeBobPressed = () => {
         navigation.navigate("BottomTabs", {
-            screen: 'Profile'
+            screen: 'Profile',
+            params: {
+                iconPath: 'spongebob',
+            }
         });
     } 
 
     const iconBatmanPressed = () => {
         navigation.navigate("BottomTabs", {
-            screen: 'Profile'
+            screen: 'Profile',
+            params: {
+                iconPath: 'batman',
+            }
         });
     } 
 
     const iconDefaultPressed = () => {
         navigation.navigate("BottomTabs", {
-            screen: 'Profile'
+            screen: 'Profile',
+            params: {
+                iconPath: 'default',
+            }
         });
     } 
 

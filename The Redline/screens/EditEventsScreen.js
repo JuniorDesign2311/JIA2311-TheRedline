@@ -6,7 +6,6 @@ import EventDescriptionInput from '../components/EventDescriptionInput';
 import { db } from '../firebaseConfig';
 import firebase from "firebase/app";
 import uuid from 'react-native-uuid';
-import KeyboardAvoidingWrapper from '../components/KeyboardAvoidingWrapper';
 import GlobalStyles from '../components/GlobalStyles';
 import { GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
@@ -264,7 +263,7 @@ const EditEventsScreen = ({ route, navigation }) => {
 
     // UI Components
     return (
-        <KeyboardAvoidingWrapper>
+        <ScrollView keyboardShouldPersistTaps='handled' contentContainerStyle={{ flexGrow: 1 }}>
             <View style={GlobalStyles.viewStyle}>
                 <Text style={[styles.header]}> Update Event </Text>
                 
@@ -275,7 +274,7 @@ const EditEventsScreen = ({ route, navigation }) => {
                         <View style={styles.fieldContainter}>
                             <View style={[styles.boundingBox, {borderColor: isValidLocation ? '#e8e8e8': 'red'}]}>
 
-                            <ScrollView horizontal={true} nestedScrollEnabled={true} keyboardShouldPersistTaps='handled' contentContainerStyle={{ flexGrow: 1 }}>
+                            <ScrollView horizontal={true} nestedScrollEnabled={true} keyboardShouldPersistTaps='handled'>
                                 <GooglePlacesAutocomplete
                                     placeholder={ location }
                                     textInputProps={{
@@ -305,7 +304,6 @@ const EditEventsScreen = ({ route, navigation }) => {
                     <DateTimePickerModal
                         isVisible={isDatePickerVisible}
                         mode='date'
-                        display='inline'
                         minimumDate={new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate())}
                         onConfirm={handleConfirm}
                         onCancel={hideDatePicker}
@@ -377,7 +375,7 @@ const EditEventsScreen = ({ route, navigation }) => {
                     </TouchableOpacity>
                 </View>
             </View>
-        </KeyboardAvoidingWrapper>
+        </ScrollView>
     )
 }
 

@@ -3,7 +3,7 @@ There is currently no centralized place for vintage car enthusiasts to connect w
 
 # Release Notes
 
-## version 1.0 
+## Version 1.0 
 
 ### NEW FEATURES 
 * Location Permission Services for Users 
@@ -24,7 +24,7 @@ There is currently no centralized place for vintage car enthusiasts to connect w
 
 ------------
 
-# Install Guide The Redline 1.0 
+# Installation Guide for The Redline 1.0 
 
 ## PRE-REQUISITES 
 * MacBook: Homebrew, Watchmen, Node.js, React Native Client, Expo Client, Git, 

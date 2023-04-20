@@ -26,7 +26,7 @@
     "geolib": "^3.3.3",
     "react": "18.1.0",
     "react-hooks-global-state": "^2.1.0",
-    "react-native": "0.70.5",
+    "react-native": "0.70.8",
     "react-native-calendars": "^1.1293.0",
     "react-native-date-picker": "^4.2.6",
     "react-native-element-dropdown": "^2.9.0",

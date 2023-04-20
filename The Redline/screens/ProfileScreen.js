@@ -60,88 +60,86 @@ const ProfileScreen = ({navigation, route}) => {
 
 
     return (
-        <View>
-            <ScrollView>
-                <View>
-                    <View style={{flexDirection:'row', justifyContent:'space-between'}}> 
-                        <Text style={{paddingTop: '10%', paddingLeft: '2%', fontWeight: 'bold', fontSize: 35, textAlign: 'left',
-                            fontFamily: 'Helvetica Neue'}}> {username} </Text>
-                        <TouchableOpacity
-                            onPress={onSettingsPressed}
-                            style={{ paddingTop: '9%', alignSelf: 'flex-start', paddingRight: '2%'}}
-                        >
-                        <Image source={require('../assets/settings-icon.png')} />
-                        </TouchableOpacity>
-                    </View>
-                    
-                    <Image 
-                        style={{alignSelf: 'center'}}
-                        source={images[iconPath]} />
-                    
-                    <View style={{flexDirection:'row', justifyContent:'space-between'}}>
-                        <Text style={{opacity: eventButtonEnabled ? 100 : 0, paddingTop: eventButtonEnabled ? '5%' : '0%', paddingLeft: eventButtonEnabled ? '4%' : '0%', fontWeight: 'bold', 
-                            fontSize: eventButtonEnabled ? 20 : 0, textAlign: 'center', fontFamily: 'Helvetica Neue'}}>My Listed Events</Text>
-                        <TouchableOpacity
-                            enabled={eventButtonEnabled}
-                            delayPressIn={0.3}
-                            activeOpacity={eventButtonEnabled ? 50 : 0}
-                            style={ {opacity: eventButtonEnabled ? 100 : 0, alignSelf: 'flex-start', paddingRight: '5%'} }
-                            onPress={addEvent}>
-                            <Image source={require('../assets/plusbutton.png')} />
-                        </TouchableOpacity>
-                    </View>
+        <ScrollView>
+            <View>
+                <View style={{flexDirection:'row', justifyContent:'space-between'}}> 
+                    <Text style={{paddingTop: '10%', paddingLeft: '2%', fontWeight: 'bold', fontSize: 35, textAlign: 'left',
+                        fontFamily: 'Helvetica Neue'}}> {username} </Text>
+                    <TouchableOpacity
+                        onPress={onSettingsPressed}
+                        style={{ paddingTop: '9%', alignSelf: 'flex-start', paddingRight: '2%'}}
+                    >
+                    <Image source={require('../assets/settings-icon.png')} />
+                    </TouchableOpacity>
                 </View>
-                <View style={styles.container}>
-                    <View style={styles.allEvents}>
-                        {events.map((data) => {
-                            return (data["host"] === username) &&
-                            <>
-                            <View style={styles.eachEvent}>
-                                <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-                                    <TouchableOpacity
-                                        onPress={() => {
-                                            navigation.navigate("EditEvents", {
-                                                dataId: data["id"]
-                                            })
-                                        }}
-                                        style={{paddingTop: '2%'}}
-                                    >
-                                        <View>
-                                            <Text style={styles.eventTitle}>{data["title"]}</Text>
-                                            <Text style={styles.events}>Date: {data["date"]}</Text>
-                                            <Text style={styles.events}>Location: {data["location"]}</Text>
-                                        </View>
-                                        {/* <Image source={require('../assets/settings-icon.png')} /> */}
-                                    </TouchableOpacity>
-                                </View> 
-                            </View>
-                            </>
-                        })}
-                    </View>
-                </View>
-                
+                    
+                <Image 
+                    style={{alignSelf: 'center'}}
+                    source={images[iconPath]} />
+                    
                 <View style={{flexDirection:'row', justifyContent:'space-between'}}>
-                    <Text style={{paddingTop: '5%', paddingLeft: '4%', fontWeight: 'bold', fontSize: 20, textAlign: 'center',
-                        fontFamily: 'Helvetica Neue'}}>My Favorite Events</Text>
+                    <Text style={{opacity: eventButtonEnabled ? 100 : 0, paddingTop: eventButtonEnabled ? '5%' : '0%', paddingLeft: eventButtonEnabled ? '4%' : '0%', fontWeight: 'bold', 
+                        fontSize: eventButtonEnabled ? 20 : 0, textAlign: 'center', fontFamily: 'Helvetica Neue'}}>My Listed Events</Text>
+                    <TouchableOpacity
+                        enabled={eventButtonEnabled}
+                        delayPressIn={0.3}
+                        activeOpacity={eventButtonEnabled ? 50 : 0}
+                        style={ {opacity: eventButtonEnabled ? 100 : 0, alignSelf: 'flex-start', paddingRight: '5%'} }
+                        onPress={addEvent}>
+                        <Image source={require('../assets/plusbutton.png')} />
+                    </TouchableOpacity>
                 </View>
-                <View style={styles.container}>
-                    <View style={styles.allEvents}>
-                        {events.map((data) => {
-                            if (likes.includes(data["id"])) {
-                                return (data) &&
-                                <>
-                                    <View style={styles.eachEvent}>
+            </View>
+            <View style={styles.container}>
+                <View style={styles.allEvents}>
+                    {events.map((data) => {
+                        return (data["host"] === username) &&
+                        <>
+                        <View style={styles.eachEvent}>
+                            <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+                                <TouchableOpacity
+                                    onPress={() => {
+                                        navigation.navigate("EditEvents", {
+                                            dataId: data["id"]
+                                        })
+                                    }}
+                                    style={{paddingTop: '2%'}}
+                                >
+                                    <View>
                                         <Text style={styles.eventTitle}>{data["title"]}</Text>
                                         <Text style={styles.events}>Date: {data["date"]}</Text>
                                         <Text style={styles.events}>Location: {data["location"]}</Text>
                                     </View>
-                                </>
-                            }
-                        })}
-                    </View>
+                                    {/* <Image source={require('../assets/settings-icon.png')} /> */}
+                                </TouchableOpacity>
+                            </View> 
+                        </View>
+                        </>
+                    })}
                 </View>
-            </ScrollView>
-        </View>
+            </View>
+                
+            <View style={{flexDirection:'row', justifyContent:'space-between'}}>
+                <Text style={{paddingTop: '5%', paddingLeft: '4%', fontWeight: 'bold', fontSize: 20, textAlign: 'center',
+                    fontFamily: 'Helvetica Neue'}}>My Favorite Events</Text>
+            </View>
+            <View style={styles.container}>
+                <View style={styles.allEvents}>
+                    {events.map((data) => {
+                        if (likes.includes(data["id"])) {
+                            return (data) &&
+                            <>
+                                <View style={styles.eachEvent}>
+                                    <Text style={styles.eventTitle}>{data["title"]}</Text>
+                                    <Text style={styles.events}>Date: {data["date"]}</Text>
+                                    <Text style={styles.events}>Location: {data["location"]}</Text>
+                                </View>
+                            </>
+                        }
+                    })}
+                </View>
+            </View>
+        </ScrollView>
     )
 }
 

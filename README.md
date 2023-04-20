@@ -29,9 +29,9 @@ There is currently no centralized place for vintage car enthusiasts to connect w
 ## PRE-REQUISITES 
 * MacBook: Homebrew, Watchmen, Node.js, React Native Client, Expo Client, Git, 
  XCode (optionally) 
-* Windows: Node.js, React Native Client, Expo Client, Git, JDK (for Android), Android Studio (optionally) 
+* Windows: Node.js, React Native Client, Expo Client, Git, 
 
-_Note: Xcode needs to be in the most recent version and Android Studio emulator needs to have Google Play services SDK Tool downloaded._
+_Note: Xcode needs to be in the most recent version
 
 ## DEPENDENCIES 
 Mac OS 
@@ -39,12 +39,10 @@ Mac OS
 * VS Code (for computer to code) 
 * Homebrew & Watchmen (needed to set up expo go with React Native) 
 * Xcode (to emulate iOS app) 
-* Android Studio (to emulate the android app) 
 
 Windows 
 * Expo Go (on mobile phone if you want to emulate app on phone) 
 * VS Code (for computer to code) 
-* Android Studio (to emulate the android app) 
 
 ## DOWNLOAD 
 * Get access to the project from GitHub and clone the repository 
@@ -65,9 +63,8 @@ Windows
     * `expo start` 
     * `npm run start` 
     * `npm start` 
-* With any of those commands, a QR code will be generated in the terminal and can be scanned with the camera app on iOS or the Expo Go app on Android (press “Scan QR Code in the “Home” tab of Expo Go app) 
+* With any of those commands, a QR code will be generated in the terminal and can be scanned with the camera app on iOS
 * If you don’t want to emulate on your phone, you may also emulate on your laptop: 
-    * “a” to load up Android emulator 
     * “i” to load up iOS emulator 
 
 ## INSTALLATION 
@@ -86,6 +83,3 @@ Windows
         * Make sure both devices are using the same internet connection 
         * Update expo-cli and @expo/ngrok 
         * To run the app, try using ‘expo-cli start –tunnel’ in the terminal 
-* Android Emulator not loading
-    * Stop the Expo Go server with “Ctrl+C”
-    * Reload the server and start up the Android App again

@@ -288,7 +288,7 @@ const MapScreen = ({ navigation, route }) => {
 
   const displayEvents = () => {
     return (
-      <ScrollView>
+      <ScrollView style={styles.scrollview}>
         <View style={styles.container}>
           <View style={styles.allEvents}>
             
@@ -501,7 +501,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     backgroundColor: '#FFFFFF',
-    minHeight: Math.round(windowH)
+    minHeight: Math.round(windowH),
   },
   map: {
     width: '100%',
@@ -557,6 +557,9 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 15, 
     borderBottomRightRadius: 15,
     flexDirection: 'col',
+  },
+  scrollview: {
+    marginBottom: 70,
   }
 });
 

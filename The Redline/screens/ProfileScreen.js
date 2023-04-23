@@ -92,29 +92,27 @@ const ProfileScreen = ({navigation, route}) => {
             </View>
             <View style={styles.container}>
                 <View style={styles.allEvents}>
-                    {events.map((data) => {
+                    {events.map((data, i) => {
                         return (data["host"] === username) &&
-                        <>
-                        <View style={styles.eachEvent}>
-                            <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-                                <TouchableOpacity
-                                    onPress={() => {
-                                        navigation.navigate("EditEvents", {
-                                            dataId: data["id"]
-                                        })
-                                    }}
-                                    style={{paddingTop: '2%'}}
-                                >
-                                    <View>
-                                        <Text style={styles.eventTitle}>{data["title"]}</Text>
-                                        <Text style={styles.events}>Date: {data["date"]}</Text>
-                                        <Text style={styles.events}>Location: {data["location"]}</Text>
-                                    </View>
-                                    {/* <Image source={require('../assets/settings-icon.png')} /> */}
-                                </TouchableOpacity>
-                            </View> 
-                        </View>
-                        </>
+                            <View style={styles.eachEvent} key={i}> 
+                                <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+                                    <TouchableOpacity
+                                        onPress={() => {
+                                            navigation.navigate("EditEvents", {
+                                                dataId: data["id"]
+                                            })
+                                        }}
+                                        style={{paddingTop: '2%'}}
+                                    >
+                                        <View>
+                                            <Text style={styles.eventTitle}>{data["title"]}</Text>
+                                            <Text style={styles.events}>Date: {data["date"]}</Text>
+                                            <Text style={styles.events}>Location: {data["location"]}</Text>
+                                        </View>
+                                        {/* <Image source={require('../assets/settings-icon.png')} /> */}
+                                    </TouchableOpacity>
+                                </View> 
+                            </View>
                     })}
                 </View>
             </View>
@@ -125,16 +123,14 @@ const ProfileScreen = ({navigation, route}) => {
             </View>
             <View style={styles.container}>
                 <View style={styles.allEvents}>
-                    {events.map((data) => {
+                    {events.map((data, i) => {
                         if (likes.includes(data["id"])) {
                             return (data) &&
-                            <>
-                                <View style={styles.eachEvent}>
+                                <View style={styles.eachEvent} key={i}>
                                     <Text style={styles.eventTitle}>{data["title"]}</Text>
                                     <Text style={styles.events}>Date: {data["date"]}</Text>
                                     <Text style={styles.events}>Location: {data["location"]}</Text>
                                 </View>
-                            </>
                         }
                     })}
                 </View>

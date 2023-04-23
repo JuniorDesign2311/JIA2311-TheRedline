@@ -20,9 +20,8 @@ There is currently no centralized place for vintage car enthusiasts to connect w
 * Fixed Firebase Authentication/Writing error in which it would create the account before continuing to step 2. This was an issue as users were allowed to go back to change their email address, phone number, etc. and thus not allowing them to reuse their information previously chosen. 
 
 ### KNOWN ISSUES 
-* Console warning: "Each child in a list should have a unique key prop."
 * Console warning: AsyncStorage has been extracted from react-native-core and will be removed in a future release.
-    * Neither of these console warnings cause issues with the functionality of the app, but they continuously pop up when simulating the build.
+    * This console warnings does not cause issues with the functionality of the app, but it pop up when simulating the build.
 
 ------------
 

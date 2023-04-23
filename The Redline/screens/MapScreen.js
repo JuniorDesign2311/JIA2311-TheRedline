@@ -293,7 +293,7 @@ const MapScreen = ({ navigation, route }) => {
           <View style={styles.allEvents}>
             
             {events.map((data, i) => (
-              <>
+              <View key={i}>
                 <Text></Text>
                   <ExpandableComponent
                   data = {data} onClickFunction = {() => {
@@ -312,7 +312,7 @@ const MapScreen = ({ navigation, route }) => {
                   i = {i}>
                   </ExpandableComponent>
                 
-              </>
+              </View>
             ))}
           </View>
         </View>

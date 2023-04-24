@@ -474,20 +474,24 @@ const MapScreen = ({ navigation, route }) => {
             <Text> {locationFilterDistance} miles </Text>
          
           </View>
-          
-          <View style={{paddingTop: "20%"}}>
-            <Button
-            title = 'Save'
-            color='blue'
-            onPress={closeLocationSheet}/>
-          </View>
 
-          <View style={{paddingTop: "0%"}}>
-            <Button
-            title = 'Cancel'
-            color='blue'
-            onPress={onCancelLocation}/>
-          </View>
+        
+          
+            <View style={{paddingTop: "10%"}}>
+              <Button
+              title = 'Save'
+              color='blue'
+              onPress={closeLocationSheet}/>
+            </View>
+
+            <View style={{paddingTop: "0%"}}>
+              <Button
+              title = 'Cancel'
+              color='blue'
+              onPress={onCancelLocation}/>
+            </View>
+
+
             
         </View>
       </BottomSheet>
@@ -528,7 +532,8 @@ const styles = StyleSheet.create({
     width: '80%',
     color: 'red',
     paddingLeft: '20%',
-    paddingTop: '3%'
+    paddingTop: '3%',
+
   },
   noEventsToDisplayContainer: {
     alignItems: 'center',

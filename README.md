@@ -16,7 +16,7 @@ There is currently no centralized place for vintage car enthusiasts to connect w
 ### BUG FIXES 
 * Fixed an error where our account system would create an account but not continue to the application’s landing page due to an error with our error handling. 
 * Fixed distortion of the screen size on the map screen whenever a user logged in with their phone’s keyboard still active. 
-* Fixed a bug for the submit button on the event creation that required 2 presses 
+* Fixed a bug for the submit button on the event creation that required 2 presses.
 * Fixed Firebase Authentication/Writing error in which it would create the account before continuing to step 2. This was an issue as users were allowed to go back to change their email address, phone number, etc. and thus not allowing them to reuse their information previously chosen. 
 
 ### KNOWN ISSUES 

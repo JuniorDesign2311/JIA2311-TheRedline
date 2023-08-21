@@ -1,6 +1,14 @@
 # The Redline 🚗
 There is currently no centralized place for vintage car enthusiasts to connect with the greater car community. Our application is an all-in-one platform that will aggregate car show events and meetups, allowing users to favorite and post their own events. 
 
+### DEMO LINKS
+* [Sprint 4](https://www.youtube.com/watch?v=OeJkzl1tG3c)
+* [Sprint 3](https://www.youtube.com/watch?v=OJM0JjlryLI)
+* [Sprint 1 & 2](https://youtu.be/64tBT23KTN4)
+
+### FINAL PRESENTATION LINK
+* [Google Slides](https://docs.google.com/presentation/d/17icJV_SPVJfEi_pdEW3LEQymlrxeYNoMu6Q0AI2VHWQ/edit?usp=sharing)
+
 # Release Notes
 
 ## Version 1.0 

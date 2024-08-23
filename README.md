@@ -1,6 +1,9 @@
 # The Redline 🚗
 There is currently no centralized place for vintage car enthusiasts to connect with the greater car community. Our application is an all-in-one platform that will aggregate car show events and meetups, allowing users to favorite and post their own events. 
 
+### Our team received third place in the Georgia Tech Junior Design Expo!
+Click [here](https://www.cc.gatech.edu/news/team-earns-top-cs-capstone-honor-medical-app) to read about the expo!
+
 ### DEMO LINKS
 * [Sprint 4](https://www.youtube.com/watch?v=OeJkzl1tG3c)
 * [Sprint 3](https://www.youtube.com/watch?v=OJM0JjlryLI)
